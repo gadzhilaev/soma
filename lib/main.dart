@@ -56,9 +56,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
   int? selected;
 
   final _items = const [
-    _LangItem('Русский', 'assets/images/ru.png', Locale('ru')),
-    _LangItem('English', 'assets/images/en.png', Locale('en')),
-    _LangItem('Spanish', 'assets/images/es.png', Locale('es')),
+    _LangItem('Русский', 'assets/icons/ru.png', Locale('ru')),
+    _LangItem('English', 'assets/icons/en.png', Locale('en')),
+    _LangItem('Spanish', 'assets/icons/es.png', Locale('es')),
   ];
 
   @override
@@ -85,7 +85,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   width: 112,
                   height: 118,
                   child: Image.asset(
-                    'assets/images/logo.png',
+                    'assets/logo/logo.png',
                     fit: BoxFit.contain,
                   ),
                 ),

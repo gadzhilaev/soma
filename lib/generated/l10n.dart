@@ -58,6 +58,21 @@ class S {
   String get ok {
     return Intl.message('OK', name: 'ok', desc: '', args: []);
   }
+
+  /// `Russian`
+  String get languageRussian {
+    return Intl.message('Russian', name: 'languageRussian', desc: '', args: []);
+  }
+
+  /// `English`
+  String get languageEnglish {
+    return Intl.message('English', name: 'languageEnglish', desc: '', args: []);
+  }
+
+  /// `Spanish`
+  String get languageSpanish {
+    return Intl.message('Spanish', name: 'languageSpanish', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
