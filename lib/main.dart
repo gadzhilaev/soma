@@ -54,26 +54,19 @@ class LanguageScreen extends StatefulWidget {
 class _LanguageScreenState extends State<LanguageScreen> {
   int? selected;
 
+  // без названий — только флаг и локаль
   final _items = const [
-    _LangItem('Русский', 'assets/icons/ru.png', Locale('ru')),
-    _LangItem('English', 'assets/icons/en.png', Locale('en')),
-    _LangItem('Spanish', 'assets/icons/es.png', Locale('es')),
+    _LangItem('assets/icons/ru.png', Locale('ru')),
+    _LangItem('assets/icons/en.png', Locale('en')),
+    _LangItem('assets/icons/es.png', Locale('es')),
   ];
 
   @override
   void initState() {
     super.initState();
-
-    // определяем язык устройства
-    final systemLocale = WidgetsBinding.instance.window.locale.languageCode;
-
-    // ищем индекс совпадающего языка
-    final index = _items.indexWhere(
-      (item) => item.locale.languageCode == systemLocale,
-    );
-
-    // если язык найден, выбираем его, иначе ставим 0 (русский)
-    selected = index != -1 ? index : 0;
+    final systemCode = WidgetsBinding.instance.window.locale.languageCode;
+    final idx = _items.indexWhere((it) => it.locale.languageCode == systemCode);
+    selected = idx != -1 ? idx : 0;
   }
 
   @override
@@ -87,8 +80,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
             end: Alignment.bottomCenter,
           ),
         ),
-        width: double.infinity,
-        height: double.infinity,
         child: SafeArea(
           child: Column(
             children: [
@@ -97,10 +88,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 child: SizedBox(
                   width: 112,
                   height: 118,
-                  child: Image.asset(
-                    'assets/logo/logo.png',
-                    fit: BoxFit.contain,
-                  ),
+                  child: Image.asset('assets/logo/logo.png', fit: BoxFit.contain),
                 ),
               ),
               const SizedBox(height: 87),
@@ -132,9 +120,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD580),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
                     padding: const EdgeInsets.fromLTRB(114, 22, 114, 22),
                     elevation: 0,
                   ),
@@ -145,7 +131,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                       height: 1.0,
-                      letterSpacing: 0.04 * 12,
+                      letterSpacing: 0.48,
                       color: Color(0xFF59523A),
                     ),
                   ),
@@ -172,8 +158,6 @@ class _LanguageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Выбранный: background #8E86FF
-    // Невыбранный: без фона и без обводки
     final bg = selected ? const Color(0xFF8E86FF) : Colors.transparent;
 
     return InkWell(
@@ -181,11 +165,7 @@ class _LanguageTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 56,
-        decoration: BoxDecoration(
-          color: bg,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        // по центру по вертикали, слева отступ 16, между флагом и текстом 6
+        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16)),
         child: Row(
           children: [
             const SizedBox(width: 16),
@@ -198,19 +178,17 @@ class _LanguageTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 6),
-            Expanded(
-              child: Text(
-                item.title,
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  height: 1.0, // line-height 100%
-                  // letter-spacing явно 0%
-                  color: Colors.white, // контраст на фиолетовом
-                ),
+            // текст слева отцентрирован по высоте, без центрирования по строке
+            Text(
+              item.localizedTitle(context),
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                height: 1.0,
+                color: Colors.white,
               ),
             ),
+            const Spacer(),
             const SizedBox(width: 16),
           ],
         ),
@@ -220,8 +198,21 @@ class _LanguageTile extends StatelessWidget {
 }
 
 class _LangItem {
-  final String title;
   final String flagPath;
   final Locale locale;
-  const _LangItem(this.title, this.flagPath, this.locale);
+  const _LangItem(this.flagPath, this.locale);
+
+  String localizedTitle(BuildContext context) {
+    final s = S.of(context);
+    switch (locale.languageCode) {
+      case 'ru':
+        return s.languageRussian;
+      case 'en':
+        return s.languageEnglish;
+      case 'es':
+        return s.languageSpanish;
+      default:
+        return locale.languageCode; // fallback
+    }
+  }
 }
