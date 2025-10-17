@@ -52,7 +52,6 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  // 0 = ru, 1 = en, 2 = es
   int? selected;
 
   final _items = const [
@@ -62,8 +61,23 @@ class _LanguageScreenState extends State<LanguageScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    // определяем язык устройства
+    final systemLocale = WidgetsBinding.instance.window.locale.languageCode;
+
+    // ищем индекс совпадающего языка
+    final index = _items.indexWhere(
+      (item) => item.locale.languageCode == systemLocale,
+    );
+
+    // если язык найден, выбираем его, иначе ставим 0 (русский)
+    selected = index != -1 ? index : 0;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Градиент фона #6C63FF → #8982FF
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -78,8 +92,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 47), // отступ сверху до лого
-              // Лого: 112x118, по центру
+              const SizedBox(height: 47),
               Center(
                 child: SizedBox(
                   width: 112,
@@ -91,7 +104,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 ),
               ),
               const SizedBox(height: 87),
-              // Список языков с боковыми отступами 20 и промежутками 10
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -108,7 +120,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 ),
               ),
               const SizedBox(height: 48),
-              // Кнопка ОК: ширина 353, высота 56, radius 40, фон #FFD580
               SizedBox(
                 width: 353,
                 height: 56,
@@ -118,7 +129,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       : () {
                           final locale = _items[selected!].locale;
                           widget.onConfirmLocale(locale);
-                          // Можно выполнить дополнительную инициализацию/навигацию позже
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD580),
@@ -132,12 +142,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     S.of(context).ok.toUpperCase(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      // параметры текста кнопки
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
-                      height: 1.0, // line-height 100%
-                      letterSpacing: 0.04 * 12, // 4%
-                      color: Color(0xFF59523A), // цвет текста
+                      height: 1.0,
+                      letterSpacing: 0.04 * 12,
+                      color: Color(0xFF59523A),
                     ),
                   ),
                 ),
