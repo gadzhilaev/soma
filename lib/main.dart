@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'generated/l10n.dart'; // flutter_intl генерирует это
+import 'generated/l10n.dart';
+import 'auth/login.dart';
 
 void main() {
   runApp(const MainApp());
@@ -26,7 +27,7 @@ class _MainAppState extends State<MainApp> {
       debugShowCheckedModeBanner: false,
       locale: _locale,
       localizationsDelegates: const [
-        S.delegate, // из flutter_intl
+        S.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -34,11 +35,9 @@ class _MainAppState extends State<MainApp> {
       supportedLocales: S.delegate.supportedLocales,
       theme: ThemeData(
         useMaterial3: true,
-        fontFamily: 'Inter', // подключите шрифт в pubspec.yaml
+        fontFamily: 'Inter',
       ),
-      home: LanguageScreen(
-        onConfirmLocale: _setLocale,
-      ),
+      home: LanguageScreen(onConfirmLocale: _setLocale),
     );
   }
 }
@@ -68,7 +67,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
     final idx = _items.indexWhere((it) => it.locale.languageCode == systemCode);
     selected = idx != -1 ? idx : 0;
 
-    // применяем системную локаль сразу, чтобы тексты уже были на нужном языке
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.onConfirmLocale(_items[selected!].locale);
     });
@@ -107,7 +105,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
                         selected: selected == i,
                         onTap: () {
                           setState(() => selected = i);
-                          // ⚡ меняем локаль сразу при выборе
                           widget.onConfirmLocale(_items[i].locale);
                         },
                       ),
@@ -124,9 +121,17 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   onPressed: selected == null
                       ? null
                       : () {
-                          // Кнопка “ОК” пока просто подтверждает выбор
                           final locale = _items[selected!].locale;
                           widget.onConfirmLocale(locale);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => LoginScreen(
+                                onChangeLocale: widget.onConfirmLocale,
+                                currentLocale: locale,
+                              ),
+                            ),
+                          );
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD580),
@@ -136,11 +141,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   ),
                   child: Text(
                     S.of(context).ok.toUpperCase(),
-                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
-                      height: 1.0,
                       letterSpacing: 0.48,
                       color: Color(0xFF59523A),
                     ),
@@ -169,7 +172,6 @@ class _LanguageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = selected ? const Color(0xFF8E86FF) : Colors.transparent;
-
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
@@ -179,22 +181,16 @@ class _LanguageTile extends StatelessWidget {
         child: Row(
           children: [
             const SizedBox(width: 16),
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(500),
-                child: Image.asset(item.flagPath, fit: BoxFit.cover),
-              ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(500),
+              child: Image.asset(item.flagPath, width: 24, height: 24, fit: BoxFit.cover),
             ),
             const SizedBox(width: 6),
-            // текст слева отцентрирован по высоте, без центрирования по строке
             Text(
               item.localizedTitle(context),
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
-                height: 1.0,
                 color: Colors.white,
               ),
             ),
@@ -222,7 +218,7 @@ class _LangItem {
       case 'es':
         return s.languageSpanish;
       default:
-        return locale.languageCode; // fallback
+        return locale.languageCode;
     }
   }
 }

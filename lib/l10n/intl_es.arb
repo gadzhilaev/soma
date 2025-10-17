@@ -1,6 +1,14 @@
 {
-  "ok": "Aceptar",
+  "@@locale": "es",
+  "ok": "Bien",
   "languageRussian": "Ruso",
   "languageEnglish": "Inglés",
-  "languageSpanish": "Español"
+  "languageSpanish": "Español",
+  "emailLabel": "Correo electrónico",
+  "emailHint": "Introduce tu correo",
+  "passwordLabel": "Contraseña",
+  "passwordHint": "Introduce tu contraseña",
+  "login": "Iniciar sesión",
+  "register": "Registrarse",
+  "forgotPassword": "¿Olvidaste tu contraseña?"
 }

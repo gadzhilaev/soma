@@ -1,6 +1,14 @@
 {
+  "@@locale": "en",
   "ok": "OK",
   "languageRussian": "Russian",
   "languageEnglish": "English",
-  "languageSpanish": "Spanish"
+  "languageSpanish": "Spanish",
+  "emailLabel": "Email",
+  "emailHint": "Enter your email",
+  "passwordLabel": "Password",
+  "passwordHint": "Enter your password",
+  "login": "Login",
+  "register": "Register",
+  "forgotPassword": "Forgot password?"
 }
