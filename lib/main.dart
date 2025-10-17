@@ -192,7 +192,7 @@ class _LanguageTile extends StatelessWidget {
             Expanded(
               child: Text(
                 item.title,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.start,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
