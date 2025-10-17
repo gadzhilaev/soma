@@ -25,6 +25,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "languageEnglish": MessageLookupByLibrary.simpleMessage("Английский"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Русский"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Испанский"),
-    "ok": MessageLookupByLibrary.simpleMessage("ОК"),
+    "ok": MessageLookupByLibrary.simpleMessage("Хорошо"),
   };
 }

@@ -54,7 +54,6 @@ class LanguageScreen extends StatefulWidget {
 class _LanguageScreenState extends State<LanguageScreen> {
   int? selected;
 
-  // без названий — только флаг и локаль
   final _items = const [
     _LangItem('assets/icons/ru.png', Locale('ru')),
     _LangItem('assets/icons/en.png', Locale('en')),
@@ -64,9 +63,15 @@ class _LanguageScreenState extends State<LanguageScreen> {
   @override
   void initState() {
     super.initState();
+
     final systemCode = WidgetsBinding.instance.window.locale.languageCode;
     final idx = _items.indexWhere((it) => it.locale.languageCode == systemCode);
     selected = idx != -1 ? idx : 0;
+
+    // применяем системную локаль сразу, чтобы тексты уже были на нужном языке
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onConfirmLocale(_items[selected!].locale);
+    });
   }
 
   @override
@@ -100,7 +105,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       _LanguageTile(
                         item: _items[i],
                         selected: selected == i,
-                        onTap: () => setState(() => selected = i),
+                        onTap: () {
+                          setState(() => selected = i);
+                          // ⚡ меняем локаль сразу при выборе
+                          widget.onConfirmLocale(_items[i].locale);
+                        },
                       ),
                       if (i != _items.length - 1) const SizedBox(height: 10),
                     ],
@@ -115,6 +124,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   onPressed: selected == null
                       ? null
                       : () {
+                          // Кнопка “ОК” пока просто подтверждает выбор
                           final locale = _items[selected!].locale;
                           widget.onConfirmLocale(locale);
                         },
