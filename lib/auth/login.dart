@@ -240,8 +240,6 @@ class _InputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 353,
-        height: 48,
         decoration: BoxDecoration(
           color: const Color(0x29FFFFFF), // #FFFFFF29
           borderRadius: BorderRadius.circular(24),
@@ -250,7 +248,6 @@ class _InputField extends StatelessWidget {
         child: TextField(
           controller: controller,
           obscureText: obscure,
-          textAlignVertical: TextAlignVertical.center, // важно — вертикальное центрирование
           style: const TextStyle(
             fontFamily: 'Inter',
             fontWeight: FontWeight.w500,
