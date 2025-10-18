@@ -42,7 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       // делаем прозрачный фон у Scaffold, чтобы градиент контейнера покрывал весь экран
       backgroundColor: Colors.transparent,
-      body: SizedBox.expand(
+      body: Stack(
+        children: [SizedBox.expand(
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -218,10 +219,88 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      // Язык селектор поверх всего — оставляем как было
-      // (ниже Positioned код такой же, но вынесен за Scaffold.body для простоты)
-      // Добавим через Overlay внутри body (уже реализовано в этом же файле с Positioned)
+      // ===== Выбор языка (внизу справа) =====
+          Positioned(
+            right: 20,
+            bottom: 48,
+            child: GestureDetector(
+              onTap: () => setState(() => showLanguageList = !showLanguageList),
+              child: Container(
+                width: 63,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF9892FF),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(selectedLang.flagPath, width: 23, height: 23),
+                    const SizedBox(width: 6),
+                    const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // ===== Список языков, если открыт =====
+          if (showLanguageList)
+            Positioned(
+              right: 20,
+              bottom: 90,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.95),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: _languages.map((lang) {
+                    return InkWell(
+                      onTap: () {
+                        widget.onChangeLocale(lang.locale);
+                        setState(() => showLanguageList = false);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(lang.flagPath, width: 23, height: 23),
+                            const SizedBox(width: 8),
+                            Text(
+                              // Показываем название языка в текущей локали
+                              _languageNameForLocale(context, lang.locale),
+                              style: const TextStyle(fontFamily: 'Inter', color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
+  }
+
+  String _languageNameForLocale(BuildContext context, Locale locale) {
+    final s = S.of(context);
+    switch (locale.languageCode) {
+      case 'ru':
+        return s.languageRussian;
+      case 'en':
+        return s.languageEnglish;
+      case 'es':
+        return s.languageSpanish;
+      default:
+        return locale.languageCode;
+    }
   }
 }
 
