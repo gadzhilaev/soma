@@ -183,6 +183,31 @@ class S {
       args: [],
     );
   }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
+  }
+
+  /// `Enter your email address that was specified when registering your account`
+  String get restoreLabel {
+    return Intl.message(
+      'Enter your email address that was specified when registering your account',
+      name: 'restoreLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore password`
+  String get restorePass {
+    return Intl.message(
+      'Restore password',
+      name: 'restorePass',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

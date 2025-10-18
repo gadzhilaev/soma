@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "agreePrefix": MessageLookupByLibrary.simpleMessage(
       "Acepto los términos del procesamiento de ",
     ),
+    "cancel": MessageLookupByLibrary.simpleMessage("Отменить"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Introduce tu correo"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Correo electrónico"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
@@ -48,5 +49,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Repite la contraseña",
     ),
+    "restoreLabel": MessageLookupByLibrary.simpleMessage(
+      "Enter your email address that was specified when registering your account",
+    ),
+    "restorePass": MessageLookupByLibrary.simpleMessage("Restore password"),
   };
 }

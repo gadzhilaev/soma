@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "agreePrefix": MessageLookupByLibrary.simpleMessage(
       "Я согласен(-на) с условиями обработки ",
     ),
+    "cancel": MessageLookupByLibrary.simpleMessage("Отменить"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Введите почту"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Электронная почта"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
@@ -48,5 +49,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Повторите пароль",
     ),
+    "restoreLabel": MessageLookupByLibrary.simpleMessage(
+      "Введите вашу электронную почту, которую указывали при регистрации вашего аккаунта",
+    ),
+    "restorePass": MessageLookupByLibrary.simpleMessage("Восстановить пароль"),
   };
 }

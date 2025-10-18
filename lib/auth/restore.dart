@@ -1,29 +1,31 @@
-// lib/auth/login.dart
+// lib/auth/register.dart
 import 'package:flutter/material.dart';
 import 'package:soma/generated/l10n.dart';
+import 'login.dart';
 
-import 'register.dart';
-import 'restore.dart';
-
-class LoginScreen extends StatefulWidget {
+class RestoreScreen extends StatefulWidget {
   final Function(Locale locale) onChangeLocale;
   final Locale currentLocale;
 
-  const LoginScreen({
+  const RestoreScreen({
     super.key,
     required this.onChangeLocale,
     required this.currentLocale,
   });
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RestoreScreen> createState() => _RestoreScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RestoreScreenState extends State<RestoreScreen> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final passController = TextEditingController();
+  final repeatPassController = TextEditingController();
+
   late Locale _currentLocale;
   bool showLanguageList = false;
+  bool agreed = false;
 
   final _languages = const [
     _LangItem('assets/icons/ru.png', Locale('ru')),
@@ -34,13 +36,13 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // 🔹 ИНИЦИАЛИЗАЦИЯ state-локали из того, что пришло извне
     _currentLocale = widget.currentLocale;
   }
 
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
+
     final selectedLang = _languages.firstWhere(
       (l) => l.locale.languageCode == _currentLocale.languageCode,
       orElse: () => _languages.first,
@@ -50,10 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final verticalPadding = MediaQuery.of(context).padding.vertical;
 
     return Scaffold(
-      // делаем прозрачный фон у Scaffold, чтобы градиент контейнера покрывал весь экран
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
+          // фон + контент
           SizedBox.expand(
             child: Container(
               decoration: const BoxDecoration(
@@ -63,7 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   end: Alignment.bottomCenter,
                 ),
               ),
-              // SafeArea + SingleChildScrollView, но гарантируем минимум высоты = экран
               child: SafeArea(
                 child: SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
@@ -90,58 +91,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 48),
 
-                            // Email label
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Text(
-                                  s.emailLabel,
-                                  style: const TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                    color: Color(0xB2FFFFFF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
+                            // Электронная почта (берём из S)
+                            _Label(text: s.restoreLabel),
+                            const SizedBox(height: 24),
                             _InputField(
                               controller: emailController,
                               hint: s.emailHint,
                             ),
+
                             const SizedBox(height: 16),
 
-                            // Password label
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Text(
-                                  s.passwordLabel,
-                                  style: const TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                    color: Color(0xB2FFFFFF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            _InputField(
-                              controller: passwordController,
-                              hint: s.passwordHint,
-                              obscure: true,
-                            ),
-
-                            const SizedBox(height: 24),
-
-                            // Кнопка Войти (фиксированная высота)
+                            // Кнопка Восстановить пароль
                             Center(
                               child: SizedBox(
-                                width: 353,
                                 height: 56,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -149,68 +111,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
-                                    padding: EdgeInsets.zero,
                                     elevation: 0,
                                     minimumSize: const Size(353, 56),
                                   ),
-                                  onPressed: () {},
-                                  child: Center(
-                                    child: Text(
-                                      s.login.toUpperCase(),
-                                      style: const TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        letterSpacing: 0.48,
-                                        color: Color(0xFF59523A),
-                                        height: 1.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            // Кнопка Регистрация
-                            Center(
-                              child: SizedBox(
-                                width: 353,
-                                height: 56,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(
-                                      color: Colors.white,
-                                      width: 2,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(40),
-                                    ),
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: const Size(353, 56),
-                                  ),
                                   onPressed: () {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => RegisterScreen(
-                                          onChangeLocale: widget.onChangeLocale,
-                                          currentLocale: _currentLocale,
-                                        ),
-                                      ),
-                                    );
+                                    // TODO: регистрация
                                   },
                                   child: Center(
                                     child: Text(
-                                      s.register.toUpperCase(),
+                                      s.restorePass.toUpperCase(),
                                       style: const TextStyle(
                                         fontFamily: 'Inter',
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
-                                        letterSpacing: 0.48,
-                                        color: Colors.white,
-                                        height: 1.0,
+                                        letterSpacing: 0.48, // 4% от 12
+                                        color: Color(0xFF59523A),
                                       ),
                                     ),
                                   ),
@@ -220,14 +135,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             const SizedBox(height: 32),
 
-                            // Забыли пароль?
+                            // У меня уже есть аккаунт
                             Center(
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => RestoreScreen(
+                                      builder: (_) => LoginScreen(
                                         onChangeLocale: widget.onChangeLocale,
                                         currentLocale: _currentLocale,
                                       ),
@@ -235,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   );
                                 },
                                 child: Text(
-                                  s.forgotPassword,
+                                  s.cancel,
                                   style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontWeight: FontWeight.w400,
@@ -245,6 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
+
+                            const Spacer(),
+                            const SizedBox(height: 48),
                           ],
                         ),
                       ),
@@ -254,7 +172,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          // ===== Кнопка выбора языка + список языков =====
+
+          // ===== Кнопка выбора языка + список языков (как в login.dart) =====
           Positioned(
             right: 20,
             bottom: 48,
@@ -262,7 +181,6 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // ===== Список языков (над кнопкой, без нижнего скругления) =====
                 if (showLanguageList)
                   Container(
                     width: 65,
@@ -271,13 +189,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12),
-                        // нижние углы убраны — чтобы прилегал к кнопке
                       ),
                     ),
                     padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(
-                      bottom: 1,
-                    ), // 🔹 зазор 1 пиксель
+                    margin: const EdgeInsets.only(bottom: 1),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,8 +227,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           .toList(),
                     ),
                   ),
-
-                // ===== Кнопка выбранного языка =====
                 GestureDetector(
                   onTap: () =>
                       setState(() => showLanguageList = !showLanguageList),
@@ -358,6 +271,29 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
+// ===== Общие мелкие виджеты =====
+
+class _Label extends StatelessWidget {
+  final String text;
+  const _Label({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w500,
+          fontSize: 13,
+          color: Color(0xB2FFFFFF),
+        ),
+      ),
+    );
+  }
+}
+
 class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
@@ -373,11 +309,11 @@ class _InputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+        height: 48,
         decoration: BoxDecoration(
-          color: const Color(0x29FFFFFF), // #FFFFFF29
+          color: const Color(0x29FFFFFF), // #FFFFFF с ~16% прозрачности
           borderRadius: BorderRadius.circular(24),
         ),
-        alignment: Alignment.centerLeft,
         child: TextField(
           controller: controller,
           obscureText: obscure,
@@ -390,13 +326,12 @@ class _InputField extends StatelessWidget {
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: hint,
-            contentPadding: const EdgeInsets.only(left: 20), // слева 20
+            contentPadding: const EdgeInsets.only(left: 20),
             hintStyle: const TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w500,
               fontSize: 14,
               color: Colors.white70,
-              height: 1.0,
             ),
           ),
         ),

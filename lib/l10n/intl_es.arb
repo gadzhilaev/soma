@@ -17,5 +17,8 @@
   "agreePrefix": "Acepto los términos del procesamiento de ",
   "personalData": "datos personales",
   "registerSubmit": "Registrarse",
-  "haveAccount": "Ya tengo una cuenta"
+  "haveAccount": "Ya tengo una cuenta",
+  "cancel": "Отменить",
+  "restoreLabel": "Enter your email address that was specified when registering your account",
+  "restorePass": "Restore password"
 }
