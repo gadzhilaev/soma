@@ -19,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
+  late Locale _currentLocale;
   bool showLanguageList = false;
 
   final _languages = const [
@@ -29,10 +29,17 @@ class _LoginScreenState extends State<LoginScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    // 🔹 ИНИЦИАЛИЗАЦИЯ state-локали из того, что пришло извне
+    _currentLocale = widget.currentLocale;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final s = S.of(context);
     final selectedLang = _languages.firstWhere(
-      (l) => l.locale.languageCode == widget.currentLocale.languageCode,
+      (l) => l.locale.languageCode == _currentLocale.languageCode,
       orElse: () => _languages.first,
     );
 
@@ -219,71 +226,82 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      // ===== Выбор языка (внизу справа) =====
-          Positioned(
-            right: 20,
-            bottom: 48,
-            child: GestureDetector(
-              onTap: () => setState(() => showLanguageList = !showLanguageList),
-              child: Container(
-                width: 63,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF9892FF),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(selectedLang.flagPath, width: 23, height: 23),
-                    const SizedBox(width: 6),
-                    const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
-                  ],
-                ),
-              ),
+      // ===== Кнопка выбора языка + список языков =====
+Positioned(
+  right: 20,
+  bottom: 48,
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      // ===== Список языков (над кнопкой, без нижнего скругления) =====
+      if (showLanguageList)
+        Container(
+          width: 65,
+          decoration: const BoxDecoration(
+            color: Color(0xFF9892FF),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+              // нижние углы убраны — чтобы прилегал к кнопке
             ),
           ),
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(bottom: 1), // 🔹 зазор 1 пиксель
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: _languages
+                .where((lang) => lang.locale.languageCode != _currentLocale.languageCode)
+                .map((lang) {
+              return InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  widget.onChangeLocale(lang.locale);
+                  setState(() {
+                    _currentLocale = lang.locale;
+                    showLanguageList = false;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Image.asset(lang.flagPath, width: 23, height: 23),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
 
-          // ===== Список языков, если открыт =====
-          if (showLanguageList)
-            Positioned(
-              right: 20,
-              bottom: 90,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.95),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: _languages.map((lang) {
-                    return InkWell(
-                      onTap: () {
-                        widget.onChangeLocale(lang.locale);
-                        setState(() => showLanguageList = false);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(lang.flagPath, width: 23, height: 23),
-                            const SizedBox(width: 8),
-                            Text(
-                              // Показываем название языка в текущей локали
-                              _languageNameForLocale(context, lang.locale),
-                              style: const TextStyle(fontFamily: 'Inter', color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
+      // ===== Кнопка выбранного языка =====
+      GestureDetector(
+        onTap: () => setState(() => showLanguageList = !showLanguageList),
+        child: Container(
+          width: 65,
+          height: 36,
+          decoration: BoxDecoration(
+            color: const Color(0xFF9892FF),
+            borderRadius: showLanguageList
+                ? const BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  )
+                : BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(selectedLang.flagPath, width: 23, height: 23),
+              const SizedBox(width: 6),
+              const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
+            ],
+          ),
+        ),
+      ),
+    ],
+  ),
+),
         ],
       ),
     );
