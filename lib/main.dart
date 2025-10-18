@@ -136,7 +136,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD580),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                    padding: const EdgeInsets.fromLTRB(114, 22, 114, 22),
                     elevation: 0,
                   ),
                   child: Text(
