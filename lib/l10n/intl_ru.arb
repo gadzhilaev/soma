@@ -10,5 +10,12 @@
   "passwordHint": "Введите пароль",
   "login": "Войти",
   "register": "Регистрация",
-  "forgotPassword": "Забыли пароль?"
+  "forgotPassword": "Забыли пароль?",
+  "nameLabel": "Имя",
+  "nameHint": "Введите Имя",
+  "repeatPasswordLabel": "Повторите пароль",
+  "agreePrefix": "Я согласен(-на) с условиями обработки ",
+  "personalData": "персональных данных",
+  "registerSubmit": "Зарегистрироваться",
+  "haveAccount": "У меня уже есть аккаунт"
 }

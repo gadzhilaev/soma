@@ -22,16 +22,31 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "agreePrefix": MessageLookupByLibrary.simpleMessage(
+      "Я согласен(-на) с условиями обработки ",
+    ),
     "emailHint": MessageLookupByLibrary.simpleMessage("Введите почту"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Электронная почта"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
+    "haveAccount": MessageLookupByLibrary.simpleMessage(
+      "У меня уже есть аккаунт",
+    ),
     "languageEnglish": MessageLookupByLibrary.simpleMessage("Английский"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Русский"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Испанский"),
     "login": MessageLookupByLibrary.simpleMessage("Войти"),
+    "nameHint": MessageLookupByLibrary.simpleMessage("Введите Имя"),
+    "nameLabel": MessageLookupByLibrary.simpleMessage("Имя"),
     "ok": MessageLookupByLibrary.simpleMessage("Хорошо"),
     "passwordHint": MessageLookupByLibrary.simpleMessage("Введите пароль"),
     "passwordLabel": MessageLookupByLibrary.simpleMessage("Пароль"),
+    "personalData": MessageLookupByLibrary.simpleMessage("персональных данных"),
     "register": MessageLookupByLibrary.simpleMessage("Регистрация"),
+    "registerSubmit": MessageLookupByLibrary.simpleMessage(
+      "Зарегистрироваться",
+    ),
+    "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
+      "Повторите пароль",
+    ),
   };
 }

@@ -123,6 +123,66 @@ class S {
       args: [],
     );
   }
+
+  /// `Name`
+  String get nameLabel {
+    return Intl.message('Name', name: 'nameLabel', desc: '', args: []);
+  }
+
+  /// `Enter your name`
+  String get nameHint {
+    return Intl.message(
+      'Enter your name',
+      name: 'nameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repeat password`
+  String get repeatPasswordLabel {
+    return Intl.message(
+      'Repeat password',
+      name: 'repeatPasswordLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I agree with the terms of processing of `
+  String get agreePrefix {
+    return Intl.message(
+      'I agree with the terms of processing of ',
+      name: 'agreePrefix',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `personal data`
+  String get personalData {
+    return Intl.message(
+      'personal data',
+      name: 'personalData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register`
+  String get registerSubmit {
+    return Intl.message('Register', name: 'registerSubmit', desc: '', args: []);
+  }
+
+  /// `I already have an account`
+  String get haveAccount {
+    return Intl.message(
+      'I already have an account',
+      name: 'haveAccount',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -43,73 +43,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final s = S.of(context);
 
-    // локальные тексты (временно, пока не добавили в .arb)
-    String tName() {
-      switch (_currentLocale.languageCode) {
-        case 'en':
-          return 'Name';
-        case 'es':
-          return 'Nombre';
-        default:
-          return 'Имя';
-      }
-    }
-
-    String tRepeatPassword() {
-      switch (_currentLocale.languageCode) {
-        case 'en':
-          return 'Repeat password';
-        case 'es':
-          return 'Repite la contraseña';
-        default:
-          return 'Повторите пароль';
-      }
-    }
-
-    String tAgreePrefix() {
-      switch (_currentLocale.languageCode) {
-        case 'en':
-          return 'I agree with the terms of processing of ';
-        case 'es':
-          return 'Acepto los términos del procesamiento de ';
-        default:
-          return 'Я согласен(-на) с условиями обработки ';
-      }
-    }
-
-    String tPersonalData() {
-      switch (_currentLocale.languageCode) {
-        case 'en':
-          return 'personal data';
-        case 'es':
-          return 'datos personales';
-        default:
-          return 'персональных данных';
-      }
-    }
-
-    String tRegisterAction() {
-      switch (_currentLocale.languageCode) {
-        case 'en':
-          return 'Register';
-        case 'es':
-          return 'Registrarse';
-        default:
-          return 'Зарегистрироваться';
-      }
-    }
-
-    String tHaveAccount() {
-      switch (_currentLocale.languageCode) {
-        case 'en':
-          return 'I already have an account';
-        case 'es':
-          return 'Ya tengo una cuenta';
-        default:
-          return 'У меня уже есть аккаунт';
-      }
-    }
-
     final selectedLang = _languages.firstWhere(
       (l) => l.locale.languageCode == _currentLocale.languageCode,
       orElse: () => _languages.first,
@@ -150,17 +83,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: SizedBox(
                                 width: 112,
                                 height: 118,
-                                child: Image.asset('assets/logo/logo.png', fit: BoxFit.contain),
+                                child: Image.asset(
+                                  'assets/logo/logo.png',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 48),
 
                             // Имя
-                            _Label(text: tName()),
+                            _Label(text: s.nameLabel),
                             const SizedBox(height: 12),
                             _InputField(
                               controller: nameController,
-                              hint: tName(),
+                              hint: s.nameHint,
                             ),
                             const SizedBox(height: 16),
 
@@ -184,11 +120,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             const SizedBox(height: 16),
 
                             // Повторите пароль
-                            _Label(text: tRepeatPassword()),
+                            _Label(text: s.repeatPasswordLabel),
                             const SizedBox(height: 12),
                             _InputField(
                               controller: repeatPassController,
-                              hint: tRepeatPassword(),
+                              hint: s.repeatPasswordLabel,
                               obscure: true,
                             ),
 
@@ -200,12 +136,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () => setState(() => agreed = !agreed),
-                                  child: Container(
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 150),
                                     width: 20,
                                     height: 20,
-                                    margin: const EdgeInsets.only(right: 12, top: 2),
+                                    margin: const EdgeInsets.only(
+                                      right: 12,
+                                      top: 2,
+                                    ),
+                                    alignment: Alignment.center,
                                     decoration: BoxDecoration(
-                                      color: Colors.transparent,
+                                      color: agreed
+                                          ? const Color(0xFFFFD580)
+                                          : Colors.transparent, // заливка
                                       borderRadius: BorderRadius.circular(4),
                                       border: Border.all(
                                         color: const Color(0xFFFFD580),
@@ -213,18 +156,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ),
                                     ),
                                     child: agreed
-                                        ? const Icon(Icons.check, size: 16, color: Color(0xFFFFD580))
+                                        ? const Icon(
+                                            Icons.check,
+                                            size:
+                                                14, // чуть меньше, чтобы красиво влезало в 20x20
+                                            color: Color(
+                                              0xFF59523A,
+                                            ), // цвет галочки
+                                          )
                                         : null,
                                   ),
                                 ),
                                 Expanded(
                                   child: Center(
                                     child: RichText(
-                                      textAlign: TextAlign.center,
+                                      textAlign: TextAlign.start,
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: tAgreePrefix(),
+                                            text: s.agreePrefix,
                                             style: const TextStyle(
                                               fontFamily: 'Inter',
                                               fontWeight: FontWeight.w400,
@@ -235,15 +185,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: tPersonalData(),
+                                            text: s.personalData,
                                             style: const TextStyle(
                                               fontFamily: 'Inter',
                                               fontWeight: FontWeight.w400,
                                               fontSize: 13,
                                               height: 1.4,
                                               letterSpacing: 0.52,
-                                              color: Color(0xFFFFE0A0), // выделение
-                                              decoration: TextDecoration.underline,
+                                              color: Color(
+                                                0xFFFFE0A0,
+                                              ), // выделение
+                                              decoration:
+                                                  TextDecoration.underline,
                                             ),
                                           ),
                                         ],
@@ -259,7 +212,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             // Кнопка ЗАРЕГИСТРИРОВАТЬСЯ
                             Center(
                               child: SizedBox(
-                                width: 353,
                                 height: 56,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -267,7 +219,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
-                                    padding: EdgeInsets.zero,
                                     elevation: 0,
                                     minimumSize: const Size(353, 56),
                                   ),
@@ -276,14 +227,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   },
                                   child: Center(
                                     child: Text(
-                                      tRegisterAction().toUpperCase(),
+                                      s.registerSubmit.toUpperCase(),
                                       style: const TextStyle(
                                         fontFamily: 'Inter',
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
                                         letterSpacing: 0.48, // 4% от 12
                                         color: Color(0xFF59523A),
-                                        height: 1.0,
                                       ),
                                     ),
                                   ),
@@ -308,13 +258,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   );
                                 },
                                 child: Text(
-                                  tHaveAccount(),
+                                  s.haveAccount,
                                   style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
                                     color: Colors.white,
-                                    height: 1.7,
                                   ),
                                 ),
                               ),
@@ -356,27 +305,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: _languages
-                          .where((lang) => lang.locale.languageCode != _currentLocale.languageCode)
+                          .where(
+                            (lang) =>
+                                lang.locale.languageCode !=
+                                _currentLocale.languageCode,
+                          )
                           .map((lang) {
-                        return InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            widget.onChangeLocale(lang.locale);
-                            setState(() {
-                              _currentLocale = lang.locale;
-                              showLanguageList = false;
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            child: Image.asset(lang.flagPath, width: 23, height: 23),
-                          ),
-                        );
-                      }).toList(),
+                            return InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {
+                                widget.onChangeLocale(lang.locale);
+                                setState(() {
+                                  _currentLocale = lang.locale;
+                                  showLanguageList = false;
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 6,
+                                ),
+                                child: Image.asset(
+                                  lang.flagPath,
+                                  width: 23,
+                                  height: 23,
+                                ),
+                              ),
+                            );
+                          })
+                          .toList(),
                     ),
                   ),
                 GestureDetector(
-                  onTap: () => setState(() => showLanguageList = !showLanguageList),
+                  onTap: () =>
+                      setState(() => showLanguageList = !showLanguageList),
                   child: Container(
                     width: 65,
                     height: 36,
@@ -394,9 +355,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset(selectedLang.flagPath, width: 23, height: 23),
+                        Image.asset(
+                          selectedLang.flagPath,
+                          width: 23,
+                          height: 23,
+                        ),
                         const SizedBox(width: 6),
-                        const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
+                        const Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.white,
+                          size: 16,
+                        ),
                       ],
                     ),
                   ),
@@ -451,23 +420,19 @@ class _InputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 353,
         height: 48,
         decoration: BoxDecoration(
           color: const Color(0x29FFFFFF), // #FFFFFF с ~16% прозрачности
           borderRadius: BorderRadius.circular(24),
         ),
-        alignment: Alignment.centerLeft,
         child: TextField(
           controller: controller,
           obscureText: obscure,
-          textAlignVertical: TextAlignVertical.center,
           style: const TextStyle(
             fontFamily: 'Inter',
             fontWeight: FontWeight.w500,
             fontSize: 14,
             color: Colors.white,
-            height: 1.0,
           ),
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -478,7 +443,6 @@ class _InputField extends StatelessWidget {
               fontWeight: FontWeight.w500,
               fontSize: 14,
               color: Colors.white70,
-              height: 1.0,
             ),
           ),
         ),

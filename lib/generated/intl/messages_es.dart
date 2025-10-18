@@ -22,20 +22,31 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "agreePrefix": MessageLookupByLibrary.simpleMessage(
+      "Acepto los términos del procesamiento de ",
+    ),
     "emailHint": MessageLookupByLibrary.simpleMessage("Introduce tu correo"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Correo electrónico"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "¿Olvidaste tu contraseña?",
     ),
+    "haveAccount": MessageLookupByLibrary.simpleMessage("Ya tengo una cuenta"),
     "languageEnglish": MessageLookupByLibrary.simpleMessage("Inglés"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Ruso"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Español"),
     "login": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
+    "nameHint": MessageLookupByLibrary.simpleMessage("Introduce tu nombre"),
+    "nameLabel": MessageLookupByLibrary.simpleMessage("Nombre"),
     "ok": MessageLookupByLibrary.simpleMessage("Bien"),
     "passwordHint": MessageLookupByLibrary.simpleMessage(
       "Introduce tu contraseña",
     ),
     "passwordLabel": MessageLookupByLibrary.simpleMessage("Contraseña"),
+    "personalData": MessageLookupByLibrary.simpleMessage("datos personales"),
     "register": MessageLookupByLibrary.simpleMessage("Registrarse"),
+    "registerSubmit": MessageLookupByLibrary.simpleMessage("Registrarse"),
+    "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
+      "Repite la contraseña",
+    ),
   };
 }

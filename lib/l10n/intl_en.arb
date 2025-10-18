@@ -10,5 +10,12 @@
   "passwordHint": "Enter your password",
   "login": "Login",
   "register": "Register",
-  "forgotPassword": "Forgot password?"
+  "forgotPassword": "Forgot password?",
+  "nameLabel": "Name",
+  "nameHint": "Enter your name",
+  "repeatPasswordLabel": "Repeat password",
+  "agreePrefix": "I agree with the terms of processing of ",
+  "personalData": "personal data",
+  "registerSubmit": "Register",
+  "haveAccount": "I already have an account"
 }
