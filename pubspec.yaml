@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_native_splash: ^2.4.7
   intl: any
 
 dev_dependencies:
@@ -25,6 +26,23 @@ flutter:
   assets:
     - assets/logo/
     - assets/icons/
-  
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  fullscreen: true
+
+  # Общий фон — максимально близкий к середине твоего градиента
+  color: "#7A70FF"
+
+  # Логотип по центру
+  image: assets/logo/logo.png
+
+  # Для Android 12+
+  android_12:
+    color: "#7A70FF"
+    image: assets/logo/logo.png
+
 flutter_intl:
   enabled: true
