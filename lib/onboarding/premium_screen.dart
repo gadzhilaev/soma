@@ -3,17 +3,27 @@ import 'package:flutter/material.dart';
 import '../generated/l10n.dart';
 import '../home/home_screen.dart';
 
-class PremiumScreen extends StatelessWidget {
+// какой план выбран
+enum _Plan { yearly, monthly }
+
+class PremiumScreen extends StatefulWidget {
   const PremiumScreen({super.key});
+
+  @override
+  State<PremiumScreen> createState() => _PremiumScreenState();
+}
+
+class _PremiumScreenState extends State<PremiumScreen> {
+  // по умолчанию — годовой
+  _Plan _selected = _Plan.yearly;
 
   Future<void> _fakePay(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 1));
-    if (context.mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-        (_) => false,
-      );
-    }
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+      (_) => false,
+    );
   }
 
   void _goFree(BuildContext context) {
@@ -71,7 +81,7 @@ class PremiumScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     fontSize: 13,
                     height: 1.4,
-                    color: Color(0xB2FFFFFF), // #FFFFFFB2
+                    color: Color(0xB2FFFFFF),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -97,174 +107,30 @@ class PremiumScreen extends StatelessWidget {
 
                 const SizedBox(height: 24),
 
-                // ГОДОВОЙ тариф (выделенный)
-                Container(
+                // YEARLY (выбран по умолчанию)
+                _PlanTile(
+                  selected: _selected == _Plan.yearly,
                   height: 82,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF938DFF),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFFFFD580), width: 1),
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      // Левый блок
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 6), // 16 + 6 ≈ 22
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                s.yearly.toUpperCase(),
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  height: 23/16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Text(
-                                    s.oldPriceYear, // "3 400 ₽"
-                                    style: const TextStyle(
-                                      decoration: TextDecoration.lineThrough,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      height: 23/14,
-                                      color: Color(0xFFCECECE),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    s.newPriceYear, // "1 999 ₽"
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      height: 23/14,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // Правый блок
-                      Padding(
-                        padding: const EdgeInsets.only(right: 6), // ~22 до края
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              s.mostPopular.toUpperCase(),
-                              textAlign: TextAlign.right,
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                                height: 23/12,
-                                color: Color(0xFFFFD580),
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            // "166 ₽ в месяц"
-                            RichText(
-                              textAlign: TextAlign.right,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: s.perMonthPrice, // "166 ₽ "
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      height: 23/14,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: s.perMonthTail, // "в месяц"
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      height: 23/14,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  leftTitle: s.yearly.toUpperCase(),
+                  leftOldPrice: s.oldPriceYear,
+                  leftNewPrice: s.newPriceYear,
+                  rightBadge: s.mostPopular.toUpperCase(),
+                  // добавил пробел между частями
+                  rightPerMonth: '${s.perMonthPrice} ${s.perMonthTail}',
+                  onTap: () => setState(() => _selected = _Plan.yearly),
                 ),
-
                 const SizedBox(height: 12),
 
-                // Ежемесячный
-                Container(
+                // MONTHLY
+                _PlanTile(
+                  selected: _selected == _Plan.monthly,
                   height: 71,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xFF938DFF), width: 1),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          s.monthly.toUpperCase(),
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                            height: 23/14,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      RichText(
-                        textAlign: TextAlign.right,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: s.monthlyPrice, // "299 ₽ "
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                height: 23/14,
-                                color: Colors.white,
-                              ),
-                            ),
-                            TextSpan(
-                              text: s.perMonthTail, // "в месяц"
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                height: 23/14,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  leftTitle: s.monthly.toUpperCase(),
+                  leftOldPrice: null,
+                  leftNewPrice: null,
+                  rightBadge: null,
+                  rightPerMonth: '${s.monthlyPrice} ${s.perMonthTail}',
+                  onTap: () => setState(() => _selected = _Plan.monthly),
                 ),
 
                 const SizedBox(height: 24),
@@ -298,7 +164,6 @@ class PremiumScreen extends StatelessWidget {
 
                 const SizedBox(height: 24),
 
-                // "Продолжить бесплатно"
                 GestureDetector(
                   onTap: () => _goFree(context),
                   child: Text(
@@ -389,6 +254,157 @@ class _FeatureCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PlanTile extends StatelessWidget {
+  final bool selected;
+  final double height;
+  final String leftTitle;
+  final String? leftOldPrice;
+  final String? leftNewPrice;
+  final String? rightBadge;     // "MOST POPULAR" для годового
+  final String rightPerMonth;   // "166 ₽ в месяц" / "299 ₽ в месяц"
+  final VoidCallback onTap;
+
+  const _PlanTile({
+    required this.selected,
+    required this.height,
+    required this.leftTitle,
+    required this.rightPerMonth,
+    required this.onTap,
+    this.leftOldPrice,
+    this.leftNewPrice,
+    this.rightBadge,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = selected ? const Color(0xFF938DFF) : Colors.transparent;
+    final border = selected ? const Color(0xFFFFD580) : const Color(0xFF938DFF);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: onTap,
+      child: Container(
+        constraints: BoxConstraints(minHeight: height),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: border, width: 1),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // ЛЕВЫЙ столбец
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 6), // визуально ≈22 до края
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Заголовок тарифа
+                    Text(
+                      leftTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        height: 23/16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (leftOldPrice != null && leftNewPrice != null) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              leftOldPrice!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                decoration: TextDecoration.lineThrough,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                height: 23/14,
+                                color: Color(0xFFCECECE),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              leftNewPrice!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                height: 23/14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+
+            // ПРАВЫЙ столбец
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (rightBadge != null) ...[
+                      Text(
+                        rightBadge!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 11,        // чуть меньше, чтобы всегда влезало
+                          height: 23/11,
+                          color: Color(0xFFFFD580),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    Text(
+                      rightPerMonth, // одна строка
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        height: 23/14,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
