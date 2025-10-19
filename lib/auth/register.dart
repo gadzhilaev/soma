@@ -251,9 +251,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Пароли не совпадают'),
-                                        ),
+                                        SnackBar(content: Text(S.of(context).errPasswordsNotMatch)),
                                       );
                                       return;
                                     }
@@ -261,11 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Подтверди согласие на обработку данных',
-                                          ),
-                                        ),
+                                        SnackBar(content: Text(S.of(context).errAgreeRequired)),
                                       );
                                       return;
                                     }
@@ -312,7 +306,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
-                                        SnackBar(content: Text('Ошибка: $e')),
+                                        SnackBar(content: Text('${S.of(context).errorPrefix} $e')),
                                       );
                                     }
                                   },

@@ -25,9 +25,56 @@ class MessageLookup extends MessageLookupByLibrary {
     "agreePrefix": MessageLookupByLibrary.simpleMessage(
       "Acepto los términos del procesamiento de ",
     ),
+    "allow": MessageLookupByLibrary.simpleMessage("Permitir"),
+    "becomePremium": MessageLookupByLibrary.simpleMessage("Hacerse premium"),
     "cancel": MessageLookupByLibrary.simpleMessage("Отменить"),
+    "continueFree": MessageLookupByLibrary.simpleMessage("Continuar gratis"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Introduce tu correo"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Correo electrónico"),
+    "errAgreeRequired": MessageLookupByLibrary.simpleMessage(
+      "Acepta el tratamiento de datos",
+    ),
+    "errEnterEmailAndPassword": MessageLookupByLibrary.simpleMessage(
+      "Introduce el correo y la contraseña",
+    ),
+    "errFillAllFields": MessageLookupByLibrary.simpleMessage(
+      "Por favor completa todos los campos",
+    ),
+    "errLoadOptions": MessageLookupByLibrary.simpleMessage(
+      "Error al cargar las opciones",
+    ),
+    "errLoadQuestions": MessageLookupByLibrary.simpleMessage(
+      "Error al cargar las preguntas",
+    ),
+    "errNoSession": MessageLookupByLibrary.simpleMessage(
+      "No hay sesión de usuario activa",
+    ),
+    "errPasswordsNotMatch": MessageLookupByLibrary.simpleMessage(
+      "Las contraseñas no coinciden",
+    ),
+    "errSaveAnswer": MessageLookupByLibrary.simpleMessage(
+      "Error al guardar la respuesta",
+    ),
+    "errSelectOption": MessageLookupByLibrary.simpleMessage(
+      "Selecciona una opción",
+    ),
+    "errorPrefix": MessageLookupByLibrary.simpleMessage("Error:"),
+    "feature1Desc": MessageLookupByLibrary.simpleMessage(
+      "técnicas únicas para relajación profunda y crecimiento personal",
+    ),
+    "feature1Title": MessageLookupByLibrary.simpleMessage(
+      "Programas exclusivos",
+    ),
+    "feature2Desc": MessageLookupByLibrary.simpleMessage(
+      "contenido adaptado a tus objetivos y necesidades",
+    ),
+    "feature2Title": MessageLookupByLibrary.simpleMessage(
+      "Recomendaciones personales",
+    ),
+    "feature3Desc": MessageLookupByLibrary.simpleMessage(
+      "recordatorios amables te ayudan a mantener la regularidad",
+    ),
+    "feature3Title": MessageLookupByLibrary.simpleMessage("Hábito constante"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "¿Olvidaste tu contraseña?",
     ),
@@ -36,14 +83,34 @@ class MessageLookup extends MessageLookupByLibrary {
     "languageRussian": MessageLookupByLibrary.simpleMessage("Ruso"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Español"),
     "login": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
+    "monthly": MessageLookupByLibrary.simpleMessage("MENSUAL"),
+    "monthlyPrice": MessageLookupByLibrary.simpleMessage("299 ₽ "),
+    "mostPopular": MessageLookupByLibrary.simpleMessage("EL MÁS POPULAR"),
     "nameHint": MessageLookupByLibrary.simpleMessage("Introduce tu nombre"),
     "nameLabel": MessageLookupByLibrary.simpleMessage("Nombre"),
+    "newPriceYear": MessageLookupByLibrary.simpleMessage("1 999 ₽"),
+    "next": MessageLookupByLibrary.simpleMessage("Siguiente"),
+    "noActiveQuestions": MessageLookupByLibrary.simpleMessage(
+      "No hay preguntas activas",
+    ),
+    "noBtn": MessageLookupByLibrary.simpleMessage("No"),
+    "notifSubtitle": MessageLookupByLibrary.simpleMessage(
+      "¿Quieres permitir que la app envíe notificaciones push?",
+    ),
+    "notifTitle": MessageLookupByLibrary.simpleMessage("Notificaciones"),
     "ok": MessageLookupByLibrary.simpleMessage("Bien"),
+    "oldPriceYear": MessageLookupByLibrary.simpleMessage("3 400 ₽"),
     "passwordHint": MessageLookupByLibrary.simpleMessage(
       "Introduce tu contraseña",
     ),
     "passwordLabel": MessageLookupByLibrary.simpleMessage("Contraseña"),
+    "perMonthPrice": MessageLookupByLibrary.simpleMessage("166 ₽ "),
+    "perMonthTail": MessageLookupByLibrary.simpleMessage("al mes"),
     "personalData": MessageLookupByLibrary.simpleMessage("datos personales"),
+    "premiumSubtitle": MessageLookupByLibrary.simpleMessage(
+      "¡Empieza tu camino hacia la armonía ahora!",
+    ),
+    "premiumTitle": MessageLookupByLibrary.simpleMessage("Cuenta premium"),
     "register": MessageLookupByLibrary.simpleMessage("Registrarse"),
     "registerSubmit": MessageLookupByLibrary.simpleMessage("Registrarse"),
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
@@ -53,5 +120,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enter your email address that was specified when registering your account",
     ),
     "restorePass": MessageLookupByLibrary.simpleMessage("Restore password"),
+    "yearly": MessageLookupByLibrary.simpleMessage("ANUAL"),
   };
 }

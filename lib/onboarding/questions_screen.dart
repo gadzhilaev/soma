@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase.dart';
 import '../home/home_screen.dart';
+import 'notifications_screen.dart';
+import 'package:soma/generated/l10n.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({super.key});
@@ -24,22 +26,35 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   // кэш опций по questionId
   final Map<String, List<_Option>> _options = {};
 
-  // выбранная опция для текущего вопроса
+  String? _lang; // <-- тут храним язык
   String? _selectedOptionId;
 
   @override
   void initState() {
     super.initState();
-    _loadQuestions();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_lang == null) {
+      final code = Localizations.localeOf(context).languageCode;
+      const allowed = ['ru', 'en', 'es'];
+      _lang = allowed.contains(code) ? code : 'en';
+      _loadQuestions(); // стартуем загрузку только теперь
+    }
   }
 
   Future<void> _loadQuestions() async {
+    if (_lang == null) return;
+    final lang = _lang!;
     setState(() => _loading = true);
     try {
       final res = await _sb
           .from('questions')
           .select('id,title,created_at')
           .eq('is_active', true)
+          .eq('language', lang)
           .order('created_at', ascending: true);
 
       _questions = (res as List)
@@ -63,19 +78,22 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
       await _loadOptions(_questions.first.id);
     } catch (e) {
-      _show('Ошибка загрузки вопросов: $e');
+      _show('${S.of(context).errLoadQuestions} $e');
     } finally {
       if (mounted) setState(() => _loading = false);
     }
   }
 
   Future<void> _loadOptions(String questionId) async {
-    if (_options.containsKey(questionId)) return; // уже есть
+    if (_lang == null) return;
+    final lang = _lang!;
+    if (_options.containsKey(questionId)) return;
     try {
       final res = await _sb
           .from('question_options')
           .select('id,label,value,sort_index')
           .eq('question_id', questionId)
+          .eq('language', lang)
           .order('sort_index', ascending: true);
 
       _options[questionId] = (res as List)
@@ -88,7 +106,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           )
           .toList();
     } catch (e) {
-      _show('Ошибка загрузки вариантов: $e');
+      _show('${S.of(context).errLoadOptions} $e');
       _options[questionId] = const [];
     }
   }
@@ -97,12 +115,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
     if (_questions.isEmpty) return;
     final user = _sb.auth.currentUser;
     if (user == null) {
-      _show('Нет активной сессии пользователя');
+      _show(S.of(context).errNoSession);
       return;
     }
     final q = _questions[_idx];
     if (_selectedOptionId == null) {
-      _show('Выберите один из вариантов');
+      _show(S.of(context).errSelectOption);
       return;
     }
 
@@ -112,7 +130,6 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         'user_id': user.id,
         'question_id': q.id,
         'option_id': _selectedOptionId,
-        // 'free_text': null, // если когда-нибудь появится поле "Другое → введите"
       });
 
       // следующий вопрос или на главную
@@ -129,12 +146,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
       } else {
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => const NotificationsScreen()),
           (_) => false,
         );
       }
     } catch (e) {
-      _show('Не удалось сохранить ответ: $e');
+      _show('${S.of(context).errorPrefix} $e');
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -285,8 +302,8 @@ class _QuestionView extends StatelessWidget {
                         color: Color(0xFF59523A),
                       ),
                     )
-                  : const Text(
-                      'ДАЛЕЕ',
+                  : Text(
+                      S.of(context).next.toUpperCase(),
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
@@ -388,8 +405,8 @@ class _EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Нет активных вопросов',
+            Text(
+              S.of(context).noActiveQuestions,
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
             const SizedBox(height: 16),

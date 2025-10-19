@@ -78,9 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ).showSnackBar(SnackBar(content: Text(e.message)));
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
+      SnackBar(content: Text('${S.of(context).errorPrefix} $e'));
     } finally {
       if (!mounted) return;
       setState(() => _loading = false);

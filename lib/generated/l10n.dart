@@ -208,6 +208,291 @@ class S {
       args: [],
     );
   }
+
+  /// `Next`
+  String get next {
+    return Intl.message('Next', name: 'next', desc: '', args: []);
+  }
+
+  /// `No active questions`
+  String get noActiveQuestions {
+    return Intl.message(
+      'No active questions',
+      name: 'noActiveQuestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get notifTitle {
+    return Intl.message(
+      'Notifications',
+      name: 'notifTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Would you like to allow the app to send push notifications?`
+  String get notifSubtitle {
+    return Intl.message(
+      'Would you like to allow the app to send push notifications?',
+      name: 'notifSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow`
+  String get allow {
+    return Intl.message('Allow', name: 'allow', desc: '', args: []);
+  }
+
+  /// `No`
+  String get noBtn {
+    return Intl.message('No', name: 'noBtn', desc: '', args: []);
+  }
+
+  /// `Premium account`
+  String get premiumTitle {
+    return Intl.message(
+      'Premium account',
+      name: 'premiumTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start your path to harmony now!`
+  String get premiumSubtitle {
+    return Intl.message(
+      'Start your path to harmony now!',
+      name: 'premiumSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exclusive programs`
+  String get feature1Title {
+    return Intl.message(
+      'Exclusive programs',
+      name: 'feature1Title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `unique techniques for deep relaxation and personal growth`
+  String get feature1Desc {
+    return Intl.message(
+      'unique techniques for deep relaxation and personal growth',
+      name: 'feature1Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personalized recommendations`
+  String get feature2Title {
+    return Intl.message(
+      'Personalized recommendations',
+      name: 'feature2Title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `content tailored to your goals and needs`
+  String get feature2Desc {
+    return Intl.message(
+      'content tailored to your goals and needs',
+      name: 'feature2Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Habit building`
+  String get feature3Title {
+    return Intl.message(
+      'Habit building',
+      name: 'feature3Title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `gentle reminders help you stay consistent`
+  String get feature3Desc {
+    return Intl.message(
+      'gentle reminders help you stay consistent',
+      name: 'feature3Desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `YEARLY`
+  String get yearly {
+    return Intl.message('YEARLY', name: 'yearly', desc: '', args: []);
+  }
+
+  /// `3,400 ₽`
+  String get oldPriceYear {
+    return Intl.message('3,400 ₽', name: 'oldPriceYear', desc: '', args: []);
+  }
+
+  /// `1,999 ₽`
+  String get newPriceYear {
+    return Intl.message('1,999 ₽', name: 'newPriceYear', desc: '', args: []);
+  }
+
+  /// `MOST POPULAR`
+  String get mostPopular {
+    return Intl.message(
+      'MOST POPULAR',
+      name: 'mostPopular',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `166 ₽ `
+  String get perMonthPrice {
+    return Intl.message('166 ₽ ', name: 'perMonthPrice', desc: '', args: []);
+  }
+
+  /// `per month`
+  String get perMonthTail {
+    return Intl.message('per month', name: 'perMonthTail', desc: '', args: []);
+  }
+
+  /// `MONTHLY`
+  String get monthly {
+    return Intl.message('MONTHLY', name: 'monthly', desc: '', args: []);
+  }
+
+  /// `299 ₽ `
+  String get monthlyPrice {
+    return Intl.message('299 ₽ ', name: 'monthlyPrice', desc: '', args: []);
+  }
+
+  /// `Become premium member`
+  String get becomePremium {
+    return Intl.message(
+      'Become premium member',
+      name: 'becomePremium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue for free`
+  String get continueFree {
+    return Intl.message(
+      'Continue for free',
+      name: 'continueFree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter email and password`
+  String get errEnterEmailAndPassword {
+    return Intl.message(
+      'Enter email and password',
+      name: 'errEnterEmailAndPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please fill in all fields`
+  String get errFillAllFields {
+    return Intl.message(
+      'Please fill in all fields',
+      name: 'errFillAllFields',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match`
+  String get errPasswordsNotMatch {
+    return Intl.message(
+      'Passwords do not match',
+      name: 'errPasswordsNotMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please accept the data processing agreement`
+  String get errAgreeRequired {
+    return Intl.message(
+      'Please accept the data processing agreement',
+      name: 'errAgreeRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active user session`
+  String get errNoSession {
+    return Intl.message(
+      'No active user session',
+      name: 'errNoSession',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select one option`
+  String get errSelectOption {
+    return Intl.message(
+      'Please select one option',
+      name: 'errSelectOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load questions`
+  String get errLoadQuestions {
+    return Intl.message(
+      'Failed to load questions',
+      name: 'errLoadQuestions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load options`
+  String get errLoadOptions {
+    return Intl.message(
+      'Failed to load options',
+      name: 'errLoadOptions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to save answer`
+  String get errSaveAnswer {
+    return Intl.message(
+      'Failed to save answer',
+      name: 'errSaveAnswer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error:`
+  String get errorPrefix {
+    return Intl.message('Error:', name: 'errorPrefix', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
