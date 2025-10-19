@@ -33,16 +33,13 @@ flutter_native_splash:
   web: false
   fullscreen: true
 
-  # Общий фон — максимально близкий к середине твоего градиента
-  color: "#7A70FF"
+  # Фоновая картинка (твой градиент на весь экран)
+  background_image: assets/logo/splash.png
 
-  # Логотип по центру
-  image: assets/logo/logo.png
-
-  # Для Android 12+
   android_12:
-    color: "#7A70FF"
-    image: assets/logo/logo.png
+    # Для Android 12+ тоже используем картинку-фон,
+    # иначе там будет просто цвет.
+    background_image: assets/logo/splash.png
 
 flutter_intl:
   enabled: true
