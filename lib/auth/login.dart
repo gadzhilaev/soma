@@ -1,7 +1,8 @@
 // lib/auth/login.dart
 import 'package:flutter/material.dart';
 import 'package:soma/generated/l10n.dart';
-
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../core/supabase.dart';
 import 'register.dart';
 import 'restore.dart';
 
@@ -25,6 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
   late Locale _currentLocale;
   bool showLanguageList = false;
 
+  // 🔹 флаг загрузки — ДОЛЖЕН быть в State
+  bool _loading = false;
+
   final _languages = const [
     _LangItem('assets/icons/ru.png', Locale('ru')),
     _LangItem('assets/icons/en.png', Locale('en')),
@@ -34,8 +38,51 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // 🔹 ИНИЦИАЛИЗАЦИЯ state-локали из того, что пришло извне
     _currentLocale = widget.currentLocale;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  // 🔹 логин — ДОЛЖЕН быть в State, чтобы видеть context/setState/mounted
+  Future<void> _login() async {
+    final email = emailController.text.trim();
+    final pass  = passwordController.text.trim();
+
+    if (email.isEmpty || pass.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Введите почту и пароль')),
+      );
+      return;
+    }
+
+    setState(() => _loading = true);
+    try {
+      await supa.auth.signInWithPassword(email: email, password: pass);
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Вход выполнен')),
+      );
+      // TODO: Navigator.pushReplacement(... на Home)
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message)),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка: $e')),
+      );
+    } finally {
+      if (!mounted) return;
+      setState(() => _loading = false);
+    }
   }
 
   @override
@@ -50,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final verticalPadding = MediaQuery.of(context).padding.vertical;
 
     return Scaffold(
-      // делаем прозрачный фон у Scaffold, чтобы градиент контейнера покрывал весь экран
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
@@ -63,7 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   end: Alignment.bottomCenter,
                 ),
               ),
-              // SafeArea + SingleChildScrollView, но гарантируем минимум высоты = экран
               child: SafeArea(
                 child: SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
@@ -138,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             const SizedBox(height: 24),
 
-                            // Кнопка Войти (фиксированная высота)
+                            // Кнопка Войти
                             Center(
                               child: SizedBox(
                                 width: 353,
@@ -153,20 +198,29 @@ class _LoginScreenState extends State<LoginScreen> {
                                     elevation: 0,
                                     minimumSize: const Size(353, 56),
                                   ),
-                                  onPressed: () {},
-                                  child: Center(
-                                    child: Text(
-                                      s.login.toUpperCase(),
-                                      style: const TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        letterSpacing: 0.48,
-                                        color: Color(0xFF59523A),
-                                        height: 1.0,
-                                      ),
-                                    ),
-                                  ),
+                                  onPressed: _loading ? null : _login,
+                                  child: _loading
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Color(0xFF59523A),
+                                          ),
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            s.login.toUpperCase(),
+                                            style: const TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              letterSpacing: 0.48,
+                                              color: Color(0xFF59523A),
+                                              height: 1.0,
+                                            ),
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),
@@ -180,10 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 56,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(
-                                      color: Colors.white,
-                                      width: 2,
-                                    ),
+                                    side: const BorderSide(color: Colors.white, width: 2),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
@@ -254,7 +305,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          // ===== Кнопка выбора языка + список языков =====
+
+          // ===== Выбор языка (как было)
           Positioned(
             right: 20,
             bottom: 48,
@@ -262,7 +314,6 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                // ===== Список языков (над кнопкой, без нижнего скругления) =====
                 if (showLanguageList)
                   Container(
                     width: 65,
@@ -271,52 +322,40 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12),
-                        // нижние углы убраны — чтобы прилегал к кнопке
                       ),
                     ),
                     padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(
-                      bottom: 1,
-                    ), // 🔹 зазор 1 пиксель
+                    margin: const EdgeInsets.only(bottom: 1),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: _languages
-                          .where(
-                            (lang) =>
-                                lang.locale.languageCode !=
-                                _currentLocale.languageCode,
-                          )
+                          .where((lang) => lang.locale.languageCode != _currentLocale.languageCode)
                           .map((lang) {
-                            return InkWell(
-                              borderRadius: BorderRadius.circular(8),
-                              onTap: () {
-                                widget.onChangeLocale(lang.locale);
-                                setState(() {
-                                  _currentLocale = lang.locale;
-                                  showLanguageList = false;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 6,
-                                ),
-                                child: Image.asset(
-                                  lang.flagPath,
-                                  width: 23,
-                                  height: 23,
-                                ),
-                              ),
-                            );
-                          })
-                          .toList(),
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () {
+                            widget.onChangeLocale(lang.locale);
+                            setState(() {
+                              _currentLocale = lang.locale;
+                              showLanguageList = false;
+                            });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 6),
+                            child: SizedBox(
+                              width: 23,
+                              height: 23,
+                              // только флаг
+                              // Image.asset(lang.flagPath, width: 23, height: 23),
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
-
-                // ===== Кнопка выбранного языка =====
                 GestureDetector(
-                  onTap: () =>
-                      setState(() => showLanguageList = !showLanguageList),
+                  onTap: () => setState(() => showLanguageList = !showLanguageList),
                   child: Container(
                     width: 65,
                     height: 36,
@@ -334,17 +373,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset(
-                          selectedLang.flagPath,
-                          width: 23,
-                          height: 23,
-                        ),
+                        Image.asset(selectedLang.flagPath, width: 23, height: 23),
                         const SizedBox(width: 6),
-                        const Icon(
-                          Icons.keyboard_arrow_down,
-                          color: Colors.white,
-                          size: 16,
-                        ),
+                        const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
                       ],
                     ),
                   ),
@@ -374,7 +405,7 @@ class _InputField extends StatelessWidget {
     return Center(
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0x29FFFFFF), // #FFFFFF29
+          color: const Color(0x29FFFFFF),
           borderRadius: BorderRadius.circular(24),
         ),
         alignment: Alignment.centerLeft,
@@ -390,7 +421,7 @@ class _InputField extends StatelessWidget {
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: hint,
-            contentPadding: const EdgeInsets.only(left: 20), // слева 20
+            contentPadding: const EdgeInsets.only(left: 20),
             hintStyle: const TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w500,

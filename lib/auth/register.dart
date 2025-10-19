@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:soma/generated/l10n.dart';
 import 'login.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // 👈
+import '../core/supabase.dart'; // 👈 если файл core/supabase.dart создашь
 
 class RegisterScreen extends StatefulWidget {
   final Function(Locale locale) onChangeLocale;
@@ -222,8 +224,109 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     elevation: 0,
                                     minimumSize: const Size(353, 56),
                                   ),
-                                  onPressed: () {
-                                    // TODO: регистрация
+                                  onPressed: () async {
+                                    final name = nameController.text.trim();
+                                    final email = emailController.text.trim();
+                                    final pass = passController.text.trim();
+                                    final pass2 = repeatPassController.text
+                                        .trim();
+
+                                    if (name.isEmpty ||
+                                        email.isEmpty ||
+                                        pass.isEmpty ||
+                                        pass2.isEmpty) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            S.of(context).emailHint,
+                                          ),
+                                        ), // можно свой текст
+                                      );
+                                      return;
+                                    }
+                                    if (pass != pass2) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Пароли не совпадают'),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    if (!agreed) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Подтверди согласие на обработку данных',
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    try {
+                                      // 1) Регистрация в auth
+                                      final res = await supa.auth.signUp(
+                                        email: email,
+                                        password: pass,
+                                        data: {
+                                          'name': name,
+                                        }, // метаданные (опционально)
+                                      );
+
+                                      final user = res.user;
+                                      if (user == null) {
+                                        throw 'Не удалось создать пользователя';
+                                      }
+
+                                      // 2) Профиль в таблицу users (id, name, email)
+                                      await supa.from('users').upsert({
+                                        'id': user
+                                            .id, // важно: ключом делаем id из auth
+                                        'name': name,
+                                        'email': email,
+                                      }).select(); // чтобы словить ошибки в dev
+
+                                      // 3) Успех
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Регистрация прошла успешно',
+                                          ),
+                                        ),
+                                      );
+
+                                      // Вернёмся на экран логина
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => LoginScreen(
+                                            onChangeLocale:
+                                                widget.onChangeLocale,
+                                            currentLocale: _currentLocale,
+                                          ),
+                                        ),
+                                      );
+                                    } on AuthException catch (e) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(content: Text(e.message)),
+                                      );
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(content: Text('Ошибка: $e')),
+                                      );
+                                    }
                                   },
                                   child: Center(
                                     child: Text(
