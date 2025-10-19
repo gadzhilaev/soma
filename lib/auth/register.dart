@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:soma/generated/l10n.dart';
 import 'login.dart';
-import 'package:supabase_flutter/supabase_flutter.dart'; // 👈
-import '../core/supabase.dart'; // 👈 если файл core/supabase.dart создашь
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../core/supabase.dart';
+import '../onboarding/questions_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Function(Locale locale) onChangeLocale;
@@ -292,27 +293,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         'email': email,
                                       }).select(); // чтобы словить ошибки в dev
 
-                                      // 3) Успех
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            'Регистрация прошла успешно',
-                                          ),
-                                        ),
-                                      );
-
                                       // Вернёмся на экран логина
-                                      Navigator.pushReplacement(
+                                      Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => LoginScreen(
-                                            onChangeLocale:
-                                                widget.onChangeLocale,
-                                            currentLocale: _currentLocale,
-                                          ),
+                                          builder: (_) =>
+                                              const QuestionsScreen(),
                                         ),
+                                        (_) => false,
                                       );
                                     } on AuthException catch (e) {
                                       ScaffoldMessenger.of(

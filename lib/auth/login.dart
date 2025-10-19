@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase.dart';
 import 'register.dart';
 import 'restore.dart';
+import '../home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function(Locale locale) onChangeLocale;
@@ -51,34 +52,35 @@ class _LoginScreenState extends State<LoginScreen> {
   // 🔹 логин — ДОЛЖЕН быть в State, чтобы видеть context/setState/mounted
   Future<void> _login() async {
     final email = emailController.text.trim();
-    final pass  = passwordController.text.trim();
+    final pass = passwordController.text.trim();
 
     if (email.isEmpty || pass.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Введите почту и пароль')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Введите почту и пароль')));
       return;
     }
 
     setState(() => _loading = true);
     try {
       await supa.auth.signInWithPassword(email: email, password: pass);
-
+      // внутри try после успешного signInWithPassword
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Вход выполнен')),
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        (_) => false,
       );
-      // TODO: Navigator.pushReplacement(... на Home)
     } on AuthException catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message)));
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Ошибка: $e')));
     } finally {
       if (!mounted) return;
       setState(() => _loading = false);
@@ -234,7 +236,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 56,
                                 child: OutlinedButton(
                                   style: OutlinedButton.styleFrom(
-                                    side: const BorderSide(color: Colors.white, width: 2),
+                                    side: const BorderSide(
+                                      color: Colors.white,
+                                      width: 2,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
@@ -330,32 +335,38 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: _languages
-                          .where((lang) => lang.locale.languageCode != _currentLocale.languageCode)
+                          .where(
+                            (lang) =>
+                                lang.locale.languageCode !=
+                                _currentLocale.languageCode,
+                          )
                           .map((lang) {
-                        return InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            widget.onChangeLocale(lang.locale);
-                            setState(() {
-                              _currentLocale = lang.locale;
-                              showLanguageList = false;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6),
-                            child: SizedBox(
-                              width: 23,
-                              height: 23,
-                              // только флаг
-                              // Image.asset(lang.flagPath, width: 23, height: 23),
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                            return InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {
+                                widget.onChangeLocale(lang.locale);
+                                setState(() {
+                                  _currentLocale = lang.locale;
+                                  showLanguageList = false;
+                                });
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                child: SizedBox(
+                                  width: 23,
+                                  height: 23,
+                                  // только флаг
+                                  // Image.asset(lang.flagPath, width: 23, height: 23),
+                                ),
+                              ),
+                            );
+                          })
+                          .toList(),
                     ),
                   ),
                 GestureDetector(
-                  onTap: () => setState(() => showLanguageList = !showLanguageList),
+                  onTap: () =>
+                      setState(() => showLanguageList = !showLanguageList),
                   child: Container(
                     width: 65,
                     height: 36,
@@ -373,9 +384,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset(selectedLang.flagPath, width: 23, height: 23),
+                        Image.asset(
+                          selectedLang.flagPath,
+                          width: 23,
+                          height: 23,
+                        ),
                         const SizedBox(width: 6),
-                        const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 16),
+                        const Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.white,
+                          size: 16,
+                        ),
                       ],
                     ),
                   ),
