@@ -56,5 +56,10 @@
   "errLoadQuestions": "Error al cargar las preguntas",
   "errLoadOptions": "Error al cargar las opciones",
   "errSaveAnswer": "Error al guardar la respuesta",
-  "errorPrefix": "Error:"
+  "errorPrefix": "Error:",
+
+  "homeForYou": "Recomendaciones para ti",
+  "homeDaily": "Recomendaciones diarias",
+  "homeArticles": "Artículos útiles",
+  "homeMoreArticles": "Más artículos"
 }

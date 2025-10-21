@@ -493,6 +493,46 @@ class S {
   String get errorPrefix {
     return Intl.message('Error:', name: 'errorPrefix', desc: '', args: []);
   }
+
+  /// `Recommended for you`
+  String get homeForYou {
+    return Intl.message(
+      'Recommended for you',
+      name: 'homeForYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily recommendations`
+  String get homeDaily {
+    return Intl.message(
+      'Daily recommendations',
+      name: 'homeDaily',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Helpful articles`
+  String get homeArticles {
+    return Intl.message(
+      'Helpful articles',
+      name: 'homeArticles',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `More articles`
+  String get homeMoreArticles {
+    return Intl.message(
+      'More articles',
+      name: 'homeMoreArticles',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

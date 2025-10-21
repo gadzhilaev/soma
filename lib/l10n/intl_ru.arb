@@ -56,5 +56,10 @@
   "errLoadQuestions": "Ошибка загрузки вопросов",
   "errLoadOptions": "Ошибка загрузки вариантов",
   "errSaveAnswer": "Не удалось сохранить ответ",
-  "errorPrefix": "Ошибка:"
+  "errorPrefix": "Ошибка:",
+
+  "homeForYou": "Рекомендации для вас",
+  "homeDaily": "Ежедневные рекомендации",
+  "homeArticles": "Полезные статьи",
+  "homeMoreArticles": "Больше статей"
 }

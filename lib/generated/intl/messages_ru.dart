@@ -83,6 +83,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "haveAccount": MessageLookupByLibrary.simpleMessage(
       "У меня уже есть аккаунт",
     ),
+    "homeArticles": MessageLookupByLibrary.simpleMessage("Полезные статьи"),
+    "homeDaily": MessageLookupByLibrary.simpleMessage(
+      "Ежедневные рекомендации",
+    ),
+    "homeForYou": MessageLookupByLibrary.simpleMessage("Рекомендации для вас"),
+    "homeMoreArticles": MessageLookupByLibrary.simpleMessage("Больше статей"),
     "languageEnglish": MessageLookupByLibrary.simpleMessage("Английский"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Русский"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Испанский"),

@@ -79,6 +79,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "haveAccount": MessageLookupByLibrary.simpleMessage(
       "I already have an account",
     ),
+    "homeArticles": MessageLookupByLibrary.simpleMessage("Helpful articles"),
+    "homeDaily": MessageLookupByLibrary.simpleMessage("Daily recommendations"),
+    "homeForYou": MessageLookupByLibrary.simpleMessage("Recommended for you"),
+    "homeMoreArticles": MessageLookupByLibrary.simpleMessage("More articles"),
     "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Russian"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Spanish"),

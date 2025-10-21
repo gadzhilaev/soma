@@ -55,5 +55,10 @@
   "errLoadQuestions": "Failed to load questions",
   "errLoadOptions": "Failed to load options",
   "errSaveAnswer": "Failed to save answer",
-  "errorPrefix": "Error:"
+  "errorPrefix": "Error:",
+
+  "homeForYou": "Recommended for you",
+  "homeDaily": "Daily recommendations",
+  "homeArticles": "Helpful articles",
+  "homeMoreArticles": "More articles"
 }
