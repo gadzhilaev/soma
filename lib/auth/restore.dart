@@ -114,9 +114,7 @@ class _RestoreScreenState extends State<RestoreScreen> {
                                     elevation: 0,
                                     minimumSize: const Size(353, 56),
                                   ),
-                                  onPressed: () {
-                                    // TODO: регистрация
-                                  },
+                                  onPressed: () {},
                                   child: Center(
                                     child: Text(
                                       s.restorePass.toUpperCase(),
