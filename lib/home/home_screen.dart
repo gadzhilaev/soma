@@ -455,18 +455,28 @@ class _DailyTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const iconColor = Color(0xFF726AFF);
+
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start, // 👈 дети ряда по ВЕРХУ
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(
-            item.imageUrl,
-            width: 100,
-            height: 80,
-            fit: BoxFit.cover,
+        // КАРТИНКА прижата к верху контейнера
+        Container(
+          width: 100,
+          height: 80,
+          clipBehavior: Clip.hardEdge, // чтобы работал borderRadius
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            image: DecorationImage(
+              image: NetworkImage(item.imageUrl),
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter, // 👈 важное место
+            ),
           ),
         ),
+
         const SizedBox(width: 12),
+
+        // ТЕКСТОВОЙ БЛОК
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -496,7 +506,7 @@ class _DailyTile extends StatelessWidget {
                   color: Color(0xFF717171),
                 ),
               ),
-              const SizedBox(height: 8), // было 12 → меньше
+              const SizedBox(height: 8),
               Row(
                 children: [
                   const Icon(Icons.hourglass_empty, size: 14, color: iconColor),
@@ -748,43 +758,43 @@ class _DotsConveyor extends StatelessWidget {
     // геометрия: ●─8─●─8─●
     const dot = 12.0;
     const gap = 8.0;
-    const totalW = dot * 3 + gap * 2;   // 52
-    const leftPos   = 0.0;
-    const centerPos = dot + gap;        // 20
-    const rightPos  = centerPos + dot + gap; // 40
+    const totalW = dot * 3 + gap * 2; // 52
+    const leftPos = 0.0;
+    const centerPos = dot + gap; // 20
+    const rightPos = centerPos + dot + gap; // 40
 
-    const active   = Color(0xFFEABC60);
+    const active = Color(0xFFEABC60);
     const inactive = Color(0xFFF1F1F1);
 
-    final u   = t.abs().clamp(0.0, 1.0);
+    final u = t.abs().clamp(0.0, 1.0);
     final dir = t >= 0 ? 1 : -1;
     late double xCurr, xNeighbor, xDepart, xIncoming;
-    late Color  colCurr, colNeighbor;
+    late Color colCurr, colNeighbor;
     late double aDepart, aIncoming; // альфа
 
     if (dir > 0) {
       // свайп ВПРАВО
-      xCurr     = _lerp(centerPos, leftPos,   u); // центр -> лево
-      xNeighbor = _lerp(rightPos,  centerPos, u); // право -> центр
-      xDepart   = leftPos;                        // левая исчезает
-      xIncoming = rightPos;                       // новая появляется справа
+      xCurr = _lerp(centerPos, leftPos, u); // центр -> лево
+      xNeighbor = _lerp(rightPos, centerPos, u); // право -> центр
+      xDepart = leftPos; // левая исчезает
+      xIncoming = rightPos; // новая появляется справа
 
-      colCurr     = Color.lerp(active,   inactive, u)!;
-      colNeighbor = Color.lerp(inactive, active,   u)!;
+      colCurr = Color.lerp(active, inactive, u)!;
+      colNeighbor = Color.lerp(inactive, active, u)!;
 
-      aDepart   = 1.0 - u; // уходит
-      aIncoming = u;       // появляется
+      aDepart = 1.0 - u; // уходит
+      aIncoming = u; // появляется
     } else {
       // свайп ВЛЕВО
-      xCurr     = _lerp(centerPos, rightPos, u);  // центр -> право
-      xNeighbor = _lerp(leftPos,   centerPos, u); // лево -> центр
-      xDepart   = rightPos;                       // правая исчезает
-      xIncoming = leftPos;                        // новая появляется слева
+      xCurr = _lerp(centerPos, rightPos, u); // центр -> право
+      xNeighbor = _lerp(leftPos, centerPos, u); // лево -> центр
+      xDepart = rightPos; // правая исчезает
+      xIncoming = leftPos; // новая появляется слева
 
-      colCurr     = Color.lerp(active,   inactive, u)!;
-      colNeighbor = Color.lerp(inactive, active,   u)!;
+      colCurr = Color.lerp(active, inactive, u)!;
+      colNeighbor = Color.lerp(inactive, active, u)!;
 
-      aDepart   = 1.0 - u;
+      aDepart = 1.0 - u;
       aIncoming = u;
     }
 
@@ -795,14 +805,30 @@ class _DotsConveyor extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Positioned(
-            left: xDepart, top: 0,
-            child: Opacity(opacity: aDepart, child: _Dot(color: inactive)),
+            left: xDepart,
+            top: 0,
+            child: Opacity(
+              opacity: aDepart,
+              child: _Dot(color: inactive),
+            ),
           ),
-          Positioned(left: xCurr, top: 0, child: _Dot(color: colCurr)),
-          Positioned(left: xNeighbor, top: 0, child: _Dot(color: colNeighbor)),
           Positioned(
-            left: xIncoming, top: 0,
-            child: Opacity(opacity: aIncoming, child: _Dot(color: inactive)),
+            left: xCurr,
+            top: 0,
+            child: _Dot(color: colCurr),
+          ),
+          Positioned(
+            left: xNeighbor,
+            top: 0,
+            child: _Dot(color: colNeighbor),
+          ),
+          Positioned(
+            left: xIncoming,
+            top: 0,
+            child: Opacity(
+              opacity: aIncoming,
+              child: _Dot(color: inactive),
+            ),
           ),
         ],
       ),
