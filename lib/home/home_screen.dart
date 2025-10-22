@@ -4,7 +4,7 @@ import '../core/supabase.dart';
 import '../generated/l10n.dart';
 import 'home_repo.dart';
 import 'models.dart';
-import '../widgets/bottom_nav.dart'; // ← вынесли nav bar
+import '../widgets/bottom_nav.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final HomeRepo _repo;
   bool _loading = true;
   String _lang = 'en';
+  double _dotProgress = 0.0;
 
   List<HeroSlide> _slides = [];
   List<DailyReco> _daily = [];
@@ -23,18 +24,42 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ArticleItem> _articles = [];
 
   final _pageCtrl = PageController(viewportFraction: 0.92);
-  int _page = 0;
+  int _virtualPage = 0; // реальный индекс PageView (для бесконечной прокрутки)
+  Timer? _autoplay;
   int _tab = 0;
 
   @override
   void initState() {
     super.initState();
     _repo = HomeRepo(supa);
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (!mounted || _slides.isEmpty) return;
-      final next = (_page + 1) % _slides.length;
+
+    _pageCtrl.addListener(() {
+      final p = _pageCtrl.page;
+      if (p == null) return;
+      final delta =
+          p - _virtualPage; // -1..+1 при свайпе между соседними страницами
+      final prog = delta.clamp(-1.0, 1.0);
+      if (prog != _dotProgress) {
+        setState(() => _dotProgress = prog);
+      }
+    });
+
+    // автопрокрутка вправо бесконечно
+    _autoplay = Timer.periodic(const Duration(seconds: 5), (_) {
+      if (!mounted || _slides.length < 2 || !_pageCtrl.hasClients) return;
+
+      int nextPage = _virtualPage + 1;
+
+      // если сильно уехали — возвращаемся в «центр петли»
+      if (nextPage > _slides.length * 2000) {
+        nextPage = _slides.length * 1000;
+        _pageCtrl.jumpToPage(nextPage); // <-- без await
+        _virtualPage = nextPage;
+        _dotProgress = 0.0;
+      }
+
       _pageCtrl.animateToPage(
-        next,
+        nextPage,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
@@ -71,10 +96,25 @@ class _HomeScreenState extends State<HomeScreen> {
     } finally {
       if (mounted) setState(() => _loading = false);
     }
+
+    // выставляем стартовую виртуальную страницу как большое число-кратное длине
+    if (mounted && _slides.isNotEmpty) {
+      final start = _slides.length * 1000;
+      _virtualPage = start;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_pageCtrl.hasClients) {
+          _pageCtrl.jumpToPage(start); // <-- без await
+          setState(() {
+            _dotProgress = 0.0;
+          });
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _autoplay?.cancel();
     _pageCtrl.dispose();
     super.dispose();
   }
@@ -110,14 +150,31 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 200,
                               child: PageView.builder(
                                 controller: _pageCtrl,
-                                onPageChanged: (i) => setState(() => _page = i),
-                                itemCount: _slides.length,
-                                itemBuilder: (_, i) =>
-                                    _HeroCard(slide: _slides[i]),
+                                // ВАЖНО: itemCount НЕ задаём — бесконечная лента
+                                onPageChanged: (i) {
+                                  setState(() {
+                                    _virtualPage = i;
+                                  });
+                                  // через короткую паузу мягко вернём индикатор в центр
+                                  Future.delayed(
+                                    const Duration(milliseconds: 150),
+                                    () {
+                                      if (!mounted) return;
+                                      setState(() => _dotProgress = 0.0);
+                                    },
+                                  );
+                                },
+                                itemBuilder: (_, i) {
+                                  if (_slides.isEmpty) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  final dataIndex = i % _slides.length;
+                                  return _HeroCard(slide: _slides[dataIndex]);
+                                },
                               ),
                             ),
                             const SizedBox(height: 12),
-                            const _StaticDots3(),
+                            Center(child: _DotsConveyor(t: _dotProgress)),
                             const SizedBox(height: 24),
 
                             // ===== DAILY TITLE =====
@@ -390,37 +447,6 @@ class _HeroCard extends StatelessWidget {
   }
 }
 
-// ===== точки под слайдером (3 фикс.) =====
-class _StaticDots3 extends StatelessWidget {
-  const _StaticDots3();
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        _Dot(color: Color(0xFFF1F1F1)),
-        SizedBox(width: 8),
-        _Dot(color: Color(0xFFEABC60)),
-        SizedBox(width: 8),
-        _Dot(color: Color(0xFFF1F1F1)),
-      ],
-    );
-  }
-}
-
-class _Dot extends StatelessWidget {
-  final Color color;
-  const _Dot({required this.color});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 12,
-      height: 12,
-      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-    );
-  }
-}
-
 // ===== DAILY ITEM (иконки фиолетовые) =====
 class _DailyTile extends StatelessWidget {
   final DailyReco item;
@@ -533,8 +559,6 @@ class _ForYouCard extends StatelessWidget {
             maxLines: 2,
           )..layout(maxWidth: textMaxWidth);
 
-          final didOverflow =
-              titlePainter.didExceedMaxLines; // true => точно >1 строки?
           // если не overflow, всё равно может быть 2 строки при длинном слове — проверим по height
           final computedLines = (titlePainter.size.height / (14 * 1.1))
               .ceil()
@@ -709,6 +733,92 @@ class _Capsule extends StatelessWidget {
           color: Colors.white,
         ),
       ),
+    );
+  }
+}
+
+class _DotsConveyor extends StatelessWidget {
+  final double t; // -1..+1: отриц. — свайп влево, положит. — вправо
+  const _DotsConveyor({required this.t});
+
+  double _lerp(double a, double b, double u) => a + (b - a) * u;
+
+  @override
+  Widget build(BuildContext context) {
+    // геометрия: ●─8─●─8─●
+    const dot = 12.0;
+    const gap = 8.0;
+    const totalW = dot * 3 + gap * 2;   // 52
+    const leftPos   = 0.0;
+    const centerPos = dot + gap;        // 20
+    const rightPos  = centerPos + dot + gap; // 40
+
+    const active   = Color(0xFFEABC60);
+    const inactive = Color(0xFFF1F1F1);
+
+    final u   = t.abs().clamp(0.0, 1.0);
+    final dir = t >= 0 ? 1 : -1;
+    late double xCurr, xNeighbor, xDepart, xIncoming;
+    late Color  colCurr, colNeighbor;
+    late double aDepart, aIncoming; // альфа
+
+    if (dir > 0) {
+      // свайп ВПРАВО
+      xCurr     = _lerp(centerPos, leftPos,   u); // центр -> лево
+      xNeighbor = _lerp(rightPos,  centerPos, u); // право -> центр
+      xDepart   = leftPos;                        // левая исчезает
+      xIncoming = rightPos;                       // новая появляется справа
+
+      colCurr     = Color.lerp(active,   inactive, u)!;
+      colNeighbor = Color.lerp(inactive, active,   u)!;
+
+      aDepart   = 1.0 - u; // уходит
+      aIncoming = u;       // появляется
+    } else {
+      // свайп ВЛЕВО
+      xCurr     = _lerp(centerPos, rightPos, u);  // центр -> право
+      xNeighbor = _lerp(leftPos,   centerPos, u); // лево -> центр
+      xDepart   = rightPos;                       // правая исчезает
+      xIncoming = leftPos;                        // новая появляется слева
+
+      colCurr     = Color.lerp(active,   inactive, u)!;
+      colNeighbor = Color.lerp(inactive, active,   u)!;
+
+      aDepart   = 1.0 - u;
+      aIncoming = u;
+    }
+
+    return SizedBox(
+      width: totalW,
+      height: dot,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: xDepart, top: 0,
+            child: Opacity(opacity: aDepart, child: _Dot(color: inactive)),
+          ),
+          Positioned(left: xCurr, top: 0, child: _Dot(color: colCurr)),
+          Positioned(left: xNeighbor, top: 0, child: _Dot(color: colNeighbor)),
+          Positioned(
+            left: xIncoming, top: 0,
+            child: Opacity(opacity: aIncoming, child: _Dot(color: inactive)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Dot extends StatelessWidget {
+  final Color color;
+  const _Dot({required this.color});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 12,
+      height: 12,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }

@@ -21,9 +21,6 @@ class NotificationsScreen extends StatelessWidget {
       return;
     }
 
-    // 2) Запрашиваем (системный диалог вылезет, только если статус был "undetermined")
-    final result = await Permission.notification.request();
-
     // Если запретил/запретил навсегда — опционально можно открыть настройки
     // if (result.isPermanentlyDenied || result.isDenied) {
     //   await openAppSettings();
