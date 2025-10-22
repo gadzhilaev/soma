@@ -30,13 +30,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _repo = HomeRepo(supa);
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (!mounted || _slides.isEmpty) return;
+      final next = (_page + 1) % _slides.length;
+      _pageCtrl.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final code = Localizations.localeOf(context).languageCode;
-    const allowed = ['ru','en','es'];
+    const allowed = ['ru', 'en', 'es'];
     _lang = allowed.contains(code) ? code : 'en';
     _load();
   }
@@ -50,10 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
         _repo.getForYou(_lang),
         _repo.getArticles(_lang),
       ]);
-      _slides  = r[0] as List<HeroSlide>;
-      _daily   = r[1] as List<DailyReco>;
-      _forYou  = r[2] as List<ForYouItem>;
-      _articles= r[3] as List<ArticleItem>;
+      _slides = r[0] as List<HeroSlide>;
+      _daily = r[1] as List<DailyReco>;
+      _forYou = r[2] as List<ForYouItem>;
+      _articles = r[3] as List<ArticleItem>;
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -74,8 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final s = S.of(context);
 
+    // точная «подложка» под плавающий навбар + желанные 20 px после кнопки
+    final bottomSafe = MediaQuery.of(context).padding.bottom;
+    final bottomScrollPadding = 50 + bottomSafe;
+
     return Scaffold(
-      backgroundColor: Colors.white, // белый фон
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           // === СКРОЛЛ-КОНТЕНТ ПОД БАРОМ ===
@@ -86,16 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: [
                       SliverPadding(
-                        padding: const EdgeInsets.only(
-                          bottom:
-                              140, // запас под плавающий навбар (80) + отступ + safe area
-                        ),
+                        padding: EdgeInsets.only(bottom: bottomScrollPadding),
                         sliver: SliverList(
                           delegate: SliverChildListDelegate.fixed([
                             _buildHeaderLogo(),
                             const SizedBox(height: 20),
 
-                            // HERO
+                            // ===== HERO =====
                             SizedBox(
                               height: 200,
                               child: PageView.builder(
@@ -110,10 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             const _StaticDots3(),
                             const SizedBox(height: 24),
 
-                            // DAILY TITLE
+                            // ===== DAILY TITLE =====
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               child: Text(
                                 s.homeDaily,
                                 style: const TextStyle(
@@ -128,17 +139,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(height: 20),
 
-                            // DAILY LIST
+                            // ===== DAILY LIST =====
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               child: Column(
                                 children: List.generate(_daily.length, (i) {
                                   return Padding(
                                     padding: EdgeInsets.only(
-                                        bottom: i == _daily.length - 1
-                                            ? 0
-                                            : 20),
+                                      bottom: i == _daily.length - 1 ? 0 : 20,
+                                    ),
                                     child: _DailyTile(item: _daily[i]),
                                   );
                                 }),
@@ -147,10 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             const SizedBox(height: 24),
 
-                            // FOR YOU
+                            // ===== FOR YOU =====
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               child: Text(
                                 s.homeForYou,
                                 style: const TextStyle(
@@ -167,8 +179,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 240,
                               child: ListView.separated(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: _forYou.length,
                                 separatorBuilder: (_, __) =>
@@ -180,10 +193,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             const SizedBox(height: 24),
 
-                            // ARTICLES
+                            // ===== ARTICLES =====
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               child: Text(
                                 s.homeArticles,
                                 style: const TextStyle(
@@ -198,16 +212,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(height: 20),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               child: Column(
-                                children:
-                                    List.generate(_articles.length, (i) {
+                                children: List.generate(_articles.length, (i) {
                                   return Padding(
                                     padding: EdgeInsets.only(
-                                        bottom: i == _articles.length - 1
-                                            ? 0
-                                            : 20),
+                                      bottom: i == _articles.length - 1
+                                          ? 0
+                                          : 20,
+                                    ),
                                     child: _ArticleTile(item: _articles[i]),
                                   );
                                 }),
@@ -216,10 +231,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             const SizedBox(height: 40),
 
-                            // MORE BUTTON
+                            // ===== MORE BUTTON =====
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
                               child: SizedBox(
                                 height: 56,
                                 width: double.infinity,
@@ -227,7 +243,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onPressed: () {},
                                   style: OutlinedButton.styleFrom(
                                     side: const BorderSide(
-                                        color: Color(0xFFFFD580), width: 2),
+                                      color: Color(0xFFFFD580),
+                                      width: 2,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(40),
                                     ),
@@ -248,10 +266,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 24),
-
-                            // доб. 20px «листабельности» ниже
-                            const SizedBox(height: 20),
+                            const SizedBox(
+                              height: 20,
+                            ), // ← в самом конце строго 20
                           ]),
                         ),
                       ),
@@ -399,8 +416,7 @@ class _Dot extends StatelessWidget {
     return Container(
       width: 12,
       height: 12,
-      decoration:
-          BoxDecoration(color: color, shape: BoxShape.circle),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }
@@ -429,17 +445,15 @@ class _DailyTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // теперь допускаем до 2 строк
               Text(
                 item.title.toUpperCase(),
                 maxLines: 2,
-                softWrap: true,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w700,
                   fontSize: 14,
-                  height: 1.0,
+                  height: 1.1,
                   color: Color(0xFF282828),
                 ),
               ),
@@ -456,17 +470,11 @@ class _DailyTile extends StatelessWidget {
                   color: Color(0xFF717171),
                 ),
               ),
-              const SizedBox(height: 12),
-              Row(
-                children: const [
-                  Icon(Icons.hourglass_empty, size: 14, color: iconColor),
-                  SizedBox(width: 4),
-                ],
-              ),
-              // длительность
+              const SizedBox(height: 8), // было 12 → меньше
               Row(
                 children: [
-                  const SizedBox(width: 18), // визуально после иконки
+                  const Icon(Icons.hourglass_empty, size: 14, color: iconColor),
+                  const SizedBox(width: 4),
                   Text(
                     '${item.durationMinutes} минут',
                     style: const TextStyle(
@@ -487,7 +495,6 @@ class _DailyTile extends StatelessWidget {
   }
 }
 
-// ===== FOR YOU CARD (заголовок до 2 строк, верхний отступ чуть меньше) =====
 class _ForYouCard extends StatelessWidget {
   final ForYouItem item;
   const _ForYouCard({required this.item});
@@ -505,62 +512,88 @@ class _ForYouCard extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      child: Stack(
-        children: [
-          // заголовок — можно до 2 строк, чуть выше старт (122 вместо 129)
-          Positioned(
-            left: 8,
-            right: 8,
-            top: 122,
-            child: Text(
-              item.title.toUpperCase(),
-              maxLines: 2,        // ← до двух строк
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
+      child: LayoutBuilder(
+        builder: (ctx, constraints) {
+          // доступная ширина для текста (слева/справа по 8)
+          final textMaxWidth = constraints.maxWidth - 16;
+
+          // меряем, в одну или две строки пойдёт заголовок
+          final titlePainter = TextPainter(
+            text: TextSpan(
+              text: item.title.toUpperCase(),
               style: const TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
-                height: 1.0,
+                height: 1.1,
                 color: Colors.white,
               ),
             ),
-          ),
-          // описание — чтобы не налезало на бейдж, ограничим 2 строками
-          Positioned(
-            left: 8,
-            right: 8,
-            top: 122 + 14 + 4,
-            child: Text(
-              item.description,
-              maxLines: 2, // слегка ужал, чтобы не пересекалось с бейджем
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                fontSize: 10,
-                height: 14 / 10,
-                color: Colors.white,
+            textDirection: TextDirection.ltr,
+            maxLines: 2,
+          )..layout(maxWidth: textMaxWidth);
+
+          final didOverflow =
+              titlePainter.didExceedMaxLines; // true => точно >1 строки?
+          // если не overflow, всё равно может быть 2 строки при длинном слове — проверим по height
+          final computedLines = (titlePainter.size.height / (14 * 1.1))
+              .ceil()
+              .clamp(1, 2);
+
+          // если 2 строки — поднимаем блок выше
+          final titleTop = (computedLines > 1) ? 110.0 : 122.0;
+          final titleHeightPx = 14 * 1.1 * computedLines;
+          final descTop = titleTop + titleHeightPx + 4;
+
+          return Stack(
+            children: [
+              Positioned(
+                left: 8,
+                right: 8,
+                top: titleTop,
+                child: Text(
+                  item.title.toUpperCase(),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                    height: 1.1,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
-          ),
-          // бейдж внизу
-          const Positioned(
-            left: 8,
-            top: 200,
-            child: SizedBox(), // место под капсулу ниже
-          ),
-          Positioned(
-            left: 8,
-            top: 200,
-            child: _Capsule(
-              width: 89,
-              height: 24,
-              bg: _HeroCard._hex(item.tagBg),
-              text: item.tagLabel.toUpperCase(),
-            ),
-          ),
-        ],
+              Positioned(
+                left: 8,
+                right: 8,
+                top: descTop,
+                child: Text(
+                  item.description,
+                  maxLines: 2, // чтобы не врезалось в бейдж
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 10,
+                    height: 1.3,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 8,
+                bottom: 12,
+                child: _Capsule(
+                  width: 89,
+                  height: 24,
+                  bg: _HeroCard._hex(item.tagBg),
+                  text: item.tagLabel.toUpperCase(),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

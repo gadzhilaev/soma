@@ -3,12 +3,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; // 👈
 import 'generated/l10n.dart';
 import 'auth/login.dart';
+import 'home/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    url: 'https://yyxgdlbamxfedwyfbbxe.supabase.co', // 👈 твой Project URL
+    url: 'https://yyxgdlbamxfedwyfbbxe.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGdkbGJhbXhmZWR3eWZiYnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4MzU5OTUsImV4cCI6MjA3NjQxMTk5NX0.TYEEAXrafUBd4SIb6D8IN5yN2hJxV1YzgrbsCSzEoaA',
   );
 
@@ -24,13 +25,35 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   Locale? _locale;
+  bool _ready = false;
+  bool _loggedIn = false;
 
-  void _setLocale(Locale locale) {
-    setState(() => _locale = locale);
+  @override
+  void initState() {
+    super.initState();
+    _checkSession();
   }
+
+  Future<void> _checkSession() async {
+    final session = Supabase.instance.client.auth.currentSession;
+    setState(() {
+      _loggedIn = session != null;
+      _ready = true;
+    });
+  }
+
+  void _setLocale(Locale locale) => setState(() => _locale = locale);
 
   @override
   Widget build(BuildContext context) {
+    if (!_ready) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: _locale,
@@ -45,7 +68,9 @@ class _MainAppState extends State<MainApp> {
         useMaterial3: true,
         fontFamily: 'Inter',
       ),
-      home: LanguageScreen(onConfirmLocale: _setLocale),
+      home: _loggedIn
+          ? const HomeScreen() // если сессия есть → сразу на главный
+          : LanguageScreen(onConfirmLocale: _setLocale),
     );
   }
 }

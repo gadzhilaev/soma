@@ -15,15 +15,16 @@ class BottomNavBar extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 10), // снизу 10 как просили
-        child: Center(
+        padding: const EdgeInsets.only(bottom: 10), // ← строго 10 пикселей
+        child: Align(
+          alignment: Alignment.bottomCenter,
           child: Container(
             width: 339,
             height: 80,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(1000),
-              border: Border.all(color: Colors.black, width: 1), // 1px черный
+              border: Border.all(color: Colors.black, width: 1),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Row(
