@@ -1,6 +1,5 @@
 // lib/onboarding/questions_screen.dart
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase.dart';
 import '../home/home_screen.dart';
 import 'notifications_screen.dart';
@@ -78,7 +77,10 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
       await _loadOptions(_questions.first.id);
     } catch (e) {
-      _show('${S.of(context).errLoadQuestions} $e');
+      if (mounted) {
+        // 👈 проверяем
+        _show('${S.of(context).errLoadOptions} $e');
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -106,7 +108,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           )
           .toList();
     } catch (e) {
-      _show('${S.of(context).errLoadOptions} $e');
+      if (!mounted) return; // 👈 защита
+      _show('${S.of(context).errLoadQuestions} $e');
       _options[questionId] = const [];
     }
   }

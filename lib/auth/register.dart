@@ -226,89 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     minimumSize: const Size(353, 56),
                                   ),
                                   onPressed: () async {
-                                    final name = nameController.text.trim();
-                                    final email = emailController.text.trim();
-                                    final pass = passController.text.trim();
-                                    final pass2 = repeatPassController.text
-                                        .trim();
-
-                                    if (name.isEmpty ||
-                                        email.isEmpty ||
-                                        pass.isEmpty ||
-                                        pass2.isEmpty) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            S.of(context).emailHint,
-                                          ),
-                                        ), // можно свой текст
-                                      );
-                                      return;
-                                    }
-                                    if (pass != pass2) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(content: Text(S.of(context).errPasswordsNotMatch)),
-                                      );
-                                      return;
-                                    }
-                                    if (!agreed) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(content: Text(S.of(context).errAgreeRequired)),
-                                      );
-                                      return;
-                                    }
-
-                                    try {
-                                      // 1) Регистрация в auth
-                                      final res = await supa.auth.signUp(
-                                        email: email,
-                                        password: pass,
-                                        data: {
-                                          'name': name,
-                                        }, // метаданные (опционально)
-                                      );
-
-                                      final user = res.user;
-                                      if (user == null) {
-                                        throw 'Не удалось создать пользователя';
-                                      }
-
-                                      // 2) Профиль в таблицу users (id, name, email)
-                                      await supa.from('users').upsert({
-                                        'id': user
-                                            .id, // важно: ключом делаем id из auth
-                                        'name': name,
-                                        'email': email,
-                                      }).select(); // чтобы словить ошибки в dev
-
-                                      // Вернёмся на экран логина
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                              const QuestionsScreen(),
-                                        ),
-                                        (_) => false,
-                                      );
-                                    } on AuthException catch (e) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(content: Text(e.message)),
-                                      );
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(content: Text('${S.of(context).errorPrefix} $e')),
-                                      );
-                                    }
+                                    await _onRegister();
                                   },
                                   child: Center(
                                     child: Text(
@@ -461,6 +379,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _onRegister() async {
+    final s = S.of(context); // локализация берём ДО await
+    final name = nameController.text.trim();
+    final email = emailController.text.trim();
+    final pass = passController.text.trim();
+    final pass2 = repeatPassController.text.trim();
+
+    // валидация без await — можно безопасно пользоваться context
+    if (name.isEmpty || email.isEmpty || pass.isEmpty || pass2.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(s.emailHint)));
+      return;
+    }
+    if (pass != pass2) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(s.errPasswordsNotMatch)));
+      return;
+    }
+    if (!agreed) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(s.errAgreeRequired)));
+      return;
+    }
+
+    try {
+      // 1) Регистрация в auth
+      final res = await supa.auth.signUp(
+        email: email,
+        password: pass,
+        data: {'name': name},
+      );
+
+      if (!mounted) return; // ⬅️ после await сразу проверка
+
+      final user = res.user;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${s.errorPrefix} Не удалось создать пользователя'),
+          ),
+        );
+        return;
+      }
+
+      // 2) Запись профиля
+      await supa.from('users').upsert({
+        'id': user.id,
+        'name': name,
+        'email': email,
+      }).select();
+
+      if (!mounted) return; // ⬅️ ещё раз после await
+
+      // Навигация
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const QuestionsScreen()),
+        (_) => false,
+      );
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message)));
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('${s.errorPrefix} $e')));
+    }
   }
 }
 

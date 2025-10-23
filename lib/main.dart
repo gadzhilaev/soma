@@ -96,7 +96,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
   void initState() {
     super.initState();
 
-    final systemCode = WidgetsBinding.instance.window.locale.languageCode;
+    final systemCode =
+      WidgetsBinding.instance.platformDispatcher.locale.languageCode;
     final idx = _items.indexWhere((it) => it.locale.languageCode == systemCode);
     selected = idx != -1 ? idx : 0;
 

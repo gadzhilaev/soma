@@ -80,8 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       SnackBar(content: Text('${S.of(context).errorPrefix} $e'));
     } finally {
-      if (!mounted) return;
-      setState(() => _loading = false);
+      // ❗ без return в finally
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 

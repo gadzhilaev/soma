@@ -17,21 +17,21 @@ class _PremiumScreenState extends State<PremiumScreen> {
   // по умолчанию — годовой
   _Plan _selected = _Plan.yearly;
 
-  Future<void> _fakePay(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 1));
-    if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-      (_) => false,
-    );
-  }
+  Future<void> _fakePay() async {
+  await Future.delayed(const Duration(seconds: 1));
+  if (!mounted) return;
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(builder: (_) => const HomeScreen()),
+    (_) => false,
+  );
+}
 
-  void _goFree(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-      (_) => false,
-    );
-  }
+void _goFree() {
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(builder: (_) => const HomeScreen()),
+    (_) => false,
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 SizedBox(
                   height: 56, width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => _fakePay(context),
+                    onPressed: () => _fakePay,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFD580),
                       shape: RoundedRectangleBorder(
@@ -165,7 +165,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 const SizedBox(height: 24),
 
                 GestureDetector(
-                  onTap: () => _goFree(context),
+                  onTap: () => _goFree,
                   child: Text(
                     s.continueFree.toUpperCase(),
                     textAlign: TextAlign.center,
