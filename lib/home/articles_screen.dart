@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../home/home_repo.dart';
 import '../home/models.dart';
+import 'article_details_screen.dart';
 
 class ArticlesScreen extends StatefulWidget {
   final String lang;
@@ -95,7 +96,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _TagsWrap(
+                      child: _TagsRow(
                         tags: _tags,
                         selected: _selectedTag,
                         onSelect: _pickTag,
@@ -115,8 +116,18 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                           const SizedBox(height: 20), // между постами 20
                       itemBuilder: (_, i) {
                         final a = _articles[i];
-                        return GestureDetector(
-                          onTap: () => widget.repo.incArticleView(a.id),
+                        return InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ArticleDetailsScreen(
+                                repo: widget.repo,
+                                lang: widget.lang,
+                                articleId: a.id,
+                                // можно передать то, что уже есть, чтобы не мигало
+                                preload: a,
+                              ),
+                            ),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -228,11 +239,11 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
 }
 
 // чипы-хэштеги (высота 24, между 8, выбранный: #766DFF/белый, невыбранный: #F1F1F1/#A3A3A3)
-class _TagsWrap extends StatelessWidget {
+class _TagsRow extends StatelessWidget {
   final List<String> tags;
   final String selected;
   final ValueChanged<String> onSelect;
-  const _TagsWrap({
+  const _TagsRow({
     required this.tags,
     required this.selected,
     required this.onSelect,
@@ -240,43 +251,49 @@ class _TagsWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8, // между контейнерами 8
-      runSpacing: 8,
-      children: tags.map((t) {
-        final isSel = t == selected;
-        return GestureDetector(
-          onTap: () => onSelect(t),
-          child: Container(
-            height: 24,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-            ), // ширина по тексту
-            decoration: BoxDecoration(
-              color: isSel ? const Color(0xFF766DFF) : const Color(0xFFF1F1F1),
-              borderRadius: BorderRadius.circular(1000),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              '#${t.toUpperCase()}',
-              maxLines: 1,
-              overflow: TextOverflow.fade,
-              softWrap: false,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                fontSize: 10,
-                height: 1.0, // line-height 100%
-                letterSpacing: 0,
+    return SizedBox(
+      height: 24, // фиксированная высота по ТЗ
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: tags.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8), // между 8
+        itemBuilder: (_, i) {
+          final t = tags[i];
+          final isSel = t == selected;
+          return GestureDetector(
+            onTap: () => onSelect(t),
+            child: Container(
+              height: 24,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+              ), // ширина по тексту
+              decoration: BoxDecoration(
                 color: isSel
-                    ? const Color(0xFFFFFFFF)
-                    : const Color(0xFFA3A3A3),
+                    ? const Color(0xFF766DFF)
+                    : const Color(0xFFF1F1F1),
+                borderRadius: BorderRadius.circular(1000),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                '#${t.toUpperCase()}',
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 10,
+                  height: 1.0,
+                  color: isSel
+                      ? const Color(0xFFFFFFFF)
+                      : const Color(0xFFA3A3A3),
+                ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        },
+      ),
     );
   }
 }

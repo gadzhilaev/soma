@@ -193,7 +193,36 @@ class HomeRepo {
         tags: tags,
         views: (e['views_count'] ?? 0) as int,
         comments: (e['comments_count'] ?? 0) as int,
+        // content: null по умолчанию
       );
     }).toList();
+  }
+
+  // одна статья с контентом
+  Future<ArticleItem> getArticleById(String lang, String id) async {
+    final res = await _sb
+        .from('articles')
+        .select('''
+        id,image_url,published_at,views_count,comments_count,
+        i18n:articles_i18n!inner(title,summary,content,tags,language)
+      ''')
+        .eq('id', id)
+        .eq('i18n.language', lang)
+        .limit(1);
+
+    final row = (res as List).first;
+    final i = (row['i18n'] as List).first;
+
+    return ArticleItem(
+      id: row['id'] as String,
+      imageUrl: (row['image_url'] ?? '') as String,
+      publishedAt: DateTime.parse(row['published_at'] as String),
+      title: (i['title'] ?? '') as String,
+      summary: (i['summary'] ?? '') as String,
+      tags: (i['tags'] as List?)?.cast<String>() ?? const <String>[],
+      views: (row['views_count'] ?? 0) as int,
+      comments: (row['comments_count'] ?? 0) as int,
+      content: (i['content'] ?? '') as String, // ← сюда кладём полный текст
+    );
   }
 }

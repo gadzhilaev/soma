@@ -21,7 +21,6 @@
   "cancel": "Отменить",
   "restoreLabel": "Введите вашу электронную почту, которую указывали при регистрации вашего аккаунта",
   "restorePass": "Восстановить пароль",
-  
   "next": "Далее",
   "noActiveQuestions": "Нет активных вопросов",
   "notifTitle": "Уведомления",
@@ -46,7 +45,6 @@
   "monthlyPrice": "299 ₽ ",
   "becomePremium": "Стать премиум участником",
   "continueFree": "Продолжить бесплатно",
-
   "errEnterEmailAndPassword": "Введите почту и пароль",
   "errFillAllFields": "Заполните все поля",
   "errPasswordsNotMatch": "Пароли не совпадают",
@@ -57,9 +55,13 @@
   "errLoadOptions": "Ошибка загрузки вариантов",
   "errSaveAnswer": "Не удалось сохранить ответ",
   "errorPrefix": "Ошибка:",
-
   "homeForYou": "Рекомендации для вас",
   "homeDaily": "Ежедневные рекомендации",
   "homeArticles": "Полезные статьи",
-  "homeMoreArticles": "Больше статей"
+  "homeMoreArticles": "Больше статей",
+  "articleComments": "Комментарии",
+  "articleLeaveComment": "Оставить комментарий",
+  "minShort": "мин",
+  "hourShort": "ч",
+  "dayShort": "дн"
 }

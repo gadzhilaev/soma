@@ -21,7 +21,6 @@
   "cancel": "Cancel",
   "restoreLabel": "Enter your email address that was specified when registering your account",
   "restorePass": "Restore password",
-
   "next": "Next",
   "noActiveQuestions": "No active questions",
   "notifTitle": "Notifications",
@@ -56,9 +55,13 @@
   "errLoadOptions": "Failed to load options",
   "errSaveAnswer": "Failed to save answer",
   "errorPrefix": "Error:",
-
   "homeForYou": "Recommended for you",
   "homeDaily": "Daily recommendations",
   "homeArticles": "Helpful articles",
-  "homeMoreArticles": "More articles"
+  "homeMoreArticles": "More articles",
+  "articleComments": "Comments",
+  "articleLeaveComment": "Leave a comment",
+  "minShort": "min",
+  "hourShort": "h",
+  "dayShort": "d"
 }

@@ -21,7 +21,6 @@
   "cancel": "Отменить",
   "restoreLabel": "Enter your email address that was specified when registering your account",
   "restorePass": "Restore password",
-  
   "next": "Siguiente",
   "noActiveQuestions": "No hay preguntas activas",
   "notifTitle": "Notificaciones",
@@ -46,7 +45,6 @@
   "monthlyPrice": "299 ₽ ",
   "becomePremium": "Hacerse premium",
   "continueFree": "Continuar gratis",
-
   "errEnterEmailAndPassword": "Introduce el correo y la contraseña",
   "errFillAllFields": "Por favor completa todos los campos",
   "errPasswordsNotMatch": "Las contraseñas no coinciden",
@@ -57,9 +55,13 @@
   "errLoadOptions": "Error al cargar las opciones",
   "errSaveAnswer": "Error al guardar la respuesta",
   "errorPrefix": "Error:",
-
   "homeForYou": "Recomendaciones para ti",
   "homeDaily": "Recomendaciones diarias",
   "homeArticles": "Artículos útiles",
-  "homeMoreArticles": "Más artículos"
+  "homeMoreArticles": "Más artículos",
+  "articleComments": "Comentarios",
+  "articleLeaveComment": "Dejar un comentario",
+  "minShort": "min",
+  "hourShort": "h",
+  "dayShort": "d"
 }

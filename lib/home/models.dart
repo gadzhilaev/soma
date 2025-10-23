@@ -76,6 +76,9 @@ class ArticleItem {
   final int views;
   final int comments;
 
+  /// Полный текст статьи. Может быть `null`, если загружали список без контента.
+  final String? content;
+
   ArticleItem({
     required this.id,
     required this.imageUrl,
@@ -85,6 +88,7 @@ class ArticleItem {
     required this.tags,
     required this.views,
     required this.comments,
+    this.content, // ← добавили
   });
 
   factory ArticleItem.fromJson(Map<String, dynamic> j) => ArticleItem(
@@ -96,5 +100,30 @@ class ArticleItem {
     tags: (j['tags'] as List<dynamic>).cast<String>(),
     views: (j['views_count'] as num).toInt(),
     comments: (j['comments_count'] as num).toInt(),
+    content: j['content'] as String?, // если будет в JSON — подхватится
   );
+
+  ArticleItem copyWith({
+    String? id,
+    String? imageUrl,
+    DateTime? publishedAt,
+    String? title,
+    String? summary,
+    List<String>? tags,
+    int? views,
+    int? comments,
+    String? content,
+  }) {
+    return ArticleItem(
+      id: id ?? this.id,
+      imageUrl: imageUrl ?? this.imageUrl,
+      publishedAt: publishedAt ?? this.publishedAt,
+      title: title ?? this.title,
+      summary: summary ?? this.summary,
+      tags: tags ?? this.tags,
+      views: views ?? this.views,
+      comments: comments ?? this.comments,
+      content: content ?? this.content,
+    );
+  }
 }

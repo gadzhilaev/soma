@@ -533,6 +533,41 @@ class S {
       args: [],
     );
   }
+
+  /// `Comments`
+  String get articleComments {
+    return Intl.message(
+      'Comments',
+      name: 'articleComments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Leave a comment`
+  String get articleLeaveComment {
+    return Intl.message(
+      'Leave a comment',
+      name: 'articleLeaveComment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `min`
+  String get minShort {
+    return Intl.message('min', name: 'minShort', desc: '', args: []);
+  }
+
+  /// `h`
+  String get hourShort {
+    return Intl.message('h', name: 'hourShort', desc: '', args: []);
+  }
+
+  /// `d`
+  String get dayShort {
+    return Intl.message('d', name: 'dayShort', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

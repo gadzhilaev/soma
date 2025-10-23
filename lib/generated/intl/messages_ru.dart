@@ -26,6 +26,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Я согласен(-на) с условиями обработки ",
     ),
     "allow": MessageLookupByLibrary.simpleMessage("Разрешить"),
+    "articleComments": MessageLookupByLibrary.simpleMessage("Комментарии"),
+    "articleLeaveComment": MessageLookupByLibrary.simpleMessage(
+      "Оставить комментарий",
+    ),
     "becomePremium": MessageLookupByLibrary.simpleMessage(
       "Стать премиум участником",
     ),
@@ -33,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "continueFree": MessageLookupByLibrary.simpleMessage(
       "Продолжить бесплатно",
     ),
+    "dayShort": MessageLookupByLibrary.simpleMessage("дн"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Введите почту"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Электронная почта"),
     "errAgreeRequired": MessageLookupByLibrary.simpleMessage(
@@ -89,10 +94,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "homeForYou": MessageLookupByLibrary.simpleMessage("Рекомендации для вас"),
     "homeMoreArticles": MessageLookupByLibrary.simpleMessage("Больше статей"),
+    "hourShort": MessageLookupByLibrary.simpleMessage("ч"),
     "languageEnglish": MessageLookupByLibrary.simpleMessage("Английский"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Русский"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Испанский"),
     "login": MessageLookupByLibrary.simpleMessage("Войти"),
+    "minShort": MessageLookupByLibrary.simpleMessage("мин"),
     "monthly": MessageLookupByLibrary.simpleMessage("ЕЖЕМЕСЯЧНЫЙ"),
     "monthlyPrice": MessageLookupByLibrary.simpleMessage("299 ₽ "),
     "mostPopular": MessageLookupByLibrary.simpleMessage("САМЫЙ ПОПУЛЯРНЫЙ"),
