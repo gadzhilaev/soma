@@ -295,12 +295,12 @@ class _Label extends StatelessWidget {
 class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
-  final bool obscure;
+  //final bool obscure;
 
   const _InputField({
     required this.controller,
     required this.hint,
-    this.obscure = false,
+    //this.obscure = false,
   });
 
   @override
@@ -314,7 +314,7 @@ class _InputField extends StatelessWidget {
         ),
         child: TextField(
           controller: controller,
-          obscureText: obscure,
+          //obscureText: obscure,
           style: const TextStyle(
             fontFamily: 'Inter',
             fontWeight: FontWeight.w500,

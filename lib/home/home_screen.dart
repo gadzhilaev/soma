@@ -124,28 +124,53 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final s = S.of(context);
 
-    // точная «подложка» под плавающий навбар + желанные 20 px после кнопки
-    final bottomSafe = MediaQuery.of(context).padding.bottom;
-    final bottomScrollPadding = 50 + bottomSafe;
+    const double navBarHeight = 80.0; // если у тебя другая — поставь свою
+
+  // 2) safe area снизу (вырезы/жестовая панель)
+  final double bottomSafe = MediaQuery.of(context).padding.bottom;
+
+  // 3) паддинг у списка = высота навбара + safe area
+  final double listBottomPadding = navBarHeight + bottomSafe;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           // === СКРОЛЛ-КОНТЕНТ ПОД БАРОМ ===
-          SafeArea(
+          MediaQuery.removePadding(
+            context: context,
+            removeTop: false,
+            removeBottom: true,
             child: _loading
                 ? const Center(child: CircularProgressIndicator())
                 : CustomScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     slivers: [
+                      // ===== СКРЫВАЕМЫЙ ПРИ СКРОЛЛЕ APP BAR =====
+                      SliverAppBar(
+                        backgroundColor: Colors.white,
+                        elevation: 0,
+                        pinned: false, // 👈 уезжает при скролле вниз
+                        floating: false,
+                        snap: false,
+                        centerTitle: true,
+                        title: SizedBox(
+                          width: 48,
+                          height: 50,
+                          child: Image.asset(
+                            'assets/logo/logo.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+
+                      // отступ после логотипа
+                      const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
                       SliverPadding(
-                        padding: EdgeInsets.only(bottom: bottomScrollPadding),
+                        padding: EdgeInsets.only(bottom: listBottomPadding),
                         sliver: SliverList(
                           delegate: SliverChildListDelegate.fixed([
-                            _buildHeaderLogo(),
-                            const SizedBox(height: 20),
-
                             // ===== HERO =====
                             SizedBox(
                               height: 200,
@@ -346,28 +371,19 @@ class _HomeScreenState extends State<HomeScreen> {
           // === ПЛАВАЮЩИЙ NAV BAR СВЕРХУ КОНТЕНТА ===
           Align(
             alignment: Alignment.bottomCenter,
-            child: BottomNavBar(
-              index: _tab,
-              onTap: (i) => setState(() => _tab = i),
+            child: SafeArea(
+              // учтём нижний вырез только для бара
+              top: false,
+              left: false,
+              right: false,
+              child: BottomNavBar(
+                index: _tab,
+                onTap: (i) => setState(() => _tab = i),
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildHeaderLogo() {
-    return Column(
-      children: [
-        const SizedBox(height: 4),
-        Center(
-          child: SizedBox(
-            width: 48,
-            height: 50,
-            child: Image.asset('assets/logo/logo.png', fit: BoxFit.contain),
-          ),
-        ),
-      ],
     );
   }
 }

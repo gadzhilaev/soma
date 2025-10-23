@@ -14,48 +14,45 @@ class BottomNavBar extends StatelessWidget {
     // сам бар — по центру, поверх контента
     return SafeArea(
       top: false,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10), // ← строго 10 пикселей
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: 339,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(1000),
-              border: Border.all(color: Colors.black, width: 1),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _NavItem(
-                  icon: Icons.home,
-                  label: 'дом',
-                  color: _itemColor(index == 0),
-                  onTap: () => onTap(0),
-                ),
-                _NavItem(
-                  icon: Icons.spa,
-                  label: 'программы',
-                  color: _itemColor(index == 1),
-                  onTap: () => onTap(1),
-                ),
-                _NavItem(
-                  icon: Icons.headphones,
-                  label: 'музыка',
-                  color: _itemColor(index == 2),
-                  onTap: () => onTap(2),
-                ),
-                _NavItem(
-                  icon: Icons.account_circle,
-                  label: 'профиль',
-                  color: _itemColor(index == 3),
-                  onTap: () => onTap(3),
-                ),
-              ],
-            ),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          width: 339,
+          height: 80,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(1000),
+            border: Border.all(color: Colors.black, width: 1),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _NavItem(
+                icon: Icons.home,
+                label: 'дом',
+                color: _itemColor(index == 0),
+                onTap: () => onTap(0),
+              ),
+              _NavItem(
+                icon: Icons.spa,
+                label: 'программы',
+                color: _itemColor(index == 1),
+                onTap: () => onTap(1),
+              ),
+              _NavItem(
+                icon: Icons.headphones,
+                label: 'музыка',
+                color: _itemColor(index == 2),
+                onTap: () => onTap(2),
+              ),
+              _NavItem(
+                icon: Icons.account_circle,
+                label: 'профиль',
+                color: _itemColor(index == 3),
+                onTap: () => onTap(3),
+              ),
+            ],
           ),
         ),
       ),
