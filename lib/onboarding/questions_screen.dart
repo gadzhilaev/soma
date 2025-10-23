@@ -1,7 +1,7 @@
 // lib/onboarding/questions_screen.dart
 import 'package:flutter/material.dart';
 import '../core/supabase.dart';
-import '../home/home_screen.dart';
+import '../windows/home/home_screen.dart';
 import 'notifications_screen.dart';
 import 'package:soma/generated/l10n.dart';
 

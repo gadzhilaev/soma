@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../core/supabase.dart';
-import '../generated/l10n.dart';
+import '../../core/supabase.dart';
+import '../../generated/l10n.dart';
 import 'home_repo.dart';
-import 'models.dart';
-import '../widgets/bottom_nav.dart';
-import 'articles_screen.dart';
+import '../models.dart';
+import '../../widgets/bottom_nav.dart';
+import '../article/articles_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

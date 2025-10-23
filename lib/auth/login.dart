@@ -5,7 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase.dart';
 import 'register.dart';
 import 'restore.dart';
-import '../home/home_screen.dart';
+import '../windows/home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function(Locale locale) onChangeLocale;

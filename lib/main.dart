@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart'; // 👈
 import 'generated/l10n.dart';
 import 'auth/login.dart';
-import 'home/home_screen.dart';
+import 'windows/home/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

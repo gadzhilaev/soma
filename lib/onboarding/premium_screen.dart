@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../generated/l10n.dart';
-import '../home/home_screen.dart';
+import '../windows/home/home_screen.dart';
 
 // какой план выбран
 enum _Plan { yearly, monthly }

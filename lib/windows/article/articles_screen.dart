@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../home/home_repo.dart';
-import '../home/models.dart';
+import '../models.dart';
 import 'article_details_screen.dart';
 
 class ArticlesScreen extends StatefulWidget {

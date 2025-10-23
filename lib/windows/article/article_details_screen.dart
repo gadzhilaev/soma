@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home_repo.dart';
-import 'models.dart';
-import '../generated/l10n.dart';
+import '../home/home_repo.dart';
+import '../models.dart';
+import '../../generated/l10n.dart';
 
 class ArticleDetailsScreen extends StatefulWidget {
   final HomeRepo repo;
