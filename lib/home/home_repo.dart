@@ -5,7 +5,7 @@ class HomeRepo {
   final SupabaseClient _sb;
   HomeRepo(this._sb);
 
-  // язык: 'ru' | 'en' | 'es'
+  // ===== HERO =====
   Future<List<HeroSlide>> getHeroSlides(String lang) async {
     final res = await _sb
         .from('home_hero_slides')
@@ -19,7 +19,7 @@ class HomeRepo {
         .eq('i18n.language', lang)
         .order('sort_index');
 
-    final list = (res as List).map((e) {
+    return (res as List).map((e) {
       final i = (e['i18n'] as List).first;
       return HeroSlide(
         id: e['id'] as String,
@@ -35,10 +35,9 @@ class HomeRepo {
         subtitle: (i['subtitle'] ?? '') as String,
       );
     }).toList();
-
-    return list;
   }
 
+  // ===== DAILY =====
   Future<List<DailyReco>> getDailyRecos(String lang) async {
     final res = await _sb
         .from('daily_recos')
@@ -63,6 +62,7 @@ class HomeRepo {
     }).toList();
   }
 
+  // ===== FOR YOU =====
   Future<List<ForYouItem>> getForYou(String lang) async {
     final res = await _sb
         .from('for_you_items')
@@ -88,27 +88,111 @@ class HomeRepo {
     }).toList();
   }
 
+  // ===== ARTICLES (главный экран: последние 3) =====
   Future<List<ArticleItem>> getArticles(String lang) async {
     final res = await _sb
         .from('articles')
         .select('''
-          id,image_url,published_at,sort_index,
-          i18n:articles_i18n!inner(title,summary,language)
+          id,image_url,published_at,views_count,comments_count,
+          i18n:articles_i18n!inner(title,summary,tags,language)
         ''')
         .eq('is_active', true)
         .eq('i18n.language', lang)
-        .order('sort_index')
+        .order('published_at', ascending: false)
+        .limit(3);
+
+    return _mapArticlesFromMainSelect(res as List, lang);
+  }
+
+  // ===== СПИСОК ВСЕХ ТЕГОВ (по языку) =====
+  Future<List<String>> getArticleTags(String lang) async {
+    final res = await _sb
+        .from('articles_i18n')
+        .select('tags')
+        .eq('language', lang);
+
+    final set = <String>{};
+    for (final row in (res as List)) {
+      final tags = (row['tags'] as List?)?.cast<String>() ?? const <String>[];
+      set.addAll(tags.where((t) => t.trim().isNotEmpty));
+    }
+    final list = set.toList()
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    return list;
+  }
+
+  // ===== СТАТЬИ ПО ТЕГУ (экран «Больше статей») =====
+  Future<List<ArticleItem>> getArticlesByTag(
+    String lang, {
+    required String tag,
+  }) async {
+    if (tag.isEmpty) {
+      // если тега нет — вернём просто все статьи этого языка
+      final all = await _sb
+          .from('articles')
+          .select('''
+            id,image_url,published_at,views_count,comments_count,
+            i18n:articles_i18n!inner(title,summary,tags,language)
+          ''')
+          .eq('is_active', true)
+          .eq('i18n.language', lang)
+          .order('published_at', ascending: false);
+      return _mapArticlesFromMainSelect(all as List, lang);
+    }
+
+    // 1) найдём article_id по языку и наличию тега в массиве tags
+    final i18nRows = await _sb
+        .from('articles_i18n')
+        .select('article_id')
+        .eq('language', lang)
+        .contains('tags', [tag]); // PostgREST array contains
+
+    final ids = (i18nRows as List)
+        .map((e) => (e['article_id'] ?? '').toString())
+        .where((id) => id.isNotEmpty)
+        .toList();
+
+    if (ids.isEmpty) return <ArticleItem>[];
+
+    // 2) подтянем статьи + i18n для этого языка
+    final byIds = await _sb
+        .from('articles')
+        .select('''
+          id,image_url,published_at,views_count,comments_count,
+          i18n:articles_i18n!inner(title,summary,tags,language)
+        ''')
+        .eq('is_active', true)
+        .eq('i18n.language', lang)
+        .inFilter('id', ids)
         .order('published_at', ascending: false);
 
-    return (res as List).map((e) {
+    return _mapArticlesFromMainSelect(byIds as List, lang);
+  }
+
+  // =====+1 VIEW =====
+  Future<void> incArticleView(String articleId) async {
+    try {
+      // у тебя функция называется article_inc_view(p_article uuid)
+      await _sb.rpc('article_inc_view', params: {'p_article': articleId});
+    } catch (_) {
+      // без падения UI
+    }
+  }
+
+  // ===== helper mapper =====
+  List<ArticleItem> _mapArticlesFromMainSelect(List rows, String lang) {
+    return rows.map((e) {
       final i = (e['i18n'] as List).first;
+      final tags = (i['tags'] as List?)?.cast<String>() ?? const <String>[];
       return ArticleItem(
-        id: e['id'] as String,
-        imageUrl: e['image_url'] as String,
+        id: (e['id'] ?? '') as String,
+        imageUrl: (e['image_url'] ?? '') as String,
         publishedAt: DateTime.parse(e['published_at'] as String),
-        sortIndex: (e['sort_index'] ?? 1) as int,
         title: (i['title'] ?? '') as String,
         summary: (i['summary'] ?? '') as String,
+        tags: tags,
+        views: (e['views_count'] ?? 0) as int,
+        comments: (e['comments_count'] ?? 0) as int,
       );
     }).toList();
   }

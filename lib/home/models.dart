@@ -70,16 +70,31 @@ class ArticleItem {
   final String id;
   final String imageUrl;
   final DateTime publishedAt;
-  final int sortIndex;
   final String title;
   final String summary;
+  final List<String> tags;
+  final int views;
+  final int comments;
 
   ArticleItem({
     required this.id,
     required this.imageUrl,
     required this.publishedAt,
-    required this.sortIndex,
     required this.title,
     required this.summary,
+    required this.tags,
+    required this.views,
+    required this.comments,
   });
+
+  factory ArticleItem.fromJson(Map<String, dynamic> j) => ArticleItem(
+    id: j['id'] as String,
+    imageUrl: j['image_url'] as String,
+    publishedAt: DateTime.parse(j['published_at'] as String),
+    title: j['title'] as String,
+    summary: j['summary'] as String,
+    tags: (j['tags'] as List<dynamic>).cast<String>(),
+    views: (j['views_count'] as num).toInt(),
+    comments: (j['comments_count'] as num).toInt(),
+  );
 }

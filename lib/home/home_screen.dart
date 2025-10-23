@@ -5,6 +5,7 @@ import '../generated/l10n.dart';
 import 'home_repo.dart';
 import 'models.dart';
 import '../widgets/bottom_nav.dart';
+import 'articles_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -297,7 +298,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 56,
                                 width: double.infinity,
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => ArticlesScreen(
+                                          lang: _lang,
+                                          repo: _repo,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   style: OutlinedButton.styleFrom(
                                     side: const BorderSide(
                                       color: Color(0xFFFFD580),
