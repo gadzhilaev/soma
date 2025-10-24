@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
+import '../programs/programs_screen.dart';
 import 'home_repo.dart';
 import '../models.dart';
 import '../../widgets/bottom_nav.dart';
@@ -27,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final _pageCtrl = PageController(viewportFraction: 0.92);
   int _virtualPage = 0; // реальный индекс PageView (для бесконечной прокрутки)
   Timer? _autoplay;
-  int _tab = 0;
 
   @override
   void initState() {
@@ -126,11 +126,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     const double navBarHeight = 80.0; // если у тебя другая — поставь свою
 
-  // 2) safe area снизу (вырезы/жестовая панель)
-  final double bottomSafe = MediaQuery.of(context).padding.bottom;
+    // 2) safe area снизу (вырезы/жестовая панель)
+    final double bottomSafe = MediaQuery.of(context).padding.bottom;
 
-  // 3) паддинг у списка = высота навбара + safe area
-  final double listBottomPadding = navBarHeight + bottomSafe;
+    // 3) паддинг у списка = высота навбара + safe area
+    final double listBottomPadding = navBarHeight + bottomSafe;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -377,8 +377,20 @@ class _HomeScreenState extends State<HomeScreen> {
               left: false,
               right: false,
               child: BottomNavBar(
-                index: _tab,
-                onTap: (i) => setState(() => _tab = i),
+                index: 0, // ← на главной всегда подсвечиваем «дом»
+                onTap: (i) {
+                  if (i == 0) return; // уже тут
+                  if (i == 1) {
+                    // Вариант Б: без именованных роутов
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            ProgramsScreen(lang: _lang, repo: _repo),
+                      ),
+                    ); //
+                  }
+                  // остальные вкладки добавишь позже
+                },
               ),
             ),
           ),

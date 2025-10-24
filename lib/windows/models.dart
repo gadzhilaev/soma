@@ -1,33 +1,3 @@
-class HeroSlide {
-  final String id;
-  final String imageUrl;
-  final int heightPx;
-  final int radiusPx;
-  final int sortIndex;
-
-  // i18n
-  final String topBadgeLabel;
-  final String topBadgeBg;
-  final String leftChipLabel;
-  final String leftChipBg;
-  final String title;
-  final String subtitle;
-
-  HeroSlide({
-    required this.id,
-    required this.imageUrl,
-    required this.heightPx,
-    required this.radiusPx,
-    required this.sortIndex,
-    required this.topBadgeLabel,
-    required this.topBadgeBg,
-    required this.leftChipLabel,
-    required this.leftChipBg,
-    required this.title,
-    required this.subtitle,
-  });
-}
-
 class DailyReco {
   final String id;
   final String imageUrl;
@@ -126,4 +96,38 @@ class ArticleItem {
       content: content ?? this.content,
     );
   }
+}
+
+class HeroSlide {
+  final String id;
+  final String imageUrl;
+  final int heightPx;
+  final int radiusPx;
+  final int sortIndex;
+
+  // i18n
+  final String topBadgeLabel;
+  final String topBadgeBg;
+  final String leftChipLabel;
+  final String leftChipBg;
+  final String title;
+  final String subtitle;
+
+  // 🆕 для «НОВОЕ»
+  final DateTime updatedAt;
+
+  HeroSlide({
+    required this.id,
+    required this.imageUrl,
+    required this.heightPx,
+    required this.radiusPx,
+    required this.sortIndex,
+    required this.topBadgeLabel,
+    required this.topBadgeBg,
+    required this.leftChipLabel,
+    required this.leftChipBg,
+    required this.title,
+    required this.subtitle,
+    required this.updatedAt, // 🆕
+  });
 }

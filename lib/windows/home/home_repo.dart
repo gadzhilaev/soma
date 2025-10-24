@@ -10,11 +10,22 @@ class HomeRepo {
     final res = await _sb
         .from('home_hero_slides')
         .select('''
-          id,image_url,height_px,corner_radius_px,sort_index,
-          i18n:home_hero_slides_i18n!inner(
-            top_badge_label,top_badge_bg,left_chip_label,left_chip_bg,title,subtitle,language
-          )
-        ''')
+      id,
+      image_url,
+      height_px,
+      corner_radius_px,
+      sort_index,
+      updated_at,
+      i18n:home_hero_slides_i18n!inner(
+        top_badge_label,
+        top_badge_bg,
+        left_chip_label,
+        left_chip_bg,
+        title,
+        subtitle,
+        language
+      )
+    ''')
         .eq('is_active', true)
         .eq('i18n.language', lang)
         .order('sort_index');
@@ -33,6 +44,7 @@ class HomeRepo {
         leftChipBg: (i['left_chip_bg'] ?? '#AB7AFF') as String,
         title: (i['title'] ?? '') as String,
         subtitle: (i['subtitle'] ?? '') as String,
+        updatedAt: DateTime.parse(e['updated_at'] as String), // 🆕
       );
     }).toList();
   }
