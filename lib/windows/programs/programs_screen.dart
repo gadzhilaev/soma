@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../home/home_repo.dart';
 import '../models.dart';
 import '../../widgets/bottom_nav.dart';
+import 'program_details_screen.dart';
 
 class ProgramsScreen extends StatefulWidget {
   final String lang;
@@ -16,9 +17,9 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
   bool _loading = true;
 
   List<ProgramCategory> _cats = [];
-  String? _selectedKey;                 // ключ выбранной категории
-  List<HeroSlide> _allSlides = [];      // все слайды
-  List<HeroSlide> _filtered = [];       // отфильтрованные по категории (или == все)
+  String? _selectedKey; // ключ выбранной категории
+  List<HeroSlide> _allSlides = []; // все слайды
+  List<HeroSlide> _filtered = []; // отфильтрованные по категории (или == все)
 
   @override
   void initState() {
@@ -36,11 +37,25 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
       _cats = r[0] as List<ProgramCategory>;
       _allSlides = r[1] as List<HeroSlide>;
 
-      // выбрать первую категорию, если есть
-      if (_cats.isNotEmpty) {
-        _selectedKey = _cats.first.key;
-      }
+      // вставляем "Все" как первую категорию
+      // вставляем "Все" как первую категорию (id и sortIndex — обязательны)
+      _cats.insert(
+        0,
+        ProgramCategory(
+          id: 'all', // любой строковый стабильный id
+          key: 'all',
+          colorHex: '#F1F1F1',
+          sortIndex: 0, // чтобы шла первой
+          label: widget.lang == 'ru'
+              ? 'Все'
+              : widget.lang == 'es'
+              ? 'Todo'
+              : 'All',
+        ),
+      );
 
+      // по умолчанию — "Все"
+      _selectedKey = 'all';
       _applyFilter();
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -48,8 +63,9 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
   }
 
   void _applyFilter() {
-    // если в слайдах есть categoryKey — фильтруем; иначе показываем все
-    if (_selectedKey != null &&
+    if (_selectedKey == 'all') {
+      _filtered = List.of(_allSlides); // ← всегда всё
+    } else if (_selectedKey != null &&
         _allSlides.any((s) => s.categoryKey != null)) {
       _filtered = _allSlides
           .where((s) => s.categoryKey == _selectedKey)
@@ -84,8 +100,12 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                   pinned: false,
                   centerTitle: true,
                   title: SizedBox(
-                    width: 48, height: 50,
-                    child: Image.asset('assets/logo/logo.png', fit: BoxFit.contain),
+                    width: 48,
+                    height: 50,
+                    child: Image.asset(
+                      'assets/logo/logo.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 const SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -103,8 +123,15 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                         itemBuilder: (_, i) {
                           final c = _cats[i];
                           final selected = c.key == _selectedKey;
-                          final bg = selected ? _hex(c.colorHex) : const Color(0xFFF1F1F1);
-                          final fg = selected ? Colors.white : const Color(0xFFA3A3A3);
+
+                          // теперь ВСЕ выбранные чипы одного цвета (#766DFF)
+                          final bg = selected
+                              ? const Color(0xFF766DFF)
+                              : const Color(0xFFF1F1F1);
+                          final fg = selected
+                              ? Colors.white
+                              : const Color(0xFFA3A3A3);
+
                           return InkWell(
                             borderRadius: BorderRadius.circular(1000),
                             onTap: () {
@@ -114,14 +141,16 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                             },
                             child: Container(
                               height: 28,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
                               decoration: BoxDecoration(
                                 color: bg,
                                 borderRadius: BorderRadius.circular(1000),
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                c.label.toUpperCase(),     // 👈 локализованный текст
+                                c.label.toUpperCase(),
                                 maxLines: 1,
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
@@ -152,70 +181,96 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                     itemBuilder: (_, i) {
                       final slide = _filtered[i];
                       final showNew = _isNew(slide.updatedAt);
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(slide.radiusPx.toDouble()),
-                        child: Stack(
-                          children: [
-                            Image.network(
-                              slide.imageUrl,
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                            if (showNew)
-                              Positioned(
-                                top: 16,
-                                right: 16,
-                                child: _Capsule(
-                                  width: 60,
-                                  height: 24,
-                                  bg: _hex(slide.topBadgeBg),
-                                  text: slide.topBadgeLabel.toUpperCase(),
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ProgramDetailsScreen(
+                                repo: widget.repo,
+                                lang: widget.lang,
+                                programId: slide.id,
+                                preload: ProgramDetails(
+                                  id: slide.id,
+                                  imageUrl: slide.imageUrl,
+                                  title: slide
+                                      .title, // заголовок возьмём из слайда
+                                  content: null, // подтянем внутри экрана
+                                  views: 0,
+                                  comments: 0,
+                                  publishedAt:
+                                      slide.updatedAt, // на первое время ок
                                 ),
                               ),
-                            Positioned(
-                              left: 16,
-                              right: 16,
-                              top: 16 + 24 + 54,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _Capsule(
-                                    width: 88,
-                                    height: 24,
-                                    bg: _hex(slide.leftChipBg),
-                                    text: slide.leftChipLabel.toUpperCase(),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    slide.title.toUpperCase(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18,
-                                      height: 1.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    slide.subtitle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                      height: 19 / 12,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
-                          ],
+                          );
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            slide.radiusPx.toDouble(),
+                          ),
+                          child: Stack(
+                            children: [
+                              Image.network(
+                                slide.imageUrl,
+                                height: 200,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                              if (showNew)
+                                Positioned(
+                                  top: 16,
+                                  right: 16,
+                                  child: _Capsule(
+                                    width: 60,
+                                    height: 24,
+                                    bg: _hex(slide.topBadgeBg),
+                                    text: slide.topBadgeLabel.toUpperCase(),
+                                  ),
+                                ),
+                              Positioned(
+                                left: 16,
+                                right: 16,
+                                top: 16 + 24 + 54,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _Capsule(
+                                      width: 88,
+                                      height: 24,
+                                      bg: _hex(slide.leftChipBg),
+                                      text: slide.leftChipLabel.toUpperCase(),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      slide.title.toUpperCase(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 18,
+                                        height: 1.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      slide.subtitle,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12,
+                                        height: 19 / 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -250,18 +305,32 @@ class _Capsule extends StatelessWidget {
   final double height;
   final Color bg;
   final String text;
-  const _Capsule({required this.width, required this.height, required this.bg, required this.text});
+  const _Capsule({
+    required this.width,
+    required this.height,
+    required this.bg,
+    required this.text,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width, height: height,
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(1000)),
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(1000),
+      ),
       alignment: Alignment.center,
       child: Text(
         text,
-        maxLines: 1, overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: const TextStyle(
-          fontFamily: 'Inter', fontWeight: FontWeight.w400, fontSize: 10, height: 1.0, color: Colors.white,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w400,
+          fontSize: 10,
+          height: 1.0,
+          color: Colors.white,
         ),
       ),
     );

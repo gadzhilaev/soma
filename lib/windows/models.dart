@@ -149,3 +149,23 @@ class ProgramCategory {
     required this.label,
   });
 }
+
+class ProgramDetails {
+  final String id;
+  final String imageUrl;
+  final String title;
+  final String? content;      // длинный текст
+  final int views;
+  final int comments;
+  final DateTime? publishedAt; // можно null
+
+  ProgramDetails({
+    required this.id,
+    required this.imageUrl,
+    required this.title,
+    required this.content,
+    required this.views,
+    required this.comments,
+    required this.publishedAt,
+  });
+}

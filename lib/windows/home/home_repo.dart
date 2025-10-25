@@ -262,4 +262,40 @@ class HomeRepo {
       );
     }).toList();
   }
+
+  // Модель тянется из models.dart (см. ниже)
+  Future<ProgramDetails> getProgramById(String lang, String id) async {
+    // Минимальный путь: используем ту же таблицу слайдов + i18n
+    // и добавляем поле content в i18n, а также views/comments/published_at в базовую таблицу.
+    final res = await _sb
+        .from('home_hero_slides')
+        .select('''
+        id,image_url,published_at,views_count,comments_count,
+        i18n:home_hero_slides_i18n!inner(title,content,language)
+      ''')
+        .eq('id', id)
+        .eq('i18n.language', lang)
+        .limit(1);
+
+    final row = (res as List).first;
+    final i = (row['i18n'] as List).first;
+
+    return ProgramDetails(
+      id: row['id'] as String,
+      imageUrl: (row['image_url'] ?? '') as String,
+      title: (i['title'] ?? '') as String,
+      content: (i['content'] ?? '') as String?,
+      views: (row['views_count'] ?? 0) as int,
+      comments: (row['comments_count'] ?? 0) as int,
+      publishedAt: row['published_at'] != null
+          ? DateTime.parse(row['published_at'] as String)
+          : null,
+    );
+  }
+
+  Future<void> incProgramView(String programId) async {
+    try {
+      await _sb.rpc('program_inc_view', params: {'p_program': programId});
+    } catch (_) {}
+  }
 }
