@@ -29,19 +29,24 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
   }
 
   Future<void> _send() async {
-    if (_controller.text.trim().isEmpty) return;
-    setState(() => _busy = true);
+    final text = _controller.text.trim();
+    if (text.isEmpty || text.length < 12) {
+      _showValidationDialog();
+      return;
+    }
 
+    setState(() => _busy = true);
     final messenger = ScaffoldMessenger.of(context);
 
     try {
       await widget.repo.addComment(
-        targetType:
-            widget.target == CommentTarget.article ? 'article' : 'program',
+        targetType: widget.target == CommentTarget.article
+            ? 'article'
+            : 'program',
         targetId: widget.targetId,
         userName: 'Гость',
         userAvatar: null,
-        body: _controller.text.trim(),
+        body: text,
       );
 
       if (!mounted) return;
@@ -52,6 +57,85 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  void _showValidationDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: SizedBox(
+            // ← жёсткий размер
+            width: 280,
+            height: 180,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // ← не растягиваемся
+                children: [
+                  const Text(
+                    'Внимание!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      height: 22 / 18,
+                      letterSpacing: -0.41,
+                      color: Color(0xFF282828),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Сообщение не может быть пустым или содержать менее 12 символов в своем теле',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                      height: 1.4,
+                      color: Color(0xFF9D9D9D),
+                    ),
+                  ),
+                  const Spacer(), // В ЭТОМ варианте можно оставить, т.к. высота фиксированная
+                  SizedBox(
+                    width: 116,
+                    height: 32,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFD580),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        padding: EdgeInsets.zero,
+                        elevation: 0,
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text(
+                        'ОК',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10,
+                          height: 1.0,
+                          letterSpacing: 0.04,
+                          color: Color(0xFF59523A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
