@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
-import '../programs/programs_screen.dart';
 import 'home_repo.dart';
 import '../models.dart';
 import '../../widgets/bottom_nav.dart';
@@ -376,22 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
               top: false,
               left: false,
               right: false,
-              child: BottomNavBar(
-                index: 0, // ← на главной всегда подсвечиваем «дом»
-                onTap: (i) {
-                  if (i == 0) return; // уже тут
-                  if (i == 1) {
-                    // Вариант Б: без именованных роутов
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ProgramsScreen(lang: _lang, repo: _repo),
-                      ),
-                    ); //
-                  }
-                  // остальные вкладки добавишь позже
-                },
-              ),
+              child: BottomNavBar(index: 0, lang: _lang, repo: _repo),
             ),
           ),
         ],

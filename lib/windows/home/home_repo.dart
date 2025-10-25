@@ -16,6 +16,7 @@ class HomeRepo {
       corner_radius_px,
       sort_index,
       updated_at,
+      category_key,
       i18n:home_hero_slides_i18n!inner(
         top_badge_label,
         top_badge_bg,
@@ -44,7 +45,8 @@ class HomeRepo {
         leftChipBg: (i['left_chip_bg'] ?? '#AB7AFF') as String,
         title: (i['title'] ?? '') as String,
         subtitle: (i['subtitle'] ?? '') as String,
-        updatedAt: DateTime.parse(e['updated_at'] as String), // 🆕
+        updatedAt: DateTime.parse(e['updated_at'] as String),
+        categoryKey: e['category_key'] as String?,
       );
     }).toList();
   }
@@ -236,5 +238,28 @@ class HomeRepo {
       comments: (row['comments_count'] ?? 0) as int,
       content: (i['content'] ?? '') as String, // ← сюда кладём полный текст
     );
+  }
+
+  Future<List<ProgramCategory>> getProgramCategories(String lang) async {
+    final res = await _sb
+        .from('program_categories')
+        .select('''
+        id,key,color_hex,sort_index,
+        i18n:program_categories_i18n!inner(label,language)
+      ''')
+        .eq('is_active', true)
+        .eq('i18n.language', lang)
+        .order('sort_index');
+
+    return (res as List).map((e) {
+      final i = (e['i18n'] as List).first;
+      return ProgramCategory(
+        id: e['id'] as String,
+        key: e['key'] as String,
+        colorHex: (e['color_hex'] ?? '#AB7AFF') as String,
+        sortIndex: (e['sort_index'] ?? 1) as int,
+        label: (i['label'] ?? '') as String,
+      );
+    }).toList();
   }
 }

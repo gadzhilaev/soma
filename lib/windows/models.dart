@@ -115,6 +115,7 @@ class HeroSlide {
 
   // 🆕 для «НОВОЕ»
   final DateTime updatedAt;
+  final String? categoryKey;
 
   HeroSlide({
     required this.id,
@@ -128,6 +129,23 @@ class HeroSlide {
     required this.leftChipBg,
     required this.title,
     required this.subtitle,
-    required this.updatedAt, // 🆕
+    required this.updatedAt,
+    this.categoryKey,
+  });
+}
+
+class ProgramCategory {
+  final String id;
+  final String key;         // program / relax / learn / mood
+  final String colorHex;    // "#AB7AFF"
+  final int sortIndex;
+  final String label;       // локализованный текст
+
+  ProgramCategory({
+    required this.id,
+    required this.key,
+    required this.colorHex,
+    required this.sortIndex,
+    required this.label,
   });
 }
