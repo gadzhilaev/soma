@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../home/home_repo.dart';
 import '../models.dart';
 import '../../generated/l10n.dart';
+import '../../widgets/comments.dart';
+import '../../widgets/leave_comment_box.dart';
 
 class ArticleDetailsScreen extends StatefulWidget {
   final HomeRepo repo;
@@ -35,7 +37,10 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
 
   Future<void> _load() async {
     try {
-      final full = await widget.repo.getArticleById(widget.lang, widget.articleId);
+      final full = await widget.repo.getArticleById(
+        widget.lang,
+        widget.articleId,
+      );
       if (!mounted) return;
       setState(() => _data = full);
       // увеличим просмотры без блокировки UI
@@ -69,18 +74,24 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
                 SliverAppBar(
                   backgroundColor: Colors.white,
                   elevation: 0,
-                  pinned: false,       // 👈 не закреплён — уедет вверх
+                  pinned: false, // 👈 не закреплён — уедет вверх
                   floating: false,
                   snap: false,
                   centerTitle: true,
                   leading: IconButton(
                     onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFF282828)),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF282828),
+                    ),
                   ),
                   title: SizedBox(
                     width: 48,
                     height: 50,
-                    child: Image.asset('assets/logo/logo.png', fit: BoxFit.contain),
+                    child: Image.asset(
+                      'assets/logo/logo.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   actions: [
                     // ⭐ звезда без фона: контур -> при тапе заливка
@@ -203,7 +214,11 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        const Icon(Icons.visibility, size: 14, color: Color(0xFF726AFF)),
+                        const Icon(
+                          Icons.visibility,
+                          size: 14,
+                          color: Color(0xFF726AFF),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${a?.views ?? 0}',
@@ -216,7 +231,11 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
                           ),
                         ),
                         const SizedBox(width: 14),
-                        const Icon(Icons.chat, size: 14, color: Color(0xFF726AFF)),
+                        const Icon(
+                          Icons.chat,
+                          size: 14,
+                          color: Color(0xFF726AFF),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${a?.comments ?? 0}',
@@ -229,7 +248,11 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
                           ),
                         ),
                         const SizedBox(width: 14),
-                        const Icon(Icons.calendar_today, size: 14, color: Color(0xFF726AFF)),
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 14,
+                          color: Color(0xFF726AFF),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           a != null ? _timeAgo(a.publishedAt) : '',
@@ -264,23 +287,28 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
                     ),
                   ),
                 ),
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+                // Секция комментариев
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: CommentsSection(
+                      repo: widget.repo,
+                      target: CommentTarget.article,
+                      targetId: widget.articleId,
+                    ),
+                  ),
+                ),
 
                 const SliverToBoxAdapter(child: SizedBox(height: 32)),
 
                 // «Оставить комментарий»
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      s.articleLeaveComment,
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        height: 1.4,
-                        color: Color(0xFF282828),
-                      ),
-                    ),
+                  child: LeaveCommentBox(
+                    repo: widget.repo,
+                    target: CommentTarget.article, // или .program
+                    targetId: widget.articleId, // или programId
                   ),
                 ),
 

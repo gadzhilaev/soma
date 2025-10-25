@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../home/home_repo.dart';
 import '../models.dart';
 import '../../generated/l10n.dart';
+import '../../widgets/comments.dart';
+import '../../widgets/leave_comment_box.dart';
 
 class ProgramDetailsScreen extends StatefulWidget {
   final HomeRepo repo;
   final String lang;
-  final String programId;          // это id слайда/программы
-  final ProgramDetails? preload;   // можно передать превью (картинка/заголовок)
+  final String programId; // это id слайда/программы
+  final ProgramDetails? preload; // можно передать превью (картинка/заголовок)
 
   const ProgramDetailsScreen({
     super.key,
@@ -35,7 +37,10 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
 
   Future<void> _load() async {
     try {
-      final full = await widget.repo.getProgramById(widget.lang, widget.programId);
+      final full = await widget.repo.getProgramById(
+        widget.lang,
+        widget.programId,
+      );
       if (!mounted) return;
       setState(() => _data = full);
       // просмотры — без ожидания UI
@@ -71,12 +76,18 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                   centerTitle: true,
                   leading: IconButton(
                     onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFF282828)),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF282828),
+                    ),
                   ),
                   title: SizedBox(
                     width: 48,
                     height: 50,
-                    child: Image.asset('assets/logo/logo.png', fit: BoxFit.contain),
+                    child: Image.asset(
+                      'assets/logo/logo.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   actions: [
                     Padding(
@@ -91,7 +102,7 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                           onPressed: () => setState(() => _fav = !_fav),
                           icon: Icon(
                             _fav ? Icons.star : Icons.star_border,
-                            size: 24,
+                            size: 32,
                             color: const Color(0xFFFFD580),
                           ),
                         ),
@@ -164,7 +175,11 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        const Icon(Icons.visibility, size: 14, color: Color(0xFF726AFF)),
+                        const Icon(
+                          Icons.visibility,
+                          size: 14,
+                          color: Color(0xFF726AFF),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${a?.views ?? 0}',
@@ -177,7 +192,11 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                           ),
                         ),
                         const SizedBox(width: 14),
-                        const Icon(Icons.chat, size: 14, color: Color(0xFF726AFF)),
+                        const Icon(
+                          Icons.chat,
+                          size: 14,
+                          color: Color(0xFF726AFF),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${a?.comments ?? 0}',
@@ -190,10 +209,16 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                           ),
                         ),
                         const SizedBox(width: 14),
-                        const Icon(Icons.calendar_today, size: 14, color: Color(0xFF726AFF)),
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 14,
+                          color: Color(0xFF726AFF),
+                        ),
                         const SizedBox(width: 4),
                         Text(
-                          a?.publishedAt != null ? _timeAgo(a!.publishedAt!) : '',
+                          a?.publishedAt != null
+                              ? _timeAgo(a!.publishedAt!)
+                              : '',
                           style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w500,
@@ -204,6 +229,31 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                         ),
                       ],
                     ),
+                  ),
+                ),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+                // «Комментарии»
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: CommentsSection(
+                      repo: widget.repo,
+                      target: CommentTarget.program,
+                      targetId: widget.programId,
+                    ),
+                  ),
+                ),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+                // «Оставить комментарий»
+                SliverToBoxAdapter(
+                  child: LeaveCommentBox(
+                    repo: widget.repo,
+                    target: CommentTarget.program,
+                    targetId: widget.programId,
                   ),
                 ),
 

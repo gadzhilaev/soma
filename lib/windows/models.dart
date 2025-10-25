@@ -169,3 +169,33 @@ class ProgramDetails {
     required this.publishedAt,
   });
 }
+
+class AppComment {
+  final String id;
+  final String targetType;   // 'article' | 'program'
+  final String targetId;
+  final String userName;
+  final String? userAvatar;  // url
+  final String body;
+  final DateTime createdAt;
+
+  AppComment({
+    required this.id,
+    required this.targetType,
+    required this.targetId,
+    required this.userName,
+    required this.userAvatar,
+    required this.body,
+    required this.createdAt,
+  });
+
+  factory AppComment.fromMap(Map<String, dynamic> m) => AppComment(
+    id: (m['id'] ?? '') as String,
+    targetType: (m['target_type'] ?? '') as String,
+    targetId: (m['target_id'] ?? '') as String,
+    userName: (m['user_name'] ?? '') as String,
+    userAvatar: m['user_avatar'] as String?,
+    body: (m['body'] ?? '') as String,
+    createdAt: DateTime.parse(m['inserted_at'] as String),
+  );
+}

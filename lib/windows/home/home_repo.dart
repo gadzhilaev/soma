@@ -298,4 +298,43 @@ class HomeRepo {
       await _sb.rpc('program_inc_view', params: {'p_program': programId});
     } catch (_) {}
   }
+
+  // ===== COMMENTS =====
+  Future<List<AppComment>> getComments({
+    required String targetType, // 'article' | 'program'
+    required String targetId,
+    int limit = 20,
+    String? cursorIso, // пагинация по дате: загрузить СТАРШЕ этой даты
+  }) async {
+    var q = _sb
+        .from('app_comments')
+        .select()
+        .eq('target_type', targetType)
+        .eq('target_id', targetId);
+
+    if (cursorIso != null && cursorIso.isNotEmpty) {
+      q = q.lt('inserted_at', cursorIso);
+    }
+
+    final res = await q.order('inserted_at', ascending: false).limit(limit);
+    return (res as List)
+        .map((e) => AppComment.fromMap(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> addComment({
+    required String targetType, // 'article' | 'program'
+    required String targetId,
+    required String userName,
+    String? userAvatar,
+    required String body,
+  }) async {
+    await _sb.from('app_comments').insert({
+      'target_type': targetType,
+      'target_id': targetId,
+      'user_name': userName,
+      'user_avatar': userAvatar,
+      'body': body,
+    });
+  }
 }
