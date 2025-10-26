@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../settings/repo.dart';
 import '../../settings/models.dart';
 import '../../widgets/comments.dart';
+import '../../generated/l10n.dart';
 import '../../widgets/leave_comment_box.dart';
 
 class ProgramDetailsScreen extends StatefulWidget {
@@ -53,6 +54,7 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final a = _data;
+    final s = S.of(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -158,7 +160,102 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                   ),
                 ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                // Если есть шаги — показываем их
+                if ((a?.steps ?? []).isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 24),
+                          for (int i = 0; i < a!.steps!.length; i++) ...[
+                            Text(
+                              s.stepN(i + 1), // ← локализация "Шаг N"
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                height: 22 / 14, // 22px line-height
+                                letterSpacing: -0.41,
+                                color: Color(0xFF282828),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.network(
+                                    a.steps![i].imageUrl,
+                                    width: 113,
+                                    height: 116,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        a.steps![i].title.toUpperCase(),
+                                        style: const TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                          height: 1.4, // 140%
+                                          color: Color(0xFF282828),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        a.steps![i].description,
+                                        style: const TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          height: 1.5, // 150%
+                                          color: Color(0xFF717171),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.play_circle,
+                                            size: 24,
+                                            color: Color(0xFF766DFF),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            s.listen, // ← локализовано
+                                            style: const TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
+                                              height: 19 / 14, // 19px
+                                              color: Color(0xFF766DFF),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (i != a.steps!.length - 1)
+                              const SizedBox(height: 20), // между шагами 20
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+
+                const SliverToBoxAdapter(child: SizedBox(height: 32)),
 
                 // Мета (просмотры / комментарии / давность)
                 SliverToBoxAdapter(
@@ -203,6 +300,57 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                     ),
                   ),
                 ),
+
+                // Если шагов нет — одна большая кнопка "Слушать" ПОСЛЕ меты
+                if ((a?.steps ?? []).isEmpty)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 32),
+                          SizedBox(
+                            height: 68,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(
+                                  0xFFFFD580,
+                                ), // FFD580
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const Icon(
+                                    Icons.play_circle,
+                                    size: 24,
+                                    color: Color(0xFF59523A),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    s.listenUpper, // ← локализовано
+                                    style: const TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                      height: 1.0, // 100%
+                                      letterSpacing: 0.48, // 4% от 12px = 0.48
+                                      color: Color(0xFF59523A),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
                 const SliverToBoxAdapter(child: SizedBox(height: 32)),
 

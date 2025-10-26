@@ -77,5 +77,9 @@
   "send": "Enviar",
   "commentSent": "Comentario enviado",
   "validationTitle": "¡Atención!",
-  "validationBodyTooShort": "El mensaje no puede estar vacío ni contener menos de 12 caracteres."
+  "validationBodyTooShort": "El mensaje no puede estar vacío ni contener menos de 12 caracteres.",
+  "listen": "Escuchar",
+  "listenUpper": "ESCUCHAR",
+  "stepN": "Paso {n}",
+  "@stepN": {"placeholders": {"n": {"type": "int"}}}
 }

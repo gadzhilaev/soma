@@ -20,6 +20,8 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(n) => "Step ${n}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "ago": MessageLookupByLibrary.simpleMessage("ago"),
@@ -99,6 +101,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "languageEnglish": MessageLookupByLibrary.simpleMessage("English"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Russian"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Spanish"),
+    "listen": MessageLookupByLibrary.simpleMessage("Listen"),
+    "listenUpper": MessageLookupByLibrary.simpleMessage("LISTEN"),
     "login": MessageLookupByLibrary.simpleMessage("Login"),
     "minShort": MessageLookupByLibrary.simpleMessage("min"),
     "monthly": MessageLookupByLibrary.simpleMessage("MONTHLY"),
@@ -144,6 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "restorePass": MessageLookupByLibrary.simpleMessage("Restore password"),
     "send": MessageLookupByLibrary.simpleMessage("Send"),
     "showMore": MessageLookupByLibrary.simpleMessage("Show more"),
+    "stepN": m0,
     "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
       "The message cannot be empty or contain fewer than 12 characters.",
     ),

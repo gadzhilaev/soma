@@ -678,6 +678,21 @@ class S {
       args: [],
     );
   }
+
+  /// `Listen`
+  String get listen {
+    return Intl.message('Listen', name: 'listen', desc: '', args: []);
+  }
+
+  /// `LISTEN`
+  String get listenUpper {
+    return Intl.message('LISTEN', name: 'listenUpper', desc: '', args: []);
+  }
+
+  /// `Step {n}`
+  String stepN(int n) {
+    return Intl.message('Step $n', name: 'stepN', desc: '', args: [n]);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

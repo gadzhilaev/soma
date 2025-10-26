@@ -20,6 +20,8 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
+  static String m0(n) => "Шаг ${n}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "ago": MessageLookupByLibrary.simpleMessage("назад"),
@@ -109,6 +111,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "languageEnglish": MessageLookupByLibrary.simpleMessage("Английский"),
     "languageRussian": MessageLookupByLibrary.simpleMessage("Русский"),
     "languageSpanish": MessageLookupByLibrary.simpleMessage("Испанский"),
+    "listen": MessageLookupByLibrary.simpleMessage("Слушать"),
+    "listenUpper": MessageLookupByLibrary.simpleMessage("СЛУШАТЬ"),
     "login": MessageLookupByLibrary.simpleMessage("Войти"),
     "minShort": MessageLookupByLibrary.simpleMessage("мин"),
     "monthly": MessageLookupByLibrary.simpleMessage("ЕЖЕМЕСЯЧНЫЙ"),
@@ -156,6 +160,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "restorePass": MessageLookupByLibrary.simpleMessage("Восстановить пароль"),
     "send": MessageLookupByLibrary.simpleMessage("Отправить"),
     "showMore": MessageLookupByLibrary.simpleMessage("Показать ещё"),
+    "stepN": m0,
     "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
       "Сообщение не может быть пустым или содержать менее 12 символов в своем теле",
     ),

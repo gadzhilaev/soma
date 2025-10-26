@@ -154,10 +154,13 @@ class ProgramDetails {
   final String id;
   final String imageUrl;
   final String title;
-  final String? content;      // длинный текст
+  final String? content;
   final int views;
   final int comments;
-  final DateTime? publishedAt; // можно null
+  final DateTime? publishedAt;
+
+  /// 🆕 список шагов. Пустой/null = шагов нет → рисуем большую кнопку «Слушать»
+  final List<ProgramStep>? steps;
 
   ProgramDetails({
     required this.id,
@@ -167,6 +170,7 @@ class ProgramDetails {
     required this.views,
     required this.comments,
     required this.publishedAt,
+    this.steps,
   });
 }
 
@@ -199,3 +203,18 @@ class AppComment {
     createdAt: DateTime.parse(m['inserted_at'] as String),
   );
 }
+
+class ProgramStep {
+  final String id;
+  final String imageUrl;
+  final String title;
+  final String description;
+
+  ProgramStep({
+    required this.id,
+    required this.imageUrl,
+    required this.title,
+    required this.description,
+  });
+}
+

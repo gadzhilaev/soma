@@ -265,8 +265,7 @@ class HomeRepo {
 
   // Модель тянется из models.dart (см. ниже)
   Future<ProgramDetails> getProgramById(String lang, String id) async {
-    // Минимальный путь: используем ту же таблицу слайдов + i18n
-    // и добавляем поле content в i18n, а также views/comments/published_at в базовую таблицу.
+    // Основная программа
     final res = await _sb
         .from('home_hero_slides')
         .select('''
@@ -277,8 +276,30 @@ class HomeRepo {
         .eq('i18n.language', lang)
         .limit(1);
 
+    if (res.isEmpty) throw Exception('Program not found');
     final row = (res as List).first;
     final i = (row['i18n'] as List).first;
+
+    // 🧠 Загружаем шаги (если есть)
+    final stepsRes = await _sb
+        .from('program_steps')
+        .select('''
+        id,image_url,sort_index,
+        i18n:program_steps_i18n!inner(title,description,language)
+      ''')
+        .eq('program_id', id)
+        .eq('i18n.language', lang)
+        .order('sort_index');
+
+    final steps = (stepsRes as List?)?.map((e) {
+      final i18n = (e['i18n'] as List).first;
+      return ProgramStep(
+        id: e['id'] as String,
+        imageUrl: e['image_url'] as String,
+        title: i18n['title'] as String,
+        description: i18n['description'] as String,
+      );
+    }).toList();
 
     return ProgramDetails(
       id: row['id'] as String,
@@ -290,6 +311,7 @@ class HomeRepo {
       publishedAt: row['published_at'] != null
           ? DateTime.parse(row['published_at'] as String)
           : null,
+      steps: steps,
     );
   }
 
