@@ -107,7 +107,7 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
                           onPressed: () => setState(() => _fav = !_fav),
                           icon: Icon(
                             _fav ? Icons.star : Icons.star_border,
-                            size: 24,
+                            size: 32,
                             color: const Color(0xFFFFD580),
                           ),
                         ),

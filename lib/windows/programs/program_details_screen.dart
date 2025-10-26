@@ -4,6 +4,7 @@ import '../../settings/models.dart';
 import '../../widgets/comments.dart';
 import '../../generated/l10n.dart';
 import '../../widgets/leave_comment_box.dart';
+import 'program_player_screen.dart';
 
 class ProgramDetailsScreen extends StatefulWidget {
   final HomeRepo repo;
@@ -222,25 +223,43 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.play_circle,
-                                            size: 24,
-                                            color: Color(0xFF766DFF),
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            s.listen, // ← локализовано
-                                            style: const TextStyle(
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 14,
-                                              height: 19 / 14, // 19px
+                                      InkWell(
+                                        onTap: () {
+                                          final a = _data!;
+                                          final stepIndex =
+                                              i; // текущий i из цикла
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  ProgramPlayerScreen(
+                                                    title: a.title,
+                                                    imageUrl: a.imageUrl,
+                                                    steps: a.steps ?? const [],
+                                                    initialStepIndex: stepIndex,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.play_circle_outline,
+                                              size: 24,
                                               color: Color(0xFF766DFF),
                                             ),
-                                          ),
-                                        ],
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              s.listen, // ← локализовано
+                                              style: const TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                                height: 19 / 14, // 19px
+                                                color: Color(0xFF766DFF),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -313,7 +332,18 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                             height: 68,
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                final a = _data!;
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ProgramPlayerScreen(
+                                      title: a.title,
+                                      imageUrl: a.imageUrl,
+                                      steps: const [], // одиночная дорожка
+                                    ),
+                                  ),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(
                                   0xFFFFD580,
@@ -327,7 +357,7 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   const Icon(
-                                    Icons.play_circle,
+                                    Icons.play_circle_outline,
                                     size: 24,
                                     color: Color(0xFF59523A),
                                   ),

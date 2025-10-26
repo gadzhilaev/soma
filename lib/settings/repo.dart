@@ -290,7 +290,6 @@ class HomeRepo {
         .eq('program_id', id)
         .eq('i18n.language', lang)
         .order('sort_index');
-
     final steps = (stepsRes as List?)?.map((e) {
       final i18n = (e['i18n'] as List).first;
       return ProgramStep(

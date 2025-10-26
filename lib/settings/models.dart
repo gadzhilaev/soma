@@ -159,7 +159,10 @@ class ProgramDetails {
   final int comments;
   final DateTime? publishedAt;
 
-  /// 🆕 список шагов. Пустой/null = шагов нет → рисуем большую кнопку «Слушать»
+  // 🆕 аудио всей программы
+  final String? audioUrl;
+
+  /// 🆕 шаги. Если пусто — одиночная дорожка = audioUrl из ProgramDetails
   final List<ProgramStep>? steps;
 
   ProgramDetails({
@@ -170,7 +173,26 @@ class ProgramDetails {
     required this.views,
     required this.comments,
     required this.publishedAt,
+    this.audioUrl, // 🆕
     this.steps,
+  });
+}
+
+class ProgramStep {
+  final String id;
+  final String imageUrl;
+  final String title;
+  final String description;
+
+  // 🆕 аудио шага
+  final String? audioUrl;
+
+  ProgramStep({
+    required this.id,
+    required this.imageUrl,
+    required this.title,
+    required this.description,
+    this.audioUrl, // 🆕
   });
 }
 
@@ -203,18 +225,3 @@ class AppComment {
     createdAt: DateTime.parse(m['inserted_at'] as String),
   );
 }
-
-class ProgramStep {
-  final String id;
-  final String imageUrl;
-  final String title;
-  final String description;
-
-  ProgramStep({
-    required this.id,
-    required this.imageUrl,
-    required this.title,
-    required this.description,
-  });
-}
-
