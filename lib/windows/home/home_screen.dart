@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
 import '../article/article_details_screen.dart';
-import 'home_repo.dart';
-import '../models.dart';
+import '../../settings/repo.dart';
+import '../../settings/models.dart';
 import '../../widgets/bottom_nav.dart';
 import '../article/articles_screen.dart';
 

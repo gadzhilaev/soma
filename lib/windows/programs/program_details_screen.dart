@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../home/home_repo.dart';
-import '../models.dart';
+import '../../settings/repo.dart';
+import '../../settings/models.dart';
 import '../../widgets/comments.dart';
 import '../../widgets/leave_comment_box.dart';
 

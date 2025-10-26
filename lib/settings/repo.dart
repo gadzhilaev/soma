@@ -1,5 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models.dart';
+import 'models.dart';
 
 class HomeRepo {
   final SupabaseClient _sb;

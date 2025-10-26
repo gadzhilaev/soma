@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../home/home_repo.dart';
-import '../models.dart';
+import '../../settings/repo.dart';
+import '../../settings/models.dart';
 import '../../widgets/bottom_nav.dart';
 import 'program_details_screen.dart';
 

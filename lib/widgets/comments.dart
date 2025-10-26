@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../windows/home/home_repo.dart';
-import '../windows/models.dart';
+import '../settings/repo.dart';
+import '../settings/models.dart';
 import '../../generated/l10n.dart';
 
 enum CommentTarget { article, program }

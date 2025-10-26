@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import '../core/supabase.dart';
 import '../windows/home/home_screen.dart';
-import '../windows/home/home_repo.dart';
+import '../settings/repo.dart';
 import '../windows/programs/programs_screen.dart';
 
 class BottomNavBar extends StatelessWidget {

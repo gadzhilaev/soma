@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../windows/home/home_repo.dart';
+import '../settings/repo.dart';
 import 'comments.dart';
 import '../../generated/l10n.dart';
 
