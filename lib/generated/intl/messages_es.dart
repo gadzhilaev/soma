@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "ago": MessageLookupByLibrary.simpleMessage("horas"),
     "agreePrefix": MessageLookupByLibrary.simpleMessage(
       "Acepto los términos del procesamiento de ",
     ),
@@ -32,10 +33,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "becomePremium": MessageLookupByLibrary.simpleMessage("Hacerse premium"),
     "cancel": MessageLookupByLibrary.simpleMessage("Отменить"),
+    "commentSent": MessageLookupByLibrary.simpleMessage("Comentario enviado"),
+    "commentsEmpty": MessageLookupByLibrary.simpleMessage("No hay comentarios"),
+    "complaintThanks": MessageLookupByLibrary.simpleMessage(
+      "¡Gracias! Revisaremos tu denuncia.",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage("Continuar gratis"),
     "dayShort": MessageLookupByLibrary.simpleMessage("d"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Introduce tu correo"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Correo electrónico"),
+    "enterMessage": MessageLookupByLibrary.simpleMessage(
+      "Introduce un mensaje",
+    ),
     "errAgreeRequired": MessageLookupByLibrary.simpleMessage(
       "Acepta el tratamiento de datos",
     ),
@@ -131,10 +140,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Repite la contraseña",
     ),
+    "report": MessageLookupByLibrary.simpleMessage("Denunciar"),
+    "reportBody": MessageLookupByLibrary.simpleMessage(
+      "¿Estás seguro de que quieres denunciar el comentario de otro usuario?",
+    ),
+    "reportSubmit": MessageLookupByLibrary.simpleMessage("DENUNCIAR"),
+    "reportTitle": MessageLookupByLibrary.simpleMessage("¡Atención!"),
     "restoreLabel": MessageLookupByLibrary.simpleMessage(
       "Enter your email address that was specified when registering your account",
     ),
     "restorePass": MessageLookupByLibrary.simpleMessage("Restore password"),
+    "send": MessageLookupByLibrary.simpleMessage("Enviar"),
+    "showMore": MessageLookupByLibrary.simpleMessage("Mostrar más"),
+    "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
+      "El mensaje no puede estar vacío ni contener menos de 12 caracteres.",
+    ),
+    "validationTitle": MessageLookupByLibrary.simpleMessage("¡Atención!"),
     "yearly": MessageLookupByLibrary.simpleMessage("ANUAL"),
+    "yourMessage": MessageLookupByLibrary.simpleMessage("Tu mensaje"),
   };
 }

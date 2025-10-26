@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../home/home_repo.dart';
 import '../models.dart';
+import '../../generated/l10n.dart';
 import 'article_details_screen.dart';
 
 class ArticlesScreen extends StatefulWidget {
@@ -58,9 +59,10 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
 
   String _timeAgo(DateTime dt) {
     final diff = DateTime.now().difference(dt);
-    if (diff.inMinutes < 60) return '${diff.inMinutes} мин';
-    if (diff.inHours < 24) return '${diff.inHours} ч';
-    return '${diff.inDays} дн';
+    final s = S.of(context);
+    if (diff.inMinutes < 60) return '${diff.inMinutes} ${s.minShort} ${s.ago}';
+    if (diff.inHours < 24) return '${diff.inHours} ${s.hourShort} ${s.ago}';
+    return '${diff.inDays} ${s.dayShort} ${s.ago}';
   }
 
   @override

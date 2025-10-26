@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
+import '../article/article_details_screen.dart';
 import 'home_repo.dart';
 import '../models.dart';
 import '../../widgets/bottom_nav.dart';
@@ -305,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ? 0
                                           : 20,
                                     ),
-                                    child: _ArticleTile(item: _articles[i]),
+                                    child: _ArticleTile(item: _articles[i], repo: _repo, lang: _lang),
                                   );
                                 }),
                               ),
@@ -658,7 +659,10 @@ class _ForYouCard extends StatelessWidget {
 // ===== ARTICLE ITEM =====
 class _ArticleTile extends StatelessWidget {
   final ArticleItem item;
-  const _ArticleTile({required this.item});
+  final HomeRepo? repo;
+  final String? lang;
+
+  const _ArticleTile({required this.item, this.repo, this.lang});
 
   String _timeAgo() {
     final diff = DateTime.now().difference(item.publishedAt);
@@ -670,62 +674,79 @@ class _ArticleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const iconColor = Color(0xFF726AFF);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.network(
-            item.imageUrl,
-            height: 180,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          item.title.toUpperCase(),
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-            height: 1.5,
-            color: Color(0xFF282828),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          item.summary,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
-            height: 1.4,
-            color: Color(0xFF717171),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            const Icon(Icons.calendar_today, size: 14, color: iconColor),
-            const SizedBox(width: 4),
-            Text(
-              _timeAgo(),
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-                height: 1.0,
-                color: Color(0xFF717171),
+
+    return InkWell(
+      onTap: () {
+        if (repo != null && lang != null) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ArticleDetailsScreen(
+                repo: repo!,
+                lang: lang!,
+                articleId: item.id,
+                preload: item,
               ),
             ),
-          ],
-        ),
-      ],
+          );
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(
+              item.imageUrl,
+              height: 180,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            item.title.toUpperCase(),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+              height: 1.5,
+              color: Color(0xFF282828),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            item.summary,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              height: 1.4,
+              color: Color(0xFF717171),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Icon(Icons.calendar_today, size: 14, color: iconColor),
+              const SizedBox(width: 4),
+              Text(
+                _timeAgo(),
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                  height: 1.0,
+                  color: Color(0xFF717171),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

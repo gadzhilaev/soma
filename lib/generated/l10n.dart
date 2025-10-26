@@ -568,6 +568,116 @@ class S {
   String get dayShort {
     return Intl.message('d', name: 'dayShort', desc: '', args: []);
   }
+
+  /// `ago`
+  String get ago {
+    return Intl.message('ago', name: 'ago', desc: '', args: []);
+  }
+
+  /// `No comments yet`
+  String get commentsEmpty {
+    return Intl.message(
+      'No comments yet',
+      name: 'commentsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show more`
+  String get showMore {
+    return Intl.message('Show more', name: 'showMore', desc: '', args: []);
+  }
+
+  /// `Report`
+  String get report {
+    return Intl.message('Report', name: 'report', desc: '', args: []);
+  }
+
+  /// `Attention!`
+  String get reportTitle {
+    return Intl.message('Attention!', name: 'reportTitle', desc: '', args: []);
+  }
+
+  /// `Are you sure you want to report another user's comment?`
+  String get reportBody {
+    return Intl.message(
+      'Are you sure you want to report another user\'s comment?',
+      name: 'reportBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `REPORT`
+  String get reportSubmit {
+    return Intl.message('REPORT', name: 'reportSubmit', desc: '', args: []);
+  }
+
+  /// `Thanks! We'll review your report.`
+  String get complaintThanks {
+    return Intl.message(
+      'Thanks! We\'ll review your report.',
+      name: 'complaintThanks',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a message`
+  String get enterMessage {
+    return Intl.message(
+      'Enter a message',
+      name: 'enterMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your message`
+  String get yourMessage {
+    return Intl.message(
+      'Your message',
+      name: 'yourMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send`
+  String get send {
+    return Intl.message('Send', name: 'send', desc: '', args: []);
+  }
+
+  /// `Comment sent`
+  String get commentSent {
+    return Intl.message(
+      'Comment sent',
+      name: 'commentSent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attention!`
+  String get validationTitle {
+    return Intl.message(
+      'Attention!',
+      name: 'validationTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The message cannot be empty or contain fewer than 12 characters.`
+  String get validationBodyTooShort {
+    return Intl.message(
+      'The message cannot be empty or contain fewer than 12 characters.',
+      name: 'validationBodyTooShort',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

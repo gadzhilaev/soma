@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../windows/home/home_repo.dart';
 import 'comments.dart';
+import '../../generated/l10n.dart';
 
 class LeaveCommentBox extends StatefulWidget {
   final HomeRepo repo;
@@ -29,9 +30,10 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
   }
 
   Future<void> _send() async {
+    final s = S.of(context);
     final text = _controller.text.trim();
     if (text.isEmpty || text.length < 12) {
-      _showValidationDialog();
+      _showValidationDialog(); // внутри тоже S.of(context)
       return;
     }
 
@@ -51,105 +53,100 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
 
       if (!mounted) return;
       _controller.clear();
-      messenger.showSnackBar(
-        const SnackBar(content: Text('Комментарий отправлен')),
-      );
+      messenger.showSnackBar(SnackBar(content: Text(s.commentSent)));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
   void _showValidationDialog() {
+    final s = S.of(context);
     showDialog(
       context: context,
       barrierDismissible: true,
-      builder: (_) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: SizedBox(
-            // ← жёсткий размер
-            width: 280,
-            height: 180,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min, // ← не растягиваемся
-                children: [
-                  const Text(
-                    'Внимание!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      height: 22 / 18,
-                      letterSpacing: -0.41,
-                      color: Color(0xFF282828),
-                    ),
+      builder: (_) => Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        child: SizedBox(
+          width: 280,
+          height: 180,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  s.validationTitle, // "Внимание!"
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    height: 22 / 18,
+                    letterSpacing: -0.41,
+                    color: Color(0xFF282828),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Сообщение не может быть пустым или содержать менее 12 символов в своем теле',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13,
-                      height: 1.4,
-                      color: Color(0xFF9D9D9D),
-                    ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  s.validationBodyTooShort,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                    height: 1.4,
+                    color: Color(0xFF9D9D9D),
                   ),
-                  const Spacer(), // В ЭТОМ варианте можно оставить, т.к. высота фиксированная
-                  SizedBox(
-                    width: 116,
-                    height: 32,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFD580),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        padding: EdgeInsets.zero,
-                        elevation: 0,
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: 116,
+                  height: 32,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFD580),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
                       ),
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: const Text(
-                        'ОК',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 10,
-                          height: 1.0,
-                          letterSpacing: 0.04,
-                          color: Color(0xFF59523A),
-                        ),
+                      padding: EdgeInsets.zero,
+                      elevation: 0,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                      s.ok.toUpperCase(), // "ОК"
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 10,
+                        height: 1.0,
+                        letterSpacing: 0.04,
+                        color: Color(0xFF59523A),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
             child: Text(
-              'Введите сообщение',
-              style: TextStyle(
+              s.enterMessage, // "Введите сообщение"
+              style: const TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w500,
                 fontSize: 13,
@@ -159,8 +156,6 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
             ),
           ),
           const SizedBox(height: 12),
-
-          // Поле ввода комментария
           Container(
             height: 240,
             decoration: BoxDecoration(
@@ -179,9 +174,9 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
                 height: 1.3,
                 color: Color(0xFF282828),
               ),
-              decoration: const InputDecoration(
-                hintText: 'Ваше сообщение',
-                hintStyle: TextStyle(
+              decoration: InputDecoration(
+                hintText: s.yourMessage, // "Ваше сообщение"
+                hintStyle: const TextStyle(
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
@@ -194,8 +189,6 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
             ),
           ),
           const SizedBox(height: 16),
-
-          // Кнопка "Отправить"
           SizedBox(
             width: double.infinity,
             height: 56,
@@ -205,7 +198,7 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 ),
-                padding: EdgeInsets.zero, // чтобы не расширяла
+                padding: EdgeInsets.zero,
               ),
               onPressed: _busy ? null : _send,
               child: _busy
@@ -217,13 +210,13 @@ class _LeaveCommentBoxState extends State<LeaveCommentBox> {
                         strokeWidth: 2,
                       ),
                     )
-                  : const Text(
-                      'ОТПРАВИТЬ',
-                      style: TextStyle(
+                  : Text(
+                      s.send.toUpperCase(), // "ОТПРАВИТЬ"
+                      style: const TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
-                        letterSpacing: 4 / 100,
+                        letterSpacing: 0.04,
                         height: 1.0,
                         color: Color(0xFF59523A),
                       ),

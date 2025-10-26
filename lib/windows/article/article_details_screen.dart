@@ -54,9 +54,9 @@ class _ArticleDetailsScreenState extends State<ArticleDetailsScreen> {
   String _timeAgo(DateTime dt) {
     final diff = DateTime.now().difference(dt);
     final s = S.of(context);
-    if (diff.inMinutes < 60) return '${diff.inMinutes} ${s.minShort}';
-    if (diff.inHours < 24) return '${diff.inHours} ${s.hourShort}';
-    return '${diff.inDays} ${s.dayShort}';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} ${s.minShort} ${s.ago}';
+    if (diff.inHours < 24) return '${diff.inHours} ${s.hourShort} ${s.ago}';
+    return '${diff.inDays} ${s.dayShort} ${s.ago}';
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../home/home_repo.dart';
 import '../models.dart';
-import '../../generated/l10n.dart';
 import '../../widgets/comments.dart';
 import '../../widgets/leave_comment_box.dart';
 
@@ -49,14 +48,6 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
     } finally {
       if (mounted) setState(() => _loading = false);
     }
-  }
-
-  String _timeAgo(DateTime dt) {
-    final diff = DateTime.now().difference(dt);
-    final s = S.of(context);
-    if (diff.inMinutes < 60) return '${diff.inMinutes} ${s.minShort}';
-    if (diff.inHours < 24) return '${diff.inHours} ${s.hourShort}';
-    return '${diff.inDays} ${s.dayShort}';
   }
 
   @override
@@ -204,25 +195,6 @@ class _ProgramDetailsScreenState extends State<ProgramDetailsScreen> {
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
-                            height: 1.0,
-                            color: Color(0xFF717171),
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        const Icon(
-                          Icons.calendar_today,
-                          size: 14,
-                          color: Color(0xFF726AFF),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          a?.publishedAt != null
-                              ? _timeAgo(a!.publishedAt!)
-                              : '',
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
                             height: 1.0,
                             color: Color(0xFF717171),
                           ),

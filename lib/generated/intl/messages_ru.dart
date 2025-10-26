@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "ago": MessageLookupByLibrary.simpleMessage("назад"),
     "agreePrefix": MessageLookupByLibrary.simpleMessage(
       "Я согласен(-на) с условиями обработки ",
     ),
@@ -34,12 +35,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "Стать премиум участником",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Отменить"),
+    "commentSent": MessageLookupByLibrary.simpleMessage(
+      "Комментарий отправлен",
+    ),
+    "commentsEmpty": MessageLookupByLibrary.simpleMessage(
+      "Комментарии отсутствуют",
+    ),
+    "complaintThanks": MessageLookupByLibrary.simpleMessage(
+      "Спасибо! Мы рассмотрим жалобу.",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage(
       "Продолжить бесплатно",
     ),
     "dayShort": MessageLookupByLibrary.simpleMessage("дн"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Введите почту"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Электронная почта"),
+    "enterMessage": MessageLookupByLibrary.simpleMessage("Введите сообщение"),
     "errAgreeRequired": MessageLookupByLibrary.simpleMessage(
       "Подтвердите согласие на обработку данных",
     ),
@@ -133,10 +144,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Повторите пароль",
     ),
+    "report": MessageLookupByLibrary.simpleMessage("Пожаловаться"),
+    "reportBody": MessageLookupByLibrary.simpleMessage(
+      "Вы уверены, что хотите пожаловаться на комментарий другого пользователя?",
+    ),
+    "reportSubmit": MessageLookupByLibrary.simpleMessage("ПОЖАЛОВАТЬСЯ"),
+    "reportTitle": MessageLookupByLibrary.simpleMessage("Внимание!"),
     "restoreLabel": MessageLookupByLibrary.simpleMessage(
       "Введите вашу электронную почту, которую указывали при регистрации вашего аккаунта",
     ),
     "restorePass": MessageLookupByLibrary.simpleMessage("Восстановить пароль"),
+    "send": MessageLookupByLibrary.simpleMessage("Отправить"),
+    "showMore": MessageLookupByLibrary.simpleMessage("Показать ещё"),
+    "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
+      "Сообщение не может быть пустым или содержать менее 12 символов в своем теле",
+    ),
+    "validationTitle": MessageLookupByLibrary.simpleMessage("Внимание!"),
     "yearly": MessageLookupByLibrary.simpleMessage("ГОДОВОЙ"),
+    "yourMessage": MessageLookupByLibrary.simpleMessage("Ваше сообщение"),
   };
 }

@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+    "ago": MessageLookupByLibrary.simpleMessage("ago"),
     "agreePrefix": MessageLookupByLibrary.simpleMessage(
       "I agree with the terms of processing of ",
     ),
@@ -34,10 +35,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Become premium member",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "commentSent": MessageLookupByLibrary.simpleMessage("Comment sent"),
+    "commentsEmpty": MessageLookupByLibrary.simpleMessage("No comments yet"),
+    "complaintThanks": MessageLookupByLibrary.simpleMessage(
+      "Thanks! We\'ll review your report.",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage("Continue for free"),
     "dayShort": MessageLookupByLibrary.simpleMessage("d"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Enter your email"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
+    "enterMessage": MessageLookupByLibrary.simpleMessage("Enter a message"),
     "errAgreeRequired": MessageLookupByLibrary.simpleMessage(
       "Please accept the data processing agreement",
     ),
@@ -125,10 +132,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Repeat password",
     ),
+    "report": MessageLookupByLibrary.simpleMessage("Report"),
+    "reportBody": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to report another user\'s comment?",
+    ),
+    "reportSubmit": MessageLookupByLibrary.simpleMessage("REPORT"),
+    "reportTitle": MessageLookupByLibrary.simpleMessage("Attention!"),
     "restoreLabel": MessageLookupByLibrary.simpleMessage(
       "Enter your email address that was specified when registering your account",
     ),
     "restorePass": MessageLookupByLibrary.simpleMessage("Restore password"),
+    "send": MessageLookupByLibrary.simpleMessage("Send"),
+    "showMore": MessageLookupByLibrary.simpleMessage("Show more"),
+    "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
+      "The message cannot be empty or contain fewer than 12 characters.",
+    ),
+    "validationTitle": MessageLookupByLibrary.simpleMessage("Attention!"),
     "yearly": MessageLookupByLibrary.simpleMessage("YEARLY"),
+    "yourMessage": MessageLookupByLibrary.simpleMessage("Your message"),
   };
 }

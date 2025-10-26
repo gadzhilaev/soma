@@ -63,5 +63,19 @@
   "articleLeaveComment": "Оставить комментарий",
   "minShort": "мин",
   "hourShort": "ч",
-  "dayShort": "дн"
+  "dayShort": "дн",
+  "ago": "назад",
+  "commentsEmpty": "Комментарии отсутствуют",
+  "showMore": "Показать ещё",
+  "report": "Пожаловаться",
+  "reportTitle": "Внимание!",
+  "reportBody": "Вы уверены, что хотите пожаловаться на комментарий другого пользователя?",
+  "reportSubmit": "ПОЖАЛОВАТЬСЯ",
+  "complaintThanks": "Спасибо! Мы рассмотрим жалобу.",
+  "enterMessage": "Введите сообщение",
+  "yourMessage": "Ваше сообщение",
+  "send": "Отправить",
+  "commentSent": "Комментарий отправлен",
+  "validationTitle": "Внимание!",
+  "validationBodyTooShort": "Сообщение не может быть пустым или содержать менее 12 символов в своем теле"
 }

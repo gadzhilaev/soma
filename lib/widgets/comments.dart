@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../windows/home/home_repo.dart';
 import '../windows/models.dart';
+import '../../generated/l10n.dart';
 
 enum CommentTarget { article, program }
 
@@ -62,14 +63,16 @@ class _CommentsSectionState extends State<CommentsSection> {
     });
   }
 
-  String _timeAgo(DateTime dt) {
+  String _timeAgo(BuildContext context, DateTime dt) {
+    final s = S.of(context);
     final diff = DateTime.now().difference(dt);
-    if (diff.inMinutes < 60) return '${diff.inMinutes} минут назад';
-    if (diff.inHours < 24) return '${diff.inHours} часов назад';
-    return '${diff.inDays} дн. назад';
+    if (diff.inMinutes < 60) return '${diff.inMinutes} ${s.minShort} ${s.ago}';
+    if (diff.inHours < 24) return '${diff.inHours} ${s.hourShort} ${s.ago}';
+    return '${diff.inDays} ${s.dayShort} ${s.ago}';
   }
 
   void _showReportDialog(BuildContext context, AppComment c) {
+    final s = S.of(context);
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -84,10 +87,10 @@ class _CommentsSectionState extends State<CommentsSection> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Внимание!',
+                Text(
+                  s.reportTitle, // "Внимание!"
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w600,
                     fontSize: 18,
@@ -97,10 +100,10 @@ class _CommentsSectionState extends State<CommentsSection> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'Вы уверены, что хотите пожаловаться на комментарий другого пользователя?',
+                Text(
+                  s.reportBody,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
                     fontSize: 13,
@@ -126,14 +129,12 @@ class _CommentsSectionState extends State<CommentsSection> {
                         onPressed: () {
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Спасибо! Мы рассмотрим жалобу.'),
-                            ),
+                            SnackBar(content: Text(S.of(context).complaintThanks)),
                           );
                         },
-                        child: const Text(
-                          'ПОЖАЛОВАТЬСЯ',
-                          style: TextStyle(
+                        child: Text(
+                          s.reportSubmit, // "ПОЖАЛОВАТЬСЯ"
+                          style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
                             fontSize: 10,
@@ -158,9 +159,9 @@ class _CommentsSectionState extends State<CommentsSection> {
                           elevation: 0,
                         ),
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
-                          'ОТМЕНА',
-                          style: TextStyle(
+                        child: Text(
+                          s.cancel.toUpperCase(), // локализованное "Отменить"
+                          style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
                             fontSize: 10,
@@ -183,16 +184,18 @@ class _CommentsSectionState extends State<CommentsSection> {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
+
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
 
     if (_items.isEmpty) {
-      return const Padding(
-        padding: EdgeInsets.only(top: 8),
+      return Padding(
+        padding: const EdgeInsets.only(top: 8),
         child: Text(
-          'Комментарии отсутствуют',
-          style: TextStyle(
+          s.commentsEmpty, // "Комментарии отсутствуют"
+          style: const TextStyle(
             fontFamily: 'Inter',
             fontWeight: FontWeight.w400,
             fontSize: 14,
@@ -212,13 +215,11 @@ class _CommentsSectionState extends State<CommentsSection> {
         for (int i = 0; i < visibleItems.length; i++) ...[
           _CommentTile(
             c: visibleItems[i],
-            timeAgo: _timeAgo(visibleItems[i].createdAt),
+            timeAgo: _timeAgo(context, visibleItems[i].createdAt),
             onReport: () => _showReportDialog(context, visibleItems[i]),
           ),
           if (i != visibleItems.length - 1) const SizedBox(height: 20),
         ],
-
-        // кнопка "Показать ещё" — только если комментариев больше 3 и есть что показать
         if (_items.length > 3 && _visibleCount < _items.length) ...[
           const SizedBox(height: 16),
           SizedBox(
@@ -229,9 +230,9 @@ class _CommentsSectionState extends State<CommentsSection> {
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFF726AFF)),
               ),
-              child: const Text(
-                'Показать ещё',
-                style: TextStyle(
+              child: Text(
+                s.showMore, // "Показать ещё"
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
@@ -259,6 +260,8 @@ class _CommentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -266,12 +269,7 @@ class _CommentTile extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(24),
           child: c.userAvatar != null && c.userAvatar!.isNotEmpty
-              ? Image.network(
-                  c.userAvatar!,
-                  width: 48,
-                  height: 48,
-                  fit: BoxFit.cover,
-                )
+              ? Image.network(c.userAvatar!, width: 48, height: 48, fit: BoxFit.cover)
               : Container(
                   width: 48,
                   height: 48,
@@ -281,7 +279,6 @@ class _CommentTile extends StatelessWidget {
         ),
         const SizedBox(height: 12),
 
-        // имя
         Text(
           c.userName,
           style: const TextStyle(
@@ -294,7 +291,6 @@ class _CommentTile extends StatelessWidget {
         ),
         const SizedBox(height: 8),
 
-        // тело комментария
         Text(
           c.body,
           style: const TextStyle(
@@ -307,14 +303,9 @@ class _CommentTile extends StatelessWidget {
         ),
         const SizedBox(height: 12),
 
-        // дата и "Пожаловаться"
         Row(
           children: [
-            const Icon(
-              Icons.calendar_today,
-              size: 14,
-              color: Color(0xFF726AFF),
-            ),
+            const Icon(Icons.calendar_today, size: 14, color: Color(0xFF726AFF)),
             const SizedBox(width: 4),
             Expanded(
               child: Text(
@@ -330,9 +321,9 @@ class _CommentTile extends StatelessWidget {
             ),
             GestureDetector(
               onTap: onReport,
-              child: const Text(
-                'Пожаловаться',
-                style: TextStyle(
+              child: Text(
+                s.report, // "Пожаловаться"
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w400,
                   fontSize: 12,

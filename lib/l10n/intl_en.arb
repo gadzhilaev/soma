@@ -63,5 +63,19 @@
   "articleLeaveComment": "Leave a comment",
   "minShort": "min",
   "hourShort": "h",
-  "dayShort": "d"
+  "dayShort": "d",
+  "ago": "ago",
+  "commentsEmpty": "No comments yet",
+  "showMore": "Show more",
+  "report": "Report",
+  "reportTitle": "Attention!",
+  "reportBody": "Are you sure you want to report another user's comment?",
+  "reportSubmit": "REPORT",
+  "complaintThanks": "Thanks! We'll review your report.",
+  "enterMessage": "Enter a message",
+  "yourMessage": "Your message",
+  "send": "Send",
+  "commentSent": "Comment sent",
+  "validationTitle": "Attention!",
+  "validationBodyTooShort": "The message cannot be empty or contain fewer than 12 characters."
 }

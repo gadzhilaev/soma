@@ -63,5 +63,19 @@
   "articleLeaveComment": "Dejar un comentario",
   "minShort": "min",
   "hourShort": "h",
-  "dayShort": "d"
+  "dayShort": "d",
+  "ago": "horas",
+  "commentsEmpty": "No hay comentarios",
+  "showMore": "Mostrar más",
+  "report": "Denunciar",
+  "reportTitle": "¡Atención!",
+  "reportBody": "¿Estás seguro de que quieres denunciar el comentario de otro usuario?",
+  "reportSubmit": "DENUNCIAR",
+  "complaintThanks": "¡Gracias! Revisaremos tu denuncia.",
+  "enterMessage": "Introduce un mensaje",
+  "yourMessage": "Tu mensaje",
+  "send": "Enviar",
+  "commentSent": "Comentario enviado",
+  "validationTitle": "¡Atención!",
+  "validationBodyTooShort": "El mensaje no puede estar vacío ni contener menos de 12 caracteres."
 }
