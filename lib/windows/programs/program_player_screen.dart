@@ -34,13 +34,11 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
   late final PageController _pageCtrl;
   late int _currentIndex;
 
-  bool _isPlaying = false;
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
 
   StreamSubscription<Duration>? _posSub;
   StreamSubscription<Duration?>? _durSub;
-  StreamSubscription<PlayerState>? _stateSub;
   StreamSubscription<SequenceState?>? _seqSub;
 
   bool get _hasSteps => widget.steps.isNotEmpty;
@@ -109,12 +107,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
     _durSub = _player.durationStream.listen(
       (d) => setState(() => _duration = d ?? Duration.zero),
     );
-    _stateSub = _player.playerStateStream.listen((st) {
-      setState(
-        () => _isPlaying =
-            st.playing && st.processingState == ProcessingState.ready,
-      );
-    });
     _seqSub = _player.sequenceStateStream.listen((seq) {
       if (_hasSteps &&
           seq?.currentIndex != null &&
@@ -129,7 +121,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
   void dispose() {
     _posSub?.cancel();
     _durSub?.cancel();
-    _stateSub?.cancel();
     _seqSub?.cancel();
     _player.dispose();
     _pageCtrl.dispose();
@@ -191,18 +182,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const overlay40 = Color(0x66000000);
-    const trackBg = Color(0x33000000);
-    const filled = Color(0xFFC3C3C3);
-    const thumb = Color(0xFFEDEDED);
-
-    final title = widget.title.toUpperCase();
-    final currStep = _hasSteps ? widget.steps[_currentIndex] : null;
-
-    final sliderValue = (_duration.inMilliseconds == 0)
-        ? 0.0
-        : _position.inMilliseconds / _duration.inMilliseconds;
-
     return Scaffold(
       backgroundColor: Colors.white, // ← фон экрана полностью белый
       appBar: AppBar(
@@ -254,7 +233,7 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                 ),
 
                 // 2) легкое общее затемнение
-                Container(color: Colors.black.withOpacity(0.2)),
+                Container(color: const Color.fromRGBO(0, 0, 0, 0.2)),
 
                 // 3) НИЖНИЙ ГРАДИЕНТ-ФОН (НЕ участвует в лейауте)
                 Positioned(
@@ -287,7 +266,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                   child: Column(
                     children: [
                       const Spacer(),
-
                       // ← • ▶ • →
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -306,7 +284,7 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                             bg: const Color(0x66000000),
                             icon: _player.playing
                                 ? Icons.pause
-                                : Icons.play_arrow,
+                                : Icons.play_arrow_outlined,
                             iconSize: 32,
                             iconColor: Colors.white,
                             onTap: _togglePlay,
@@ -385,7 +363,7 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 131),
+                      const SizedBox(height: 100),
 
                       // Заголовок программы
                       Padding(
@@ -407,7 +385,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                         ),
                       ),
 
-                      // === ШАГИ: свайпается ТОЛЬКО эта зона ===
                       // === ШАГИ: свайпается ТОЛЬКО эта зона ===
                       if (_hasSteps) ...[
                         const SizedBox(height: 16),
@@ -437,9 +414,10 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                                   step: step,
                                   index: i,
                                   onListen: () async {
-                                    if (_currentIndex != i)
+                                    if (_currentIndex != i) {
                                       setState(() => _currentIndex = i);
-                                    await _playCurrent(); // play только по нажатию
+                                    }
+                                    await _playCurrent();
                                   },
                                 ),
                               );
@@ -629,36 +607,6 @@ class _RoundedTrackShape extends RoundedRectSliderTrackShape {
     final double top = offset.dy + (parentBox.size.height - th) / 2;
     final double width = parentBox.size.width;
     return Rect.fromLTWH(left, top, width, th);
-  }
-}
-
-// ——— точки
-class _Dots extends StatelessWidget {
-  final int count;
-  final int index;
-  final Color active;
-  final Color inactive;
-
-  const _Dots({
-    required this.count,
-    required this.index,
-    required this.active,
-    required this.inactive,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      children: List.generate(count, (i) {
-        final color = i == index ? active : inactive;
-        return Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-        );
-      }),
-    );
   }
 }
 
