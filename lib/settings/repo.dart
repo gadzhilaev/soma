@@ -269,9 +269,9 @@ class HomeRepo {
     final res = await _sb
         .from('home_hero_slides')
         .select('''
-        id,image_url,published_at,views_count,comments_count,
-        i18n:home_hero_slides_i18n!inner(title,content,language)
-      ''')
+    id,image_url,published_at,views_count,comments_count,audio_url,
+    i18n:home_hero_slides_i18n!inner(title,content,language)
+  ''')
         .eq('id', id)
         .eq('i18n.language', lang)
         .limit(1);
@@ -284,12 +284,13 @@ class HomeRepo {
     final stepsRes = await _sb
         .from('program_steps')
         .select('''
-        id,image_url,sort_index,
-        i18n:program_steps_i18n!inner(title,description,language)
-      ''')
+    id,image_url,sort_index,audio_url,
+    i18n:program_steps_i18n!inner(title,description,language)
+  ''')
         .eq('program_id', id)
         .eq('i18n.language', lang)
         .order('sort_index');
+
     final steps = (stepsRes as List?)?.map((e) {
       final i18n = (e['i18n'] as List).first;
       return ProgramStep(
@@ -297,6 +298,7 @@ class HomeRepo {
         imageUrl: e['image_url'] as String,
         title: i18n['title'] as String,
         description: i18n['description'] as String,
+        audioUrl: e['audio_url'] as String?, // 🆕
       );
     }).toList();
 
@@ -310,6 +312,7 @@ class HomeRepo {
       publishedAt: row['published_at'] != null
           ? DateTime.parse(row['published_at'] as String)
           : null,
+      audioUrl: row['audio_url'] as String?, // 🆕
       steps: steps,
     );
   }
