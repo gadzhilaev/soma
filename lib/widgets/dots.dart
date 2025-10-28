@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-class _DotsConveyor extends StatefulWidget {
-  final double t; // -1..+1
+/// Анимированные точки для прогресса страниц (как на экране программы)
+class DotsConveyor extends StatefulWidget {
+  final double t; // от -1 до +1
   final Color active;
   final Color inactive;
 
-  const _DotsConveyor({
+  const DotsConveyor({
+    super.key,
     required this.t,
     required this.active,
     required this.inactive,
   });
 
   @override
-  State<_DotsConveyor> createState() => _DotsConveyorState();
+  State<DotsConveyor> createState() => _DotsConveyorState();
 }
 
-class _DotsConveyorState extends State<_DotsConveyor> {
-  // последнее «надёжное» направление: 1 — вправо, -1 — влево
+class _DotsConveyorState extends State<DotsConveyor> {
   int _lastDir = 1;
-  // мёртвая зона вокруг нуля (подбери по ощущениям: 0.05..0.12)
   static const double _eps = 0.08;
 
   int _stickyDir(double t) {
@@ -34,23 +34,21 @@ class _DotsConveyorState extends State<_DotsConveyor> {
   Widget build(BuildContext context) {
     const dot = 12.0;
     const gap = 8.0;
-    const totalW = dot * 3 + gap * 2; // 52
+    const totalW = dot * 3 + gap * 2;
     const leftPos = 0.0;
-    const centerPos = dot + gap;      // 20
-    const rightPos = centerPos + dot + gap; // 40
+    const centerPos = dot + gap;
+    const rightPos = centerPos + dot + gap;
 
-    // плавная доля смещения 0..1 (без смены знака)
     final u = widget.t.abs().clamp(0.0, 1.0);
-    // направление с гистерезисом
     final dir = _stickyDir(widget.t);
 
     late double xCurr, xNeighbor;
     if (dir > 0) {
-      // «двигаемся вправо»: центр -> влево, правый -> в центр
+      // движемся вправо
       xCurr = _lerp(centerPos, leftPos, u);
       xNeighbor = _lerp(rightPos, centerPos, u);
     } else {
-      // «двигаемся влево»: центр -> вправо, левый -> в центр
+      // движемся влево
       xCurr = _lerp(centerPos, rightPos, u);
       xNeighbor = _lerp(leftPos, centerPos, u);
     }
@@ -64,23 +62,21 @@ class _DotsConveyorState extends State<_DotsConveyor> {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // фиксированные крайние фоны
-          const Positioned(left: leftPos,  top: 0, child: _Dot(color: Colors.transparent)), // «слот», можно убрать
-          const Positioned(left: rightPos, top: 0, child: _Dot(color: Colors.transparent)), // «слот», можно убрать
-
-          // текущий (из центра уходит)
-          Positioned(left: xCurr, top: 0, child: _Dot(color: colCurr)),
-          // сосед (входит в центр)
-          Positioned(left: xNeighbor, top: 0, child: _Dot(color: colNeighbor)),
+          const Positioned(left: leftPos, top: 0, child: Dot(color: Colors.transparent)),
+          const Positioned(left: rightPos, top: 0, child: Dot(color: Colors.transparent)),
+          Positioned(left: xCurr, top: 0, child: Dot(color: colCurr)),
+          Positioned(left: xNeighbor, top: 0, child: Dot(color: colNeighbor)),
         ],
       ),
     );
   }
 }
 
-class _Dot extends StatelessWidget {
+/// Отдельная точка (круг)
+class Dot extends StatelessWidget {
   final Color color;
-  const _Dot({required this.color});
+  const Dot({super.key, required this.color});
+
   @override
   Widget build(BuildContext context) {
     return Container(
