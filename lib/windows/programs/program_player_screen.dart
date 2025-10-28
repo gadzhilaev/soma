@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import '../../settings/models.dart';
+import '../../widgets/dots.dart';
 import '../../generated/l10n.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
@@ -46,40 +47,51 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
   bool _fav = false; // звезда избранного
   double _dotProgress = 0.0; // прогресс для анимации точек (как на Home)
 
+
   @override
-void initState() {
-  super.initState();
-  _currentIndex = _hasSteps
-      ? widget.initialStepIndex.clamp(0, widget.steps.length - 1)
-      : 0;
-  _pageCtrl = PageController(initialPage: _currentIndex);
+  void initState() {
+    super.initState();
 
-  // a) прогресс для точек — считаем относительно ближайшей целой страницы
-  _pageCtrl.addListener(() {
-    final p = _pageCtrl.page;
-    if (p == null) return;
-    final nearest = p.roundToDouble(); // ближайшая целая
-    final t = (p - nearest).clamp(-1.0, 1.0);
-    if (t != _dotProgress) setState(() => _dotProgress = t);
-  });
+    _currentIndex = _hasSteps
+        ? widget.initialStepIndex.clamp(0, widget.steps.length - 1)
+        : 0;
+    _pageCtrl = PageController(initialPage: _currentIndex);
 
-  // b) фиксируем текущий индекс ТОЛЬКО когда скролл завершён
-  // (после drag/анимации)
-  _pageCtrl.position.isScrollingNotifier.addListener(() {
-    final scrolling = _pageCtrl.position.isScrollingNotifier.value;
-    if (!scrolling) {
+    // Прогресс точек — это безопасно
+    _pageCtrl.addListener(() {
+      final p = _pageCtrl.page;
+      if (p == null) return;
+      final nearest = p.roundToDouble();
+      final t = (p - nearest).clamp(-1.0, 1.0);
+      if (t != _dotProgress) setState(() => _dotProgress = t);
+    });
+
+    // Подключаемся к isScrollingNotifier, когда контроллер уже прикреплён к PageView
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _attachScrollEndListener(),
+    );
+
+    _initAudio();
+  }
+
+  void _attachScrollEndListener() {
+    if (!_pageCtrl.hasClients) return; // на всякий случай
+
+    final notifier = _pageCtrl.position.isScrollingNotifier;
+
+    void onScrollEnd() {
+      if (notifier.value) return; // ещё скроллим
       final p = _pageCtrl.page ?? _currentIndex.toDouble();
       final newIndex = p.round();
-      if (newIndex != _currentIndex) {
-        setState(() => _currentIndex = newIndex);
-      }
-      // центрируем прогресс
-      if (_dotProgress != 0.0) setState(() => _dotProgress = 0.0);
+      if (!mounted) return;
+      setState(() {
+        _currentIndex = newIndex;
+        _dotProgress = 0.0;
+      });
     }
-  });
 
-  _initAudio();
-}
+    notifier.addListener(onScrollEnd);
+  }
 
   Future<void> _initAudio() async {
     // безопасная конфигурация аудио-сессии только там, где плагин есть
@@ -400,14 +412,14 @@ void initState() {
                         ),
                       ),
 
+                      const SizedBox(height: 16),
+
                       // === ШАГИ: свайпается ТОЛЬКО эта зона ===
                       if (_hasSteps) ...[
-                        const SizedBox(height: 16),
-
                         // фиксируем высоту зоны карточки шага
                         SizedBox(
                           height:
-                              220, // под 113x116 + тексты; при необходимости подправьте
+                              180, // под 113x116 + тексты; при необходимости подправьте
                           child: PageView.builder(
                             controller: _pageCtrl,
                             physics: const PageScrollPhysics(),
@@ -433,6 +445,8 @@ void initState() {
                             },
                           ),
                         ),
+
+                        const SizedBox(height: 16),
 
                         // точки прогресса шагов (анимация как в Home)
                         Center(
@@ -506,6 +520,7 @@ class _StepCard extends StatelessWidget {
     final s = S.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         //index
         // Шаг N (как в details)
@@ -651,7 +666,7 @@ class _DotsConveyorState extends State<_DotsConveyor> {
     const gap = 8.0;
     const totalW = dot * 3 + gap * 2; // 52
     const leftPos = 0.0;
-    const centerPos = dot + gap;      // 20
+    const centerPos = dot + gap; // 20
     const rightPos = centerPos + dot + gap; // 40
 
     // плавная доля смещения 0..1 (без смены знака)
@@ -680,13 +695,28 @@ class _DotsConveyorState extends State<_DotsConveyor> {
         clipBehavior: Clip.none,
         children: [
           // фиксированные крайние фоны
-          const Positioned(left: leftPos,  top: 0, child: _Dot(color: Colors.transparent)), // «слот», можно убрать
-          const Positioned(left: rightPos, top: 0, child: _Dot(color: Colors.transparent)), // «слот», можно убрать
-
+          const Positioned(
+            left: leftPos,
+            top: 0,
+            child: _Dot(color: Colors.transparent),
+          ), // «слот», можно убрать
+          const Positioned(
+            left: rightPos,
+            top: 0,
+            child: _Dot(color: Colors.transparent),
+          ), // «слот», можно убрать
           // текущий (из центра уходит)
-          Positioned(left: xCurr, top: 0, child: _Dot(color: colCurr)),
+          Positioned(
+            left: xCurr,
+            top: 0,
+            child: _Dot(color: colCurr),
+          ),
           // сосед (входит в центр)
-          Positioned(left: xNeighbor, top: 0, child: _Dot(color: colNeighbor)),
+          Positioned(
+            left: xNeighbor,
+            top: 0,
+            child: _Dot(color: colNeighbor),
+          ),
         ],
       ),
     );
@@ -703,5 +733,33 @@ class _Dot extends StatelessWidget {
       height: 12,
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
+  }
+}
+
+typedef SizeCallback = void Function(Size size);
+
+class MeasureSize extends StatefulWidget {
+  final Widget child;
+  final SizeCallback onChange;
+
+  const MeasureSize({super.key, required this.child, required this.onChange});
+
+  @override
+  State<MeasureSize> createState() => _MeasureSizeState();
+}
+
+class _MeasureSizeState extends State<MeasureSize> {
+  Size? _oldSize;
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final newSize = context.size;
+      if (newSize != null && newSize != _oldSize) {
+        _oldSize = newSize;
+        widget.onChange(newSize);
+      }
+    });
+    return widget.child;
   }
 }
