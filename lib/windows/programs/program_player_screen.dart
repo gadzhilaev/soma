@@ -47,24 +47,39 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
   double _dotProgress = 0.0; // прогресс для анимации точек (как на Home)
 
   @override
-  void initState() {
-    super.initState();
-    _currentIndex = _hasSteps
-        ? widget.initialStepIndex.clamp(0, widget.steps.length - 1)
-        : 0;
-    _pageCtrl = PageController(initialPage: _currentIndex);
+void initState() {
+  super.initState();
+  _currentIndex = _hasSteps
+      ? widget.initialStepIndex.clamp(0, widget.steps.length - 1)
+      : 0;
+  _pageCtrl = PageController(initialPage: _currentIndex);
 
-    // прогресс для анимации точек
-    _pageCtrl.addListener(() {
-      final p = _pageCtrl.page;
-      if (p == null) return;
-      final delta = p - _currentIndex; // -1..+1 между соседними страницами
-      final prog = delta.clamp(-1.0, 1.0);
-      if (prog != _dotProgress) setState(() => _dotProgress = prog);
-    });
+  // a) прогресс для точек — считаем относительно ближайшей целой страницы
+  _pageCtrl.addListener(() {
+    final p = _pageCtrl.page;
+    if (p == null) return;
+    final nearest = p.roundToDouble(); // ближайшая целая
+    final t = (p - nearest).clamp(-1.0, 1.0);
+    if (t != _dotProgress) setState(() => _dotProgress = t);
+  });
 
-    _initAudio();
-  }
+  // b) фиксируем текущий индекс ТОЛЬКО когда скролл завершён
+  // (после drag/анимации)
+  _pageCtrl.position.isScrollingNotifier.addListener(() {
+    final scrolling = _pageCtrl.position.isScrollingNotifier.value;
+    if (!scrolling) {
+      final p = _pageCtrl.page ?? _currentIndex.toDouble();
+      final newIndex = p.round();
+      if (newIndex != _currentIndex) {
+        setState(() => _currentIndex = newIndex);
+      }
+      // центрируем прогресс
+      if (_dotProgress != 0.0) setState(() => _dotProgress = 0.0);
+    }
+  });
+
+  _initAudio();
+}
 
   Future<void> _initAudio() async {
     // безопасная конфигурация аудио-сессии только там, где плагин есть
@@ -397,13 +412,7 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                             controller: _pageCtrl,
                             physics: const PageScrollPhysics(),
                             itemCount: widget.steps.length,
-                            onPageChanged: (i) {
-                              setState(() {
-                                _currentIndex = i;
-                                _dotProgress = 0.0;
-                              });
-                              // НИЧЕГО НЕ ВОСПРОИЗВОДИМ автоматически
-                            },
+                            onPageChanged: (_) {}, // или вообще убери параметр
                             itemBuilder: (_, i) {
                               final step = widget.steps[i];
                               return Padding(
@@ -425,8 +434,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 16),
-
                         // точки прогресса шагов (анимация как в Home)
                         Center(
                           child: _DotsConveyor(
@@ -436,8 +443,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                           ),
                         ),
                       ],
-
-                      const SizedBox(height: 24),
                     ],
                   ),
                 ),
@@ -610,15 +615,33 @@ class _RoundedTrackShape extends RoundedRectSliderTrackShape {
   }
 }
 
-class _DotsConveyor extends StatelessWidget {
+class _DotsConveyor extends StatefulWidget {
   final double t; // -1..+1
   final Color active;
   final Color inactive;
+
   const _DotsConveyor({
     required this.t,
     required this.active,
     required this.inactive,
   });
+
+  @override
+  State<_DotsConveyor> createState() => _DotsConveyorState();
+}
+
+class _DotsConveyorState extends State<_DotsConveyor> {
+  // последнее «надёжное» направление: 1 — вправо, -1 — влево
+  int _lastDir = 1;
+  // мёртвая зона вокруг нуля (подбери по ощущениям: 0.05..0.12)
+  static const double _eps = 0.08;
+
+  int _stickyDir(double t) {
+    if (t.abs() >= _eps) {
+      _lastDir = t >= 0 ? 1 : -1;
+    }
+    return _lastDir;
+  }
 
   double _lerp(double a, double b, double u) => a + (b - a) * u;
 
@@ -628,37 +651,27 @@ class _DotsConveyor extends StatelessWidget {
     const gap = 8.0;
     const totalW = dot * 3 + gap * 2; // 52
     const leftPos = 0.0;
-    const centerPos = dot + gap; // 20
+    const centerPos = dot + gap;      // 20
     const rightPos = centerPos + dot + gap; // 40
 
-    final u = t.abs().clamp(0.0, 1.0);
-    final dir = t >= 0 ? 1 : -1;
+    // плавная доля смещения 0..1 (без смены знака)
+    final u = widget.t.abs().clamp(0.0, 1.0);
+    // направление с гистерезисом
+    final dir = _stickyDir(widget.t);
 
-    late double xCurr, xNeighbor, xDepart, xIncoming;
-    late Color colCurr, colNeighbor;
-    late double aDepart, aIncoming;
-
+    late double xCurr, xNeighbor;
     if (dir > 0) {
-      // вправо
+      // «двигаемся вправо»: центр -> влево, правый -> в центр
       xCurr = _lerp(centerPos, leftPos, u);
       xNeighbor = _lerp(rightPos, centerPos, u);
-      xDepart = leftPos;
-      xIncoming = rightPos;
-      colCurr = Color.lerp(active, inactive, u)!;
-      colNeighbor = Color.lerp(inactive, active, u)!;
-      aDepart = 1.0 - u;
-      aIncoming = u;
     } else {
-      // влево
+      // «двигаемся влево»: центр -> вправо, левый -> в центр
       xCurr = _lerp(centerPos, rightPos, u);
       xNeighbor = _lerp(leftPos, centerPos, u);
-      xDepart = rightPos;
-      xIncoming = leftPos;
-      colCurr = Color.lerp(active, inactive, u)!;
-      colNeighbor = Color.lerp(inactive, active, u)!;
-      aDepart = 1.0 - u;
-      aIncoming = u;
     }
+
+    final colCurr = Color.lerp(widget.active, widget.inactive, u)!;
+    final colNeighbor = Color.lerp(widget.inactive, widget.active, u)!;
 
     return SizedBox(
       width: totalW,
@@ -666,32 +679,14 @@ class _DotsConveyor extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Positioned(
-            left: xDepart,
-            top: 0,
-            child: Opacity(
-              opacity: aDepart,
-              child: _Dot(color: inactive),
-            ),
-          ),
-          Positioned(
-            left: xCurr,
-            top: 0,
-            child: _Dot(color: colCurr),
-          ),
-          Positioned(
-            left: xNeighbor,
-            top: 0,
-            child: _Dot(color: colNeighbor),
-          ),
-          Positioned(
-            left: xIncoming,
-            top: 0,
-            child: Opacity(
-              opacity: aIncoming,
-              child: _Dot(color: inactive),
-            ),
-          ),
+          // фиксированные крайние фоны
+          const Positioned(left: leftPos,  top: 0, child: _Dot(color: Colors.transparent)), // «слот», можно убрать
+          const Positioned(left: rightPos, top: 0, child: _Dot(color: Colors.transparent)), // «слот», можно убрать
+
+          // текущий (из центра уходит)
+          Positioned(left: xCurr, top: 0, child: _Dot(color: colCurr)),
+          // сосед (входит в центр)
+          Positioned(left: xNeighbor, top: 0, child: _Dot(color: colNeighbor)),
         ],
       ),
     );
