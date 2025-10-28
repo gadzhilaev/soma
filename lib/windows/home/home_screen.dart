@@ -6,6 +6,7 @@ import '../article/article_details_screen.dart';
 import '../../settings/repo.dart';
 import '../../settings/models.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/dots.dart';
 import '../article/articles_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -200,7 +201,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 12),
-                            Center(child: _DotsConveyor(t: _dotProgress)),
+                            Center(
+                              child: Center(
+                                child: DotsConveyor3(
+                                  t: _dotProgress,
+                                  active: const Color(0xFFEABC60),
+                                  inactive: const Color(0xFFF1F1F1),
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 24),
 
                             // ===== DAILY TITLE =====
@@ -306,7 +315,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ? 0
                                           : 20,
                                     ),
-                                    child: _ArticleTile(item: _articles[i], repo: _repo, lang: _lang),
+                                    child: _ArticleTile(
+                                      item: _articles[i],
+                                      repo: _repo,
+                                      lang: _lang,
+                                    ),
                                   );
                                 }),
                               ),

@@ -47,7 +47,6 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
   bool _fav = false; // звезда избранного
   double _dotProgress = 0.0; // прогресс для анимации точек (как на Home)
 
-
   @override
   void initState() {
     super.initState();
@@ -454,6 +453,7 @@ class _ProgramPlayerScreenState extends State<ProgramPlayerScreen> {
                             t: _dotProgress,
                             active: const Color(0xFFEABC60),
                             inactive: const Color(0xFF333333),
+                            // count: 2,
                           ),
                         ),
                       ],
