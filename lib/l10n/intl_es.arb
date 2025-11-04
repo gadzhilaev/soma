@@ -81,5 +81,8 @@
   "listen": "Escuchar",
   "listenUpper": "ESCUCHAR",
   "stepN": "Paso {n}",
-  "@stepN": {"placeholders": {"n": {"type": "int"}}}
+  "@stepN": {"placeholders": {"n": {"type": "int"}}},
+  "musicForSleep": "Para dormir",
+  "musicForInspiration": "Para inspirarse",
+  "musicForRelaxation": "Para relajarse"
 }

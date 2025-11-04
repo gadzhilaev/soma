@@ -693,6 +693,31 @@ class S {
   String stepN(int n) {
     return Intl.message('Step $n', name: 'stepN', desc: '', args: [n]);
   }
+
+  /// `For sleep`
+  String get musicForSleep {
+    return Intl.message('For sleep', name: 'musicForSleep', desc: '', args: []);
+  }
+
+  /// `For inspiration`
+  String get musicForInspiration {
+    return Intl.message(
+      'For inspiration',
+      name: 'musicForInspiration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For relaxation`
+  String get musicForRelaxation {
+    return Intl.message(
+      'For relaxation',
+      name: 'musicForRelaxation',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

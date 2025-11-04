@@ -114,6 +114,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "monthly": MessageLookupByLibrary.simpleMessage("MENSUAL"),
     "monthlyPrice": MessageLookupByLibrary.simpleMessage("299 ₽ "),
     "mostPopular": MessageLookupByLibrary.simpleMessage("EL MÁS POPULAR"),
+    "musicForInspiration": MessageLookupByLibrary.simpleMessage(
+      "Para inspirarse",
+    ),
+    "musicForRelaxation": MessageLookupByLibrary.simpleMessage(
+      "Para relajarse",
+    ),
+    "musicForSleep": MessageLookupByLibrary.simpleMessage("Para dormir"),
     "nameHint": MessageLookupByLibrary.simpleMessage("Introduce tu nombre"),
     "nameLabel": MessageLookupByLibrary.simpleMessage("Nombre"),
     "newPriceYear": MessageLookupByLibrary.simpleMessage("1 999 ₽"),

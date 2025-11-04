@@ -81,5 +81,8 @@
   "listen": "Listen",
   "listenUpper": "LISTEN",
   "stepN": "Step {n}",
-  "@stepN": {"placeholders": {"n": {"type": "int"}}}
+  "@stepN": {"placeholders": {"n": {"type": "int"}}},
+  "musicForSleep": "For sleep",
+  "musicForInspiration": "For inspiration",
+  "musicForRelaxation": "For relaxation"
 }

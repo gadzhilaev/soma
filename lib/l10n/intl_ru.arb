@@ -81,5 +81,8 @@
   "listen": "Слушать",
   "listenUpper": "СЛУШАТЬ",
   "stepN": "Шаг {n}",
-  "@stepN": {"placeholders": {"n": {"type": "int"}}}
+  "@stepN": {"placeholders": {"n": {"type": "int"}}},
+  "musicForSleep": "Для сна",
+  "musicForInspiration": "Для вдохновения",
+  "musicForRelaxation": "Для расслабления"
 }
