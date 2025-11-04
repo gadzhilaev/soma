@@ -92,8 +92,10 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
           if (_loading)
             const Center(child: CircularProgressIndicator())
           else
-            CustomScrollView(
-              slivers: [
+            RefreshIndicator(
+              onRefresh: _load,
+              child: CustomScrollView(
+                slivers: [
                 SliverAppBar(
                   backgroundColor: Colors.white,
                   elevation: 0,
@@ -277,7 +279,8 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                   ),
                 ),
               ],
-            ),
+                ),
+              ),
 
           // Навбар
           Align(

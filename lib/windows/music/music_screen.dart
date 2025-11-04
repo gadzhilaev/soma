@@ -3,8 +3,8 @@ import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
 import '../../settings/repo.dart';
 import '../../settings/models.dart';
-import '../../widgets/bottom_nav.dart';
 import 'music_player_screen.dart';
+import '../../widgets/bottom_nav.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({super.key});
@@ -70,9 +70,11 @@ class _MusicScreenState extends State<MusicScreen> {
             context: context,
             removeTop: false,
             removeBottom: true,
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
+            child: RefreshIndicator(
+              onRefresh: _load,
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
                 // Логотип
                 SliverAppBar(
                   backgroundColor: Colors.white,
@@ -165,8 +167,9 @@ class _MusicScreenState extends State<MusicScreen> {
                             ),
                           ]),
                         ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
 

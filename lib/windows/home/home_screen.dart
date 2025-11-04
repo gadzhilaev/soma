@@ -175,9 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
             removeBottom: true,
             child: _loading
                 ? const Center(child: CircularProgressIndicator())
-                : CustomScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    slivers: [
+                : RefreshIndicator(
+                    onRefresh: _load,
+                    child: CustomScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
                       // ===== СКРЫВАЕМЫЙ ПРИ СКРОЛЛЕ APP BAR =====
                       SliverAppBar(
                         backgroundColor: Colors.white,
@@ -420,7 +422,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ],
-                  ),
+                      ),
+                    ),
           ),
 
           // === ПЛАВАЮЩИЙ NAV BAR СВЕРХУ КОНТЕНТА ===
