@@ -8,36 +8,45 @@ class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
 
   Future<void> _askAndNext(BuildContext context) async {
-    // 1) Узнаём текущий статус
-    final before = await Permission.notification.status;
-
-    // Если уже разрешено — сразу дальше
-    if (before.isGranted) {
+    try {
+      // Запрашиваем разрешение на уведомления
+      // На iOS и Android разрешение будет запрошено системой
+      // Результат будет: granted, denied, permanentlyDenied и т.д.
+      await Permission.notification.request();
+      
+      // Переходим на следующий экран независимо от результата
       if (context.mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const PremiumScreen()),
         );
       }
-      return;
-    }
-
-    // Если запретил/запретил навсегда — опционально можно открыть настройки
-    // if (result.isPermanentlyDenied || result.isDenied) {
-    //   await openAppSettings();
-    // }
-
-    // 3) В любом случае — на следующий экран
-    if (context.mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const PremiumScreen()),
-      );
+    } catch (e) {
+      // В случае ошибки все равно переходим дальше
+      if (context.mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const PremiumScreen()),
+        );
+      }
     }
   }
 
-  void _skip(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const PremiumScreen()),
-    );
+  Future<void> _skip(BuildContext context) async {
+    // При нажатии "Нет" явно отказываем в разрешении (если возможно)
+    try {
+      // Можно явно отклонить разрешение, но это не всегда возможно
+      // Просто переходим дальше без запроса
+      if (context.mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const PremiumScreen()),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const PremiumScreen()),
+        );
+      }
+    }
   }
 
   @override

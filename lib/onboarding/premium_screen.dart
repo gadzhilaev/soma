@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../generated/l10n.dart';
 import '../windows/home/home_screen.dart';
 
@@ -88,19 +89,19 @@ void _goFree() {
 
                 // 3 фичи
                 _FeatureCard(
-                  icon: Icons.self_improvement,
+                  iconPath: 'assets/icons/premium_icon_1.svg',
                   title: s.feature1Title,
                   subtitle: s.feature1Desc,
                 ),
                 const SizedBox(height: 16),
                 _FeatureCard(
-                  icon: Icons.recommend,
+                  iconPath: 'assets/icons/premium_icon_2.svg',
                   title: s.feature2Title,
                   subtitle: s.feature2Desc,
                 ),
                 const SizedBox(height: 16),
                 _FeatureCard(
-                  icon: Icons.repeat,
+                  iconPath: 'assets/icons/premium_icon_3.svg',
                   title: s.feature3Title,
                   subtitle: s.feature3Desc,
                 ),
@@ -139,7 +140,7 @@ void _goFree() {
                 SizedBox(
                   height: 56, width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => _fakePay,
+                    onPressed: _fakePay,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFD580),
                       shape: RoundedRectangleBorder(
@@ -165,7 +166,7 @@ void _goFree() {
                 const SizedBox(height: 24),
 
                 GestureDetector(
-                  onTap: () => _goFree,
+                  onTap: _goFree,
                   child: Text(
                     s.continueFree.toUpperCase(),
                     textAlign: TextAlign.center,
@@ -191,12 +192,12 @@ void _goFree() {
 }
 
 class _FeatureCard extends StatelessWidget {
-  final IconData icon;
+  final String iconPath;
   final String title;
   final String subtitle;
 
   const _FeatureCard({
-    required this.icon,
+    required this.iconPath,
     required this.title,
     required this.subtitle,
   });
@@ -216,7 +217,11 @@ class _FeatureCard extends StatelessWidget {
           const SizedBox(width: 6), // чтобы до текста набрать ≈22 слева
           SizedBox(
             width: 40, height: 40,
-            child: Icon(icon, size: 40, color: const Color(0xFF6C63FF)),
+            child: SvgPicture.asset(
+              iconPath,
+              width: 40,
+              height: 40,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(

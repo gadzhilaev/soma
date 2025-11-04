@@ -5,7 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase.dart';
 import 'register.dart';
 import 'restore.dart';
-import '../windows/home/home_screen.dart';
+import '../onboarding/notifications_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function(Locale locale) onChangeLocale;
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const NotificationsScreen()),
         (_) => false,
       );
     } on AuthException catch (e) {
