@@ -1,12 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
+import '../../core/app_colors.dart';
+import '../../core/app_text_styles.dart';
 import '../../generated/l10n.dart';
-import '../article/article_details_screen.dart';
 import '../../settings/repo.dart';
 import '../../settings/models.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../widgets/dots.dart';
+import '../../widgets/home/hero_card.dart';
+import '../../widgets/home/daily_tile.dart';
+import '../../widgets/home/for_you_card.dart';
+import '../../widgets/home/article_tile.dart';
 import '../article/articles_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -239,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       return const SizedBox.shrink();
                                     }
                                     final dataIndex = i % _slides.length;
-                                    return _HeroCard(slide: _slides[dataIndex]);
+                                    return HeroCard(slide: _slides[dataIndex]);
                                   },
                                 ),
                               ),
@@ -249,8 +254,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Center(
                                 child: DotsConveyor3(
                                   t: _dotProgress,
-                                  active: const Color(0xFFEABC60),
-                                  inactive: const Color(0xFFF1F1F1),
+                                  active: AppColors.dotActive,
+                                  inactive: AppColors.dotInactive,
                                 ),
                               ),
                             ),
@@ -263,14 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: Text(
                                 s.homeDaily,
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
-                                  height: 22 / 20,
-                                  letterSpacing: -0.41,
-                                  color: Color(0xFF282828),
-                                ),
+                                style: AppTextStyles.sectionTitle,
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -286,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: EdgeInsets.only(
                                       bottom: i == _daily.length - 1 ? 0 : 20,
                                     ),
-                                    child: _DailyTile(item: _daily[i]),
+                                    child: DailyTile(item: _daily[i]),
                                   );
                                 }),
                               ),
@@ -301,14 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: Text(
                                 s.homeForYou,
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
-                                  height: 1.0,
-                                  letterSpacing: -0.41,
-                                  color: Color(0xFF282828),
-                                ),
+                                style: AppTextStyles.sectionTitleCompact,
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -323,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 separatorBuilder: (_, __) =>
                                     const SizedBox(width: 8),
                                 itemBuilder: (_, i) =>
-                                    _ForYouCard(item: _forYou[i]),
+                                    ForYouCard(item: _forYou[i]),
                               ),
                             ),
 
@@ -336,14 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: Text(
                                 s.homeArticles,
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
-                                  height: 1.4,
-                                  letterSpacing: -0.41,
-                                  color: Color(0xFF282828),
-                                ),
+                                style: AppTextStyles.sectionTitle,
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -359,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ? 0
                                           : 20,
                                     ),
-                                    child: _ArticleTile(
+                                    child: ArticleTile(
                                       item: _articles[i],
                                       repo: _repo,
                                       lang: _lang,
@@ -392,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   style: OutlinedButton.styleFrom(
                                     side: const BorderSide(
-                                      color: Color(0xFFFFD580),
+                                      color: AppColors.accent,
                                       width: 2,
                                     ),
                                     shape: RoundedRectangleBorder(
@@ -402,14 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   child: Text(
                                     s.homeMoreArticles.toUpperCase(),
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                      height: 1.0,
-                                      letterSpacing: 0.48,
-                                      color: Color(0xFF59523A),
-                                    ),
+                                    style: AppTextStyles.button,
                                   ),
                                 ),
                               ),
@@ -443,407 +420,3 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// ===== HERO CARD без изменений визуально (кроме выравнивания текста) =====
-class _HeroCard extends StatelessWidget {
-  final HeroSlide slide;
-  const _HeroCard({required this.slide});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(slide.radiusPx.toDouble()),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.network(slide.imageUrl, fit: BoxFit.cover),
-
-            // бейдж "новое"
-            Positioned(
-              top: 16,
-              right: 16,
-              child: _Capsule(
-                width: 60,
-                height: 24,
-                bg: _hex(slide.topBadgeBg),
-                text: slide.topBadgeLabel.toUpperCase(),
-              ),
-            ),
-
-            // блок слева: chip → 8 → title → 4 → subtitle
-            Positioned(
-              left: 16,
-              right: 16,
-              top: 16 + 24 + 54,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _Capsule(
-                    width: 88,
-                    height: 24,
-                    bg: _hex(slide.leftChipBg),
-                    text: slide.leftChipLabel.toUpperCase(),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    slide.title.toUpperCase(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                      height: 1.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    slide.subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                      height: 19 / 12,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static Color _hex(String hex) {
-    final v = hex.replaceAll('#', '');
-    if (v.length == 6) return Color(int.parse('FF$v', radix: 16));
-    if (v.length == 8) return Color(int.parse(v, radix: 16));
-    return const Color(0xFF33A6FF);
-  }
-}
-
-// ===== DAILY ITEM (иконки фиолетовые) =====
-class _DailyTile extends StatelessWidget {
-  final DailyReco item;
-  const _DailyTile({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    const iconColor = Color(0xFF726AFF);
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start, // 👈 дети ряда по ВЕРХУ
-      children: [
-        // КАРТИНКА прижата к верху контейнера
-        Container(
-          width: 100,
-          height: 80,
-          clipBehavior: Clip.hardEdge, // чтобы работал borderRadius
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            image: DecorationImage(
-              image: NetworkImage(item.imageUrl),
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter, // 👈 важное место
-            ),
-          ),
-        ),
-
-        const SizedBox(width: 12),
-
-        // ТЕКСТОВОЙ БЛОК
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                item.title.toUpperCase(),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                  height: 1.1,
-                  color: Color(0xFF282828),
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                item.description,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  height: 1.4,
-                  color: Color(0xFF717171),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  const Icon(Icons.hourglass_empty, size: 14, color: iconColor),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${item.durationMinutes} минут',
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      height: 1.0,
-                      color: Color(0xFF717171),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ForYouCard extends StatelessWidget {
-  final ForYouItem item;
-  const _ForYouCard({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 164,
-      height: 240,
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        image: DecorationImage(
-          image: NetworkImage(item.imageUrl),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: LayoutBuilder(
-        builder: (ctx, constraints) {
-          // доступная ширина для текста (слева/справа по 8)
-          final textMaxWidth = constraints.maxWidth - 16;
-
-          // меряем, в одну или две строки пойдёт заголовок
-          final titlePainter = TextPainter(
-            text: TextSpan(
-              text: item.title.toUpperCase(),
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-                height: 1.1,
-                color: Colors.white,
-              ),
-            ),
-            textDirection: TextDirection.ltr,
-            maxLines: 2,
-          )..layout(maxWidth: textMaxWidth);
-
-          // если не overflow, всё равно может быть 2 строки при длинном слове — проверим по height
-          final computedLines = (titlePainter.size.height / (14 * 1.1))
-              .ceil()
-              .clamp(1, 2);
-
-          // если 2 строки — поднимаем блок выше
-          final titleTop = (computedLines > 1) ? 110.0 : 122.0;
-          final titleHeightPx = 14 * 1.1 * computedLines;
-          final descTop = titleTop + titleHeightPx + 4;
-
-          return Stack(
-            children: [
-              Positioned(
-                left: 8,
-                right: 8,
-                top: titleTop,
-                child: Text(
-                  item.title.toUpperCase(),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                    height: 1.1,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 8,
-                right: 8,
-                top: descTop,
-                child: Text(
-                  item.description,
-                  maxLines: 2, // чтобы не врезалось в бейдж
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 10,
-                    height: 1.3,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Positioned(
-                left: 8,
-                bottom: 12,
-                child: _Capsule(
-                  width: 89,
-                  height: 24,
-                  bg: _HeroCard._hex(item.tagBg),
-                  text: item.tagLabel.toUpperCase(),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ===== ARTICLE ITEM =====
-class _ArticleTile extends StatelessWidget {
-  final ArticleItem item;
-  final HomeRepo? repo;
-  final String? lang;
-
-  const _ArticleTile({required this.item, this.repo, this.lang});
-
-  String _timeAgo() {
-    final diff = DateTime.now().difference(item.publishedAt);
-    if (diff.inMinutes < 60) return '${diff.inMinutes} минут назад';
-    if (diff.inHours < 24) return '${diff.inHours} часов назад';
-    return '${diff.inDays} дн. назад';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    const iconColor = Color(0xFF726AFF);
-
-    return InkWell(
-      onTap: () {
-        if (repo != null && lang != null) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => ArticleDetailsScreen(
-                repo: repo!,
-                lang: lang!,
-                articleId: item.id,
-                preload: item,
-              ),
-            ),
-          );
-        }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              item.imageUrl,
-              height: 180,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            item.title.toUpperCase(),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-              height: 1.5,
-              color: Color(0xFF282828),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            item.summary,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              height: 1.4,
-              color: Color(0xFF717171),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Icon(Icons.calendar_today, size: 14, color: iconColor),
-              const SizedBox(width: 4),
-              Text(
-                _timeAgo(),
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                  height: 1.0,
-                  color: Color(0xFF717171),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ===== капсула =====
-class _Capsule extends StatelessWidget {
-  final double width;
-  final double height;
-  final Color bg;
-  final String text;
-  const _Capsule({
-    required this.width,
-    required this.height,
-    required this.bg,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(1000),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        text,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.w400,
-          fontSize: 10,
-          height: 1.0,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-}
