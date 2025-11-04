@@ -49,7 +49,11 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
-		<key>NSUserNotificationUsageDescription</key>
-<string>Allow Soma to send you notifications about new content and updates.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>remote-notification</string>
+		</array>
+		<key>NSUserNotificationsUsageDescription</key>
+		<string>Allow Soma to send you notifications about new content and updates.</string>
 	</dict>
 </plist>

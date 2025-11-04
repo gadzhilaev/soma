@@ -9,10 +9,28 @@ class NotificationsScreen extends StatelessWidget {
 
   Future<void> _askAndNext(BuildContext context) async {
     try {
+      // Проверяем текущий статус разрешения
+      final status = await Permission.notification.status;
+      
+      // Если уже разрешено, просто переходим дальше
+      if (status.isGranted) {
+        if (context.mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const PremiumScreen()),
+          );
+        }
+        return;
+      }
+      
       // Запрашиваем разрешение на уведомления
       // На iOS и Android разрешение будет запрошено системой
-      // Результат будет: granted, denied, permanentlyDenied и т.д.
-      await Permission.notification.request();
+      final result = await Permission.notification.request();
+      
+      // Проверяем результат (для отладки можно вывести в консоль)
+      print('Notification permission status: $result');
+      
+      // Если разрешение было отклонено навсегда, можно предложить открыть настройки
+      // Но пока просто переходим дальше
       
       // Переходим на следующий экран независимо от результата
       if (context.mounted) {
@@ -21,7 +39,9 @@ class NotificationsScreen extends StatelessWidget {
         );
       }
     } catch (e) {
-      // В случае ошибки все равно переходим дальше
+      // В случае ошибки выводим в консоль для отладки
+      print('Error requesting notification permission: $e');
+      // Все равно переходим дальше
       if (context.mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const PremiumScreen()),
