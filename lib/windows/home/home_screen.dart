@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_text_styles.dart';
+import '../../core/notification_service.dart';
 import '../../generated/l10n.dart';
 import '../../settings/repo.dart';
 import '../../settings/models.dart';
@@ -20,7 +21,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late final HomeRepo _repo;
   bool _loading = true;
   String _lang = 'en';
@@ -42,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _repo = HomeRepo(supa);
 
     _pageCtrl.addListener(() {
@@ -53,6 +55,29 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     _startAutoplay(); // ← запуск сразу
+    
+    // Отправляем уведомление при первом открытии экрана
+    _sendLoginNotification();
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // Когда приложение возвращается на передний план, отправляем уведомление
+    if (state == AppLifecycleState.resumed) {
+      _sendLoginNotification();
+    }
+  }
+  
+  void _sendLoginNotification() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final s = S.of(context);
+      NotificationService().showNotification(
+        title: s.loginSuccessTitle,
+        body: s.loginSuccessBody,
+      );
+    });
   }
 
   void _startAutoplay() {
@@ -105,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _autoplay?.cancel();
     _resumeTimer?.cancel();
     _pageCtrl.dispose();

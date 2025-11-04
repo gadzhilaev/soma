@@ -1,7 +1,9 @@
 // lib/onboarding/notifications_screen.dart
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../generated/l10n.dart';
+import '../core/notification_service.dart';
 import 'premium_screen.dart';
 
 class NotificationsScreen extends StatelessWidget {
@@ -9,30 +11,21 @@ class NotificationsScreen extends StatelessWidget {
 
   Future<void> _askAndNext(BuildContext context) async {
     try {
-      // Проверяем текущий статус разрешения
-      final status = await Permission.notification.status;
-      
-      // Если уже разрешено, просто переходим дальше
-      if (status.isGranted) {
-        if (context.mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const PremiumScreen()),
-          );
+      // Для iOS используем метод из NotificationService
+      if (Platform.isIOS) {
+        await NotificationService().requestPermissions();
+      } else {
+        // Для Android используем permission_handler
+        final status = await Permission.notification.status;
+        
+        // Если уже разрешено, просто переходим дальше
+        if (!status.isGranted) {
+          // Запрашиваем разрешение на уведомления
+          await Permission.notification.request();
         }
-        return;
       }
       
-      // Запрашиваем разрешение на уведомления
-      // На iOS и Android разрешение будет запрошено системой
-      final result = await Permission.notification.request();
-      
-      // Проверяем результат (для отладки можно вывести в консоль)
-      print('Notification permission status: $result');
-      
-      // Если разрешение было отклонено навсегда, можно предложить открыть настройки
-      // Но пока просто переходим дальше
-      
-      // Переходим на следующий экран независимо от результата
+      // Переходим на следующий экран
       if (context.mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const PremiumScreen()),

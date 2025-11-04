@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
@@ -13,10 +14,11 @@ class NotificationService {
     if (_initialized) return;
 
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // Убираем автоматический запрос разрешений - они будут запрошены вручную
     const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
 
     const initSettings = InitializationSettings(
@@ -32,6 +34,34 @@ class NotificationService {
     );
 
     _initialized = true;
+  }
+
+  /// Запрашивает разрешения на уведомления
+  /// Для iOS использует flutter_local_notifications
+  /// Для Android использует permission_handler (вызывается извне)
+  Future<bool> requestPermissions() async {
+    if (!_initialized) {
+      await initialize();
+    }
+
+    // На iOS используем метод плагина для запроса разрешений
+    if (Platform.isIOS) {
+      final iosImplementation = _notifications
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>();
+      if (iosImplementation != null) {
+        final result = await iosImplementation.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+        return result ?? false;
+      }
+      return false;
+    }
+
+    // На Android permission_handler вызывается из notifications_screen.dart
+    return true;
   }
 
   Future<void> showNotification({
