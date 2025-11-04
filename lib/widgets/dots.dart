@@ -88,7 +88,7 @@ class Dot extends StatelessWidget {
 }
 
 class DotsConveyor3 extends StatefulWidget {
-  final double t;       // от -1 до +1 (как у тебя)
+  final double t; // -1..+1
   final Color active;
   final Color inactive;
 
@@ -104,101 +104,90 @@ class DotsConveyor3 extends StatefulWidget {
 }
 
 class _DotsConveyor3State extends State<DotsConveyor3> {
+  // липкое направление + небольшая мёртвая зона, чтобы не дёргалось около 0
   int _lastDir = 1;
   static const double _eps = 0.08;
 
   int _stickyDir(double t) {
-    if (t.abs() >= _eps) {
-      _lastDir = t >= 0 ? 1 : -1;
-    }
+    if (t.abs() >= _eps) _lastDir = t >= 0 ? 1 : -1;
     return _lastDir;
   }
 
+  // плавная интерполяция + сглаживание прогресса (smoothstep)
   double _lerp(double a, double b, double u) => a + (b - a) * u;
+  double _smooth(double u) => u * u * (3 - 2 * u); // без задержек на старте/финише
 
   @override
   Widget build(BuildContext context) {
-    // геометрия ровно как у твоего 2-точечного варианта: ●─8─●─8─●
+    // геометрия как в 2-точечной версии: ●─gap─●─gap─●
     const double dot = 12.0;
     const double gap = 8.0;
-    const double totalW = dot * 3 + gap * 2;
-    const double leftPos = 0.0;
+    const double leftPos   = 0.0;
     const double centerPos = dot + gap;              // 20
-    const double rightPos = centerPos + dot + gap;   // 40
-    const double step = dot + gap;                   // 20
+    const double rightPos  = centerPos + dot + gap;  // 40
+    const double totalW    = rightPos + dot;         // 52
 
-    final double u = widget.t.abs().clamp(0.0, 1.0);
-    final int dir = _stickyDir(widget.t); // +1 вправо, -1 влево
+    final int dir  = _stickyDir(widget.t);         // +1 вправо, -1 влево
+    final double u = _smooth(widget.t.abs().clamp(0.0, 1.0));
 
-    // Позиции и альфы:
-    late double xCurr, xNeighbor, xDepart, xIncoming; // координаты
-    late double aDepart, aIncoming;                   // альфы «уходящей» и «приходящей»
-    // Цвета: текущая меняет active->inactive, соседняя inactive->active.
-    // Уходящая и приходящая — неактивные (как фоновые).
-    final Color colCurr = Color.lerp(widget.active, widget.inactive, u)!;
-    final Color colNeighbor = Color.lerp(widget.inactive, widget.active, u)!;
+    // Двигаются две точки: центр -> край и край -> центр.
+    late double xFromCenterToEdge, xFromEdgeToCenter;
+    // Край, где точка «исчезает»
+    late double departEdgeX;
+    // Противоположный край, где «появляется» новая неактивная точка
+    late double appearEdgeX;
 
     if (dir > 0) {
-      // свайп ВПРАВО:
-      // центр -> лево, правая -> центр, левая исчезает, новая точка появляется справа от rightPos
-      xCurr     = _lerp(centerPos, leftPos, u);
-      xNeighbor = _lerp(rightPos,  centerPos, u);
-      xDepart   = leftPos;
-      xIncoming = rightPos + step;
-
-      aDepart   = 1.0 - u;   // левая исчезает
-      aIncoming = u;         // правая «из ниоткуда» проявляется
+      // свайп вправо: центр -> ЛЕВО, правая -> ЦЕНТР
+      xFromCenterToEdge = _lerp(centerPos, leftPos,  u);
+      xFromEdgeToCenter = _lerp(rightPos,  centerPos, u);
+      departEdgeX       = leftPos;   // левая исчезает
+      appearEdgeX       = rightPos;  // под правой появляется новая
     } else {
-      // свайп ВЛЕВО:
-      // центр -> право, левая -> центр, правая исчезает, новая точка появляется слева от leftPos
-      xCurr     = _lerp(centerPos, rightPos, u);
-      xNeighbor = _lerp(leftPos,  centerPos, u);
-      xDepart   = rightPos;
-      xIncoming = leftPos - step;
-
-      aDepart   = 1.0 - u;   // правая исчезает
-      aIncoming = u;         // левая «из ниоткуда» проявляется
+      // свайп влево: центр -> ПРАВО, левая -> ЦЕНТР
+      xFromCenterToEdge = _lerp(centerPos, rightPos, u);
+      xFromEdgeToCenter = _lerp(leftPos,  centerPos, u);
+      departEdgeX       = rightPos;  // правая исчезает
+      appearEdgeX       = leftPos;   // под левой появляется новая
     }
+
+    // Цвета: текущая тухнет, соседняя загорается
+    final Color colToEdge   = Color.lerp(widget.active,   widget.inactive, u)!;
+    final Color colToCenter = Color.lerp(widget.inactive, widget.active,   u)!;
+
+    // Прозрачности краёв
+    final double aDepart = 1.0 - u; // уходящий край
+    final double aAppear = u;       // появляющийся край
 
     return SizedBox(
       width: totalW,
       height: dot,
       child: Stack(
-        clipBehavior: Clip.none, // чтобы «приходящая» могла появляться из-за границы
+        clipBehavior: Clip.hardEdge, // ничего не вылетает наружу
         children: [
-          // Уходящая неактивная точка (на краю) — просто плавно исчезает
+          // фиктивные «пустые» точки на краях — держат постоянную ширину
+          const Positioned(left: leftPos,  top: 0, child: _Dot(color: Colors.transparent)),
+          const Positioned(left: rightPos, top: 0, child: _Dot(color: Colors.transparent)),
+
+          // Появляющаяся на краю (под соседней), просто проявляется
           Positioned(
-            left: xDepart,
+            left: appearEdgeX,
             top: 0,
-            child: Opacity(
-              opacity: aDepart,
-              child: _Dot(color: widget.inactive),
-            ),
+            child: Opacity(opacity: aAppear, child: _Dot(color: widget.inactive)),
           ),
 
-          // Текущая (центр -> край) с переходом active -> inactive
+          // Уходящая на противоположном краю, просто исчезает
           Positioned(
-            left: xCurr,
+            left: departEdgeX,
             top: 0,
-            child: _Dot(color: colCurr),
+            child: Opacity(opacity: aDepart, child: _Dot(color: widget.inactive)),
           ),
 
-          // Соседняя (край -> центр) с переходом inactive -> active
-          Positioned(
-            left: xNeighbor,
-            top: 0,
-            child: _Dot(color: colNeighbor),
-          ),
+          // Идёт ИЗ центра К краю (ниже по слоям)
+          Positioned(left: xFromCenterToEdge, top: 0, child: _Dot(color: colToEdge)),
 
-          // Приходящая неактивная точка — появляется из-за границы и проявляется
-          Positioned(
-            left: xIncoming,
-            top: 0,
-            child: Opacity(
-              opacity: aIncoming,
-              child: _Dot(color: widget.inactive),
-            ),
-          ),
+          // Идёт С края В центр (поверх всего — чтобы не «подпрыгивало» при пересечении)
+          Positioned(left: xFromEdgeToCenter, top: 0, child: _Dot(color: colToCenter)),
         ],
       ),
     );
@@ -208,12 +197,10 @@ class _DotsConveyor3State extends State<DotsConveyor3> {
 class _Dot extends StatelessWidget {
   final Color color;
   const _Dot({required this.color});
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 12,
-      height: 12,
+      width: 12, height: 12,
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }

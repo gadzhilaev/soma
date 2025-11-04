@@ -27,8 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ArticleItem> _articles = [];
 
   final _pageCtrl = PageController(viewportFraction: 0.92);
-  int _virtualPage = 0; // реальный индекс PageView (для бесконечной прокрутки)
+  int _virtualPage = 0;
+
   Timer? _autoplay;
+  Timer? _resumeTimer;
+  bool _isTouching = false;
+  bool _isAutoAnimating = false;
 
   @override
   void initState() {
@@ -38,34 +42,68 @@ class _HomeScreenState extends State<HomeScreen> {
     _pageCtrl.addListener(() {
       final p = _pageCtrl.page;
       if (p == null) return;
-      final delta =
-          p - _virtualPage; // -1..+1 при свайпе между соседними страницами
+      final delta = p - _virtualPage;
       final prog = delta.clamp(-1.0, 1.0);
-      if (prog != _dotProgress) {
-        setState(() => _dotProgress = prog);
-      }
+      if (prog != _dotProgress) setState(() => _dotProgress = prog);
     });
 
-    // автопрокрутка вправо бесконечно
-    _autoplay = Timer.periodic(const Duration(seconds: 5), (_) {
+    _startAutoplay(); // ← запуск сразу
+  }
+
+  void _startAutoplay() {
+    _autoplay?.cancel();
+    _autoplay = Timer.periodic(const Duration(seconds: 5), (_) async {
       if (!mounted || _slides.length < 2 || !_pageCtrl.hasClients) return;
+      if (_isTouching) return; // пользователь держит/листает
+      if (_pageCtrl.position.isScrollingNotifier.value) return; // идёт скролл
 
       int nextPage = _virtualPage + 1;
 
-      // если сильно уехали — возвращаемся в «центр петли»
+      // возврат в «центр петли»
       if (nextPage > _slides.length * 2000) {
         nextPage = _slides.length * 1000;
-        _pageCtrl.jumpToPage(nextPage); // <-- без await
+        _pageCtrl.jumpToPage(nextPage);
         _virtualPage = nextPage;
         _dotProgress = 0.0;
+        return;
       }
 
-      _pageCtrl.animateToPage(
-        nextPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+      _isAutoAnimating = true;
+      _pageCtrl
+          .animateToPage(
+            nextPage,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          )
+          .whenComplete(() => _isAutoAnimating = false);
     });
+  }
+
+  void _stopAutoplay() {
+    _autoplay?.cancel();
+    _autoplay = null;
+  }
+
+  void _pauseAutoplayForUser() {
+    _isTouching = true;
+    _resumeTimer?.cancel();
+    _stopAutoplay();
+  }
+
+  void _resumeAutoplayDelayed() {
+    _isTouching = false;
+    _resumeTimer?.cancel();
+    _resumeTimer = Timer(const Duration(seconds: 5), () {
+      if (!_isTouching && mounted) _startAutoplay();
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoplay?.cancel();
+    _resumeTimer?.cancel();
+    _pageCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -112,13 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     }
-  }
-
-  @override
-  void dispose() {
-    _autoplay?.cancel();
-    _pageCtrl.dispose();
-    super.dispose();
   }
 
   @override
@@ -175,29 +206,40 @@ class _HomeScreenState extends State<HomeScreen> {
                             // ===== HERO =====
                             SizedBox(
                               height: 200,
-                              child: PageView.builder(
-                                controller: _pageCtrl,
-                                // ВАЖНО: itemCount НЕ задаём — бесконечная лента
-                                onPageChanged: (i) {
-                                  setState(() {
-                                    _virtualPage = i;
-                                  });
-                                  // через короткую паузу мягко вернём индикатор в центр
-                                  Future.delayed(
-                                    const Duration(milliseconds: 150),
-                                    () {
-                                      if (!mounted) return;
-                                      setState(() => _dotProgress = 0.0);
-                                    },
-                                  );
-                                },
-                                itemBuilder: (_, i) {
-                                  if (_slides.isEmpty) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  final dataIndex = i % _slides.length;
-                                  return _HeroCard(slide: _slides[dataIndex]);
-                                },
+                              child: Listener(
+                                onPointerDown: (_) => _pauseAutoplayForUser(),
+                                onPointerUp: (_) => _resumeAutoplayDelayed(),
+                                onPointerCancel: (_) =>
+                                    _resumeAutoplayDelayed(),
+                                child: PageView.builder(
+                                  controller: _pageCtrl,
+                                  // itemCount не задаём — бесконечная лента
+                                  onPageChanged: (i) {
+                                    setState(() => _virtualPage = i);
+
+                                    // мягко вернуть индикатор к центру
+                                    Future.delayed(
+                                      const Duration(milliseconds: 150),
+                                      () {
+                                        if (!mounted) return;
+                                        setState(() => _dotProgress = 0.0);
+                                      },
+                                    );
+
+                                    // если это был ручной свайп — перезапустим автоплей через 5с
+                                    if (!_isAutoAnimating) {
+                                      _pauseAutoplayForUser();
+                                      _resumeAutoplayDelayed();
+                                    }
+                                  },
+                                  itemBuilder: (_, i) {
+                                    if (_slides.isEmpty) {
+                                      return const SizedBox.shrink();
+                                    }
+                                    final dataIndex = i % _slides.length;
+                                    return _HeroCard(slide: _slides[dataIndex]);
+                                  },
+                                ),
                               ),
                             ),
                             const SizedBox(height: 12),
