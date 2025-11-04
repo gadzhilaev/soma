@@ -293,4 +293,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileLogout => 'Logout';
+
+  @override
+  String get logoutConfirmBody =>
+      'Are you sure you want to sign out of your account? You can simply close the app';
 }

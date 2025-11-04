@@ -110,6 +110,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "listen": MessageLookupByLibrary.simpleMessage("Escuchar"),
     "listenUpper": MessageLookupByLibrary.simpleMessage("ESCUCHAR"),
     "login": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
+    "logoutConfirmBody": MessageLookupByLibrary.simpleMessage(
+      "¿Estás seguro de que quieres cerrar sesión? Puedes simplemente cerrar la aplicación",
+    ),
     "minShort": MessageLookupByLibrary.simpleMessage("min"),
     "monthly": MessageLookupByLibrary.simpleMessage("MENSUAL"),
     "monthlyPrice": MessageLookupByLibrary.simpleMessage("299 ₽ "),

@@ -657,6 +657,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get profileLogout;
+
+  /// No description provided for @logoutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out of your account? You can simply close the app'**
+  String get logoutConfirmBody;
 }
 
 class _AppLocalizationsDelegate

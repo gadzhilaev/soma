@@ -32,14 +32,22 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
     _checkSession();
+    // Слушаем изменения состояния авторизации
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      if (mounted) {
+        _checkSession();
+      }
+    });
   }
 
   Future<void> _checkSession() async {
     final session = Supabase.instance.client.auth.currentSession;
-    setState(() {
-      _loggedIn = session != null;
-      _ready = true;
-    });
+    if (mounted) {
+      setState(() {
+        _loggedIn = session != null;
+        _ready = true;
+      });
+    }
   }
 
   void _setLocale(Locale locale) => setState(() => _locale = locale);

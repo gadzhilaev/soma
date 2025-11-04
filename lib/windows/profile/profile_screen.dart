@@ -5,6 +5,7 @@ import '../../generated/l10n.dart';
 import '../../settings/repo.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../onboarding/premium_screen.dart';
+import '../../auth/login.dart';
 import 'dart:math' as math;
 
 class ProfileScreen extends StatefulWidget {
@@ -82,30 +83,133 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout() async {
+    final s = S.of(context);
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(S.of(context).profileLogout),
-        content: const Text('Вы уверены, что хотите выйти?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Отмена'),
+      barrierDismissible: false,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.zero,
+        child: Container(
+          width: 280,
+          height: 172,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
           ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(S.of(context).profileLogout),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Заголовок "Внимание!"
+              Text(
+                s.reportTitle, // Используем существующий ключ "Внимание!"
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  height: 22 / 18,
+                  letterSpacing: -0.41,
+                  color: Color(0xFF282828),
+                ),
+              ),
+              const Spacer(),
+              // Описание
+              Text(
+                s.logoutConfirmBody,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 13,
+                  height: 1.4,
+                  color: Color(0xFF9D9D9D),
+                ),
+              ),
+              const Spacer(),
+              // Кнопки
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Кнопка "Выйти"
+                  SizedBox(
+                    width: 116,
+                    height: 32,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(ctx).pop(true),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFD580),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        elevation: 0,
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Text(
+                        s.profileLogout.toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10,
+                          height: 1.0,
+                          letterSpacing: 0.04,
+                          color: Color(0xFF59523A),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Кнопка "Отмена"
+                  SizedBox(
+                    width: 116,
+                    height: 32,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(ctx).pop(false),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: const Color(0xFFF1F1F1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        side: BorderSide.none,
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Text(
+                        s.cancel.toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 10,
+                          height: 1.0,
+                          letterSpacing: 0.04,
+                          color: Color(0xFF59523A),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
     if (confirm != true) return;
 
     await supa.auth.signOut();
     if (!mounted) return;
-    // Закрываем все экраны и возвращаемся к корню приложения
-    Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-      '/',
+    // Закрываем все экраны и возвращаемся к экрану логина
+    // Получаем текущую локаль из контекста
+    final currentLocale = Localizations.localeOf(context);
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => LoginScreen(
+          onChangeLocale: (locale) {}, // Пустая функция, так как мы выходим
+          currentLocale: currentLocale,
+        ),
+      ),
       (route) => false,
     );
   }

@@ -93,5 +93,6 @@
   "profileTerms": "Términos de servicio",
   "profileSupport": "Contactar soporte",
   "profileAdmin": "Panel de administración",
-  "profileLogout": "Cerrar sesión"
+  "profileLogout": "Cerrar sesión",
+  "logoutConfirmBody": "¿Estás seguro de que quieres cerrar sesión? Puedes simplemente cerrar la aplicación"
 }

@@ -295,4 +295,8 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profileLogout => 'Выйти';
+
+  @override
+  String get logoutConfirmBody =>
+      'Вы уверены, что хотите выйти из вашего аккаунта? Вы можете просто закрыть приложение';
 }

@@ -93,5 +93,6 @@
   "profileTerms": "Terms of service",
   "profileSupport": "Contact support",
   "profileAdmin": "Admin panel",
-  "profileLogout": "Logout"
+  "profileLogout": "Logout",
+  "logoutConfirmBody": "Are you sure you want to sign out of your account? You can simply close the app"
 }

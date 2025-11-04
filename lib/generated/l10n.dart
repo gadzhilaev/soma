@@ -803,6 +803,16 @@ class S {
   String get profileLogout {
     return Intl.message('Logout', name: 'profileLogout', desc: '', args: []);
   }
+
+  /// `Are you sure you want to sign out of your account? You can simply close the app`
+  String get logoutConfirmBody {
+    return Intl.message(
+      'Are you sure you want to sign out of your account? You can simply close the app',
+      name: 'logoutConfirmBody',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

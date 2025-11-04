@@ -294,4 +294,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get profileLogout => 'Cerrar sesión';
+
+  @override
+  String get logoutConfirmBody =>
+      '¿Estás seguro de que quieres cerrar sesión? Puedes simplemente cerrar la aplicación';
 }
