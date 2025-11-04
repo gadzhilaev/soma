@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'generated/l10n.dart';
 import 'auth/login.dart';
 import 'windows/home/home_screen.dart';
+import 'core/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +13,9 @@ Future<void> main() async {
     url: 'https://yyxgdlbamxfedwyfbbxe.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGdkbGJhbXhmZWR3eWZiYnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4MzU5OTUsImV4cCI6MjA3NjQxMTk5NX0.TYEEAXrafUBd4SIb6D8IN5yN2hJxV1YzgrbsCSzEoaA',
   );
+
+  // Инициализируем сервис уведомлений
+  await NotificationService().initialize();
 
   runApp(const MainApp());
 }
