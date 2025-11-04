@@ -5,6 +5,7 @@ import '../windows/home/home_screen.dart';
 import '../settings/repo.dart';
 import '../windows/programs/programs_screen.dart';
 import '../windows/music/music_screen.dart';
+import '../windows/profile/profile_screen.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int index; // текущая вкладка
@@ -36,7 +37,7 @@ class BottomNavBar extends StatelessWidget {
         target = const MusicScreen();
         break;
       case 3:
-        target = const PlaceholderScreen(title: 'Профиль');
+        target = const ProfileScreen();
         break;
       default:
         target = const HomeScreen();

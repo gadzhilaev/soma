@@ -268,4 +268,31 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get musicForRelaxation => 'Для расслабления';
+
+  @override
+  String get profileSubscribe => 'Оформить подписку';
+
+  @override
+  String get profileNotifications => 'Уведомления';
+
+  @override
+  String get profileFavorites => 'Избранное';
+
+  @override
+  String get profileEdit => 'Редактировать профиль';
+
+  @override
+  String get profileLanguage => 'Смена языка';
+
+  @override
+  String get profileTerms => 'Пользовательское соглашение';
+
+  @override
+  String get profileSupport => 'Написать в поддержку';
+
+  @override
+  String get profileAdmin => 'Админ панель';
+
+  @override
+  String get profileLogout => 'Выйти';
 }

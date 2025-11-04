@@ -603,6 +603,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For relaxation'**
   String get musicForRelaxation;
+
+  /// No description provided for @profileSubscribe.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe'**
+  String get profileSubscribe;
+
+  /// No description provided for @profileNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get profileNotifications;
+
+  /// No description provided for @profileFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get profileFavorites;
+
+  /// No description provided for @profileEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get profileEdit;
+
+  /// No description provided for @profileLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change language'**
+  String get profileLanguage;
+
+  /// No description provided for @profileTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of service'**
+  String get profileTerms;
+
+  /// No description provided for @profileSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support'**
+  String get profileSupport;
+
+  /// No description provided for @profileAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin panel'**
+  String get profileAdmin;
+
+  /// No description provided for @profileLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get profileLogout;
 }
 
 class _AppLocalizationsDelegate

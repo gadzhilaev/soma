@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
+import '../../core/app_text_styles.dart';
 import '../../generated/l10n.dart';
 import '../../settings/repo.dart';
 import '../../settings/models.dart';
@@ -116,12 +117,7 @@ class _MusicScreenState extends State<MusicScreen> {
                                     // Заголовок категории
                                     Text(
                                       _categories[catIndex].label,
-                                      style: const TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20,
-                                        color: Color(0xFF282828),
-                                      ),
+                                      style: AppTextStyles.sectionTitle,
                                     ),
                                     const SizedBox(height: 20),
 
@@ -247,13 +243,7 @@ class _MusicCard extends StatelessWidget {
                         track.title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                          height: 1.0,
-                          color: Colors.white,
-                        ),
+                        style: AppTextStyles.musicTitle,
                       ),
                       const SizedBox(height: 8),
                       // Описание (внизу)
@@ -261,13 +251,7 @@ class _MusicCard extends StatelessWidget {
                         track.description,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10,
-                          height: 14 / 10, // Line height 14
-                          color: Colors.white,
-                        ),
+                        style: AppTextStyles.musicDescription,
                       ),
                     ],
                   ),

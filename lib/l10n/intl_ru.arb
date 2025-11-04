@@ -84,5 +84,14 @@
   "@stepN": {"placeholders": {"n": {"type": "int"}}},
   "musicForSleep": "Для сна",
   "musicForInspiration": "Для вдохновения",
-  "musicForRelaxation": "Для расслабления"
+  "musicForRelaxation": "Для расслабления",
+  "profileSubscribe": "Оформить подписку",
+  "profileNotifications": "Уведомления",
+  "profileFavorites": "Избранное",
+  "profileEdit": "Редактировать профиль",
+  "profileLanguage": "Смена языка",
+  "profileTerms": "Пользовательское соглашение",
+  "profileSupport": "Написать в поддержку",
+  "profileAdmin": "Админ панель",
+  "profileLogout": "Выйти"
 }

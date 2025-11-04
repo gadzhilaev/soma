@@ -718,6 +718,91 @@ class S {
       args: [],
     );
   }
+
+  /// `Subscribe`
+  String get profileSubscribe {
+    return Intl.message(
+      'Subscribe',
+      name: 'profileSubscribe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get profileNotifications {
+    return Intl.message(
+      'Notifications',
+      name: 'profileNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Favorites`
+  String get profileFavorites {
+    return Intl.message(
+      'Favorites',
+      name: 'profileFavorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit profile`
+  String get profileEdit {
+    return Intl.message(
+      'Edit profile',
+      name: 'profileEdit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change language`
+  String get profileLanguage {
+    return Intl.message(
+      'Change language',
+      name: 'profileLanguage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms of service`
+  String get profileTerms {
+    return Intl.message(
+      'Terms of service',
+      name: 'profileTerms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact support`
+  String get profileSupport {
+    return Intl.message(
+      'Contact support',
+      name: 'profileSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Admin panel`
+  String get profileAdmin {
+    return Intl.message(
+      'Admin panel',
+      name: 'profileAdmin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get profileLogout {
+    return Intl.message('Logout', name: 'profileLogout', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

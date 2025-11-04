@@ -266,4 +266,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get musicForRelaxation => 'For relaxation';
+
+  @override
+  String get profileSubscribe => 'Subscribe';
+
+  @override
+  String get profileNotifications => 'Notifications';
+
+  @override
+  String get profileFavorites => 'Favorites';
+
+  @override
+  String get profileEdit => 'Edit profile';
+
+  @override
+  String get profileLanguage => 'Change language';
+
+  @override
+  String get profileTerms => 'Terms of service';
+
+  @override
+  String get profileSupport => 'Contact support';
+
+  @override
+  String get profileAdmin => 'Admin panel';
+
+  @override
+  String get profileLogout => 'Logout';
 }

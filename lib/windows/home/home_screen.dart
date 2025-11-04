@@ -244,7 +244,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       return const SizedBox.shrink();
                                     }
                                     final dataIndex = i % _slides.length;
-                                    return HeroCard(slide: _slides[dataIndex]);
+                                    return HeroCard(
+                                      slide: _slides[dataIndex],
+                                      repo: _repo,
+                                      lang: _lang,
+                                    );
                                   },
                                 ),
                               ),

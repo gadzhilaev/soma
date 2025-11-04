@@ -267,4 +267,31 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get musicForRelaxation => 'Para relajarse';
+
+  @override
+  String get profileSubscribe => 'Suscribirse';
+
+  @override
+  String get profileNotifications => 'Notificaciones';
+
+  @override
+  String get profileFavorites => 'Favoritos';
+
+  @override
+  String get profileEdit => 'Editar perfil';
+
+  @override
+  String get profileLanguage => 'Cambiar idioma';
+
+  @override
+  String get profileTerms => 'Términos de servicio';
+
+  @override
+  String get profileSupport => 'Contactar soporte';
+
+  @override
+  String get profileAdmin => 'Panel de administración';
+
+  @override
+  String get profileLogout => 'Cerrar sesión';
 }

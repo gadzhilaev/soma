@@ -218,6 +218,24 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                                 width: double.infinity,
                                 fit: BoxFit.cover,
                               ),
+                              // Затемнение для читаемости текста (как в hero слайдах)
+                              Positioned.fill(
+                                child: IgnorePointer(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        stops: const [0.525, 0.9823],
+                                        colors: [
+                                          Color.fromRGBO(0, 0, 0, 0.0847845),
+                                          Color.fromRGBO(0, 0, 0, 0.8),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               if (showNew)
                                 Positioned(
                                   top: 16,

@@ -84,5 +84,14 @@
   "@stepN": {"placeholders": {"n": {"type": "int"}}},
   "musicForSleep": "For sleep",
   "musicForInspiration": "For inspiration",
-  "musicForRelaxation": "For relaxation"
+  "musicForRelaxation": "For relaxation",
+  "profileSubscribe": "Subscribe",
+  "profileNotifications": "Notifications",
+  "profileFavorites": "Favorites",
+  "profileEdit": "Edit profile",
+  "profileLanguage": "Change language",
+  "profileTerms": "Terms of service",
+  "profileSupport": "Contact support",
+  "profileAdmin": "Admin panel",
+  "profileLogout": "Logout"
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/app_colors.dart';
 import '../../core/app_text_styles.dart';
 
 /// Капсула/бейдж для отображения меток

@@ -4,6 +4,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
+import '../../core/app_colors.dart';
+import '../../core/app_text_styles.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final String title;
@@ -121,7 +123,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.of(context).maybePop(),
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF282828)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
         ),
         title: SizedBox(
           width: 48,
@@ -139,10 +141,10 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 constraints: BoxConstraints.tight(Size(32, 32)),
                 splashRadius: 32,
                 onPressed: () => setState(() => _fav = !_fav),
-                icon: Icon(
+                  icon: Icon(
                   _fav ? Icons.star : Icons.star_border,
                   size: 32,
-                  color: const Color(0xFFFFD580),
+                  color: AppColors.accent,
                 ),
               ),
             ),
@@ -283,24 +285,12 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                           children: [
                             Text(
                               _fmt(_position),
-                              style: const TextStyle(
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                height: 1.0,
-                                color: Colors.white,
-                              ),
+                              style: AppTextStyles.playerTime,
                             ),
                             const Spacer(),
                             Text(
                               _fmt(_duration),
-                              style: const TextStyle(
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                height: 1.0,
-                                color: Colors.white,
-                              ),
+                              style: AppTextStyles.playerTime,
                             ),
                           ],
                         ),
@@ -317,13 +307,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                             widget.title.toUpperCase(),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 22,
-                              height: 1.0,
-                              color: Colors.white,
-                            ),
+                            style: AppTextStyles.playerTitle,
                           ),
                         ),
                       ),

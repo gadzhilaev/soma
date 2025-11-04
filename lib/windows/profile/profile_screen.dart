@@ -4,6 +4,7 @@ import '../../core/app_colors.dart';
 import '../../generated/l10n.dart';
 import '../../settings/repo.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../onboarding/premium_screen.dart';
 import 'dart:math' as math;
 
 class ProfileScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? _avatarUrl;
   bool _isVip = false;
   bool _isAdmin = false;
-  int _notificationsCount = 0;
+  final int _notificationsCount = 0;
 
   @override
   void initState() {
@@ -231,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               if (_isVip)
                                                 Positioned(
                                                   bottom: 12, // Отступ 12px от низа картинки
-                                                  right: 0,   // Правый край прижат к правой границе картинки
+                                                  right: 1,   // Правый край прижат к правой границе картинки
                                                   child: Transform.rotate(
                                                     angle: -15 * math.pi / 180, // angle: -15 deg
                                                     child: Container(
@@ -281,7 +282,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   width: 361,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      // TODO: Навигация на экран подписки
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => const PremiumScreen(),
+                                        ),
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.accent,
@@ -321,7 +326,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ],
                               // Кнопка Уведомления
                               _ProfileButton(
-                                icon: Icons.notifications,
+                                icon: Icons.notifications_outlined,
                                 text: s.profileNotifications,
                                 onTap: () {},
                                 showBadge: true,
@@ -337,7 +342,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SizedBox(height: 8),
                               // Кнопка Редактировать профиль
                               _ProfileButton(
-                                icon: Icons.account_circle,
+                                icon: Icons.account_circle_outlined,
                                 text: s.profileEdit,
                                 onTap: () {},
                               ),
@@ -351,14 +356,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SizedBox(height: 8),
                               // Кнопка Пользовательское соглашение
                               _ProfileButton(
-                                icon: Icons.description,
+                                icon: Icons.description_outlined,
                                 text: s.profileTerms,
                                 onTap: () {},
                               ),
                               const SizedBox(height: 8),
                               // Кнопка Написать в поддержку
                               _ProfileButton(
-                                icon: Icons.contact_support,
+                                icon: Icons.contact_support_outlined,
                                 text: s.profileSupport,
                                 onTap: () {},
                               ),
@@ -366,7 +371,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               if (_isAdmin) ...[
                                 const SizedBox(height: 8),
                                 _ProfileButton(
-                                  icon: Icons.shield,
+                                  icon: Icons.admin_panel_settings_outlined,
                                   text: s.profileAdmin,
                                   onTap: () {},
                                 ),
@@ -382,7 +387,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
                                       iconSize: 24,
-                                      icon: const Icon(Icons.logout, color: AppColors.primary, size: 24),
+                                      icon: const Icon(Icons.logout_outlined, color: AppColors.primary, size: 24),
                                       onPressed: _logout,
                                     ),
                                   ),

@@ -148,6 +148,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Начните путь к гармонии прямо сейчас!",
     ),
     "premiumTitle": MessageLookupByLibrary.simpleMessage("Премиум аккаунт"),
+    "profileAdmin": MessageLookupByLibrary.simpleMessage("Админ панель"),
+    "profileEdit": MessageLookupByLibrary.simpleMessage(
+      "Редактировать профиль",
+    ),
+    "profileFavorites": MessageLookupByLibrary.simpleMessage("Избранное"),
+    "profileLanguage": MessageLookupByLibrary.simpleMessage("Смена языка"),
+    "profileLogout": MessageLookupByLibrary.simpleMessage("Выйти"),
+    "profileNotifications": MessageLookupByLibrary.simpleMessage("Уведомления"),
+    "profileSubscribe": MessageLookupByLibrary.simpleMessage(
+      "Оформить подписку",
+    ),
+    "profileSupport": MessageLookupByLibrary.simpleMessage(
+      "Написать в поддержку",
+    ),
+    "profileTerms": MessageLookupByLibrary.simpleMessage(
+      "Пользовательское соглашение",
+    ),
     "register": MessageLookupByLibrary.simpleMessage("Регистрация"),
     "registerSubmit": MessageLookupByLibrary.simpleMessage(
       "Зарегистрироваться",

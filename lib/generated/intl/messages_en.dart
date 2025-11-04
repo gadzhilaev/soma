@@ -138,6 +138,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Start your path to harmony now!",
     ),
     "premiumTitle": MessageLookupByLibrary.simpleMessage("Premium account"),
+    "profileAdmin": MessageLookupByLibrary.simpleMessage("Admin panel"),
+    "profileEdit": MessageLookupByLibrary.simpleMessage("Edit profile"),
+    "profileFavorites": MessageLookupByLibrary.simpleMessage("Favorites"),
+    "profileLanguage": MessageLookupByLibrary.simpleMessage("Change language"),
+    "profileLogout": MessageLookupByLibrary.simpleMessage("Logout"),
+    "profileNotifications": MessageLookupByLibrary.simpleMessage(
+      "Notifications",
+    ),
+    "profileSubscribe": MessageLookupByLibrary.simpleMessage("Subscribe"),
+    "profileSupport": MessageLookupByLibrary.simpleMessage("Contact support"),
+    "profileTerms": MessageLookupByLibrary.simpleMessage("Terms of service"),
     "register": MessageLookupByLibrary.simpleMessage("Register"),
     "registerSubmit": MessageLookupByLibrary.simpleMessage("Register"),
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
