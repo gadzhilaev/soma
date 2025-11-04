@@ -361,4 +361,65 @@ class HomeRepo {
       'body': body,
     });
   }
+
+  // ===== MUSIC =====
+  Future<List<MusicCategory>> getMusicCategories(String lang) async {
+    final res = await _sb
+        .from('music_categories')
+        .select('''
+          id,key,sort_index,
+          i18n:music_categories_i18n!inner(label,language)
+        ''')
+        .eq('is_active', true)
+        .eq('i18n.language', lang)
+        .order('sort_index');
+
+    return (res as List).map((e) {
+      final i = (e['i18n'] as List).first;
+      return MusicCategory(
+        id: e['id'] as String,
+        key: e['key'] as String,
+        sortIndex: (e['sort_index'] ?? 1) as int,
+        label: (i['label'] ?? '') as String,
+      );
+    }).toList();
+  }
+
+  Future<List<MusicTrack>> getMusicTracksByCategory(String lang, String categoryKey) async {
+    final res = await _sb
+        .from('music_tracks')
+        .select('''
+          id,category_key,image_url,audio_url,sort_index,
+          i18n:music_tracks_i18n!inner(title,description,language)
+        ''')
+        .eq('is_active', true)
+        .eq('category_key', categoryKey)
+        .eq('i18n.language', lang)
+        .order('sort_index');
+
+    return (res as List).map((e) {
+      final i = (e['i18n'] as List).first;
+      return MusicTrack(
+        id: e['id'] as String,
+        categoryKey: (e['category_key'] ?? '') as String,
+        imageUrl: (e['image_url'] ?? '') as String,
+        audioUrl: (e['audio_url'] ?? '') as String,
+        sortIndex: (e['sort_index'] ?? 1) as int,
+        title: (i['title'] ?? '') as String,
+        description: (i['description'] ?? '') as String,
+      );
+    }).toList();
+  }
+
+  Future<Map<String, List<MusicTrack>>> getAllMusicTracks(String lang) async {
+    final categories = await getMusicCategories(lang);
+    final Map<String, List<MusicTrack>> result = {};
+
+    for (final category in categories) {
+      final tracks = await getMusicTracksByCategory(lang, category.key);
+      result[category.key] = tracks;
+    }
+
+    return result;
+  }
 }

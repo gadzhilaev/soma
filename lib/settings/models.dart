@@ -225,3 +225,37 @@ class AppComment {
     createdAt: DateTime.parse(m['inserted_at'] as String),
   );
 }
+
+class MusicCategory {
+  final String id;
+  final String key;         // 'sleep' | 'inspiration' | 'relaxation'
+  final int sortIndex;
+  final String label;       // локализованный текст
+
+  MusicCategory({
+    required this.id,
+    required this.key,
+    required this.sortIndex,
+    required this.label,
+  });
+}
+
+class MusicTrack {
+  final String id;
+  final String categoryKey; // 'sleep' | 'inspiration' | 'relaxation'
+  final String imageUrl;
+  final String audioUrl;
+  final int sortIndex;
+  final String title;       // название трека
+  final String description; // описание
+
+  MusicTrack({
+    required this.id,
+    required this.categoryKey,
+    required this.imageUrl,
+    required this.audioUrl,
+    required this.sortIndex,
+    required this.title,
+    required this.description,
+  });
+}

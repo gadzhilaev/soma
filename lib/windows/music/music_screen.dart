@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
 import '../../settings/repo.dart';
+import '../../settings/models.dart';
 import '../../widgets/bottom_nav.dart';
+import 'music_player_screen.dart';
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({super.key});
@@ -14,6 +16,9 @@ class MusicScreen extends StatefulWidget {
 class _MusicScreenState extends State<MusicScreen> {
   late final HomeRepo _repo;
   String _lang = 'en';
+  bool _loading = true;
+  Map<String, List<MusicTrack>> _tracksByCategory = {};
+  List<MusicCategory> _categories = [];
 
   @override
   void initState() {
@@ -27,12 +32,32 @@ class _MusicScreenState extends State<MusicScreen> {
     final code = Localizations.localeOf(context).languageCode;
     const allowed = ['ru', 'en', 'es'];
     _lang = allowed.contains(code) ? code : 'en';
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _loading = true);
+    try {
+      final categories = await _repo.getMusicCategories(_lang);
+      final tracks = await _repo.getAllMusicTracks(_lang);
+      if (mounted) {
+        setState(() {
+          _categories = categories;
+          _tracksByCategory = tracks;
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${S.of(context).errorPrefix} $e')),
+      );
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final s = S.of(context);
-
     const double navBarHeight = 80.0;
     final double bottomSafe = MediaQuery.of(context).padding.bottom;
     final double listBottomPadding = navBarHeight + bottomSafe;
@@ -71,129 +96,75 @@ class _MusicScreenState extends State<MusicScreen> {
 
                 SliverPadding(
                   padding: EdgeInsets.only(bottom: listBottomPadding),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate.fixed([
-                      // Боковые отступы 16
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Текст "Для сна"
-                            Text(
-                              s.musicForSleep,
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: Color(0xFF282828),
+                  sliver: _loading
+                      ? const SliverToBoxAdapter(
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      : SliverList(
+                          delegate: SliverChildListDelegate.fixed([
+                            // Боковые отступы 16
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  for (int catIndex = 0;
+                                      catIndex < _categories.length;
+                                      catIndex++) ...[
+                                    // Заголовок категории
+                                    Text(
+                                      _categories[catIndex].label,
+                                      style: const TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
+                                        color: Color(0xFF282828),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+
+                                    // Картинки категории
+                                    SizedBox(
+                                      height: 240,
+                                      child: ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _tracksByCategory[
+                                                    _categories[catIndex].key]!
+                                                .length,
+                                        separatorBuilder: (_, __) =>
+                                            const SizedBox(width: 8),
+                                        itemBuilder: (_, i) {
+                                          final track = _tracksByCategory[
+                                              _categories[catIndex].key]![i];
+                                          return InkWell(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      MusicPlayerScreen(
+                                                    title: track.title,
+                                                    imageUrl: track.imageUrl,
+                                                    audioUrl: track.audioUrl,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: _MusicCard(track: track),
+                                          );
+                                        },
+                                      ),
+                                    ),
+
+                                    if (catIndex < _categories.length - 1)
+                                      const SizedBox(height: 32),
+                                  ],
+
+                                  const SizedBox(height: 20),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 20),
-
-                            // Картинки для сна
-                            SizedBox(
-                              height: 240,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5, // Примерное количество, можно изменить
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(width: 8),
-                                itemBuilder: (_, i) => Container(
-                                  width: 164,
-                                  height: 240,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Colors.grey[300],
-                                  ),
-                                  // TODO: Заменить на реальные изображения
-                                  child: const Center(
-                                    child: Icon(Icons.image, size: 48),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 32),
-
-                            // Текст "Для вдохновения"
-                            Text(
-                              s.musicForInspiration,
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: Color(0xFF282828),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Картинки для вдохновения
-                            SizedBox(
-                              height: 240,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5, // Примерное количество, можно изменить
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(width: 8),
-                                itemBuilder: (_, i) => Container(
-                                  width: 164,
-                                  height: 240,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Colors.grey[300],
-                                  ),
-                                  // TODO: Заменить на реальные изображения
-                                  child: const Center(
-                                    child: Icon(Icons.image, size: 48),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 32),
-
-                            // Текст "Для расслабления"
-                            Text(
-                              s.musicForRelaxation,
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                                color: Color(0xFF282828),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Картинки для расслабления
-                            SizedBox(
-                              height: 240,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 5, // Примерное количество, можно изменить
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(width: 8),
-                                itemBuilder: (_, i) => Container(
-                                  width: 164,
-                                  height: 240,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Colors.grey[300],
-                                  ),
-                                  // TODO: Заменить на реальные изображения
-                                  child: const Center(
-                                    child: Icon(Icons.image, size: 48),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 20),
-                          ],
+                          ]),
                         ),
-                      ),
-                    ]),
-                  ),
                 ),
               ],
             ),
@@ -211,6 +182,95 @@ class _MusicScreenState extends State<MusicScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+// Карточка музыки с названием и описанием
+class _MusicCard extends StatelessWidget {
+  final MusicTrack track;
+
+  const _MusicCard({required this.track});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 164,
+      height: 240,
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        image: track.imageUrl.isNotEmpty
+            ? DecorationImage(
+                image: NetworkImage(track.imageUrl),
+                fit: BoxFit.cover,
+              )
+            : null,
+        color: track.imageUrl.isEmpty ? Colors.grey[300] : null,
+      ),
+      child: track.imageUrl.isEmpty
+          ? const Center(child: Icon(Icons.image, size: 48))
+          : Stack(
+              children: [
+                // Затемнение для читаемости текста (как в дизайне)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: const [0.3712, 0.9813],
+                          colors: [
+                            Color.fromRGBO(0, 0, 0, 0.0953825),
+                            Color.fromRGBO(0, 0, 0, 0.9),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // Текст внутри картинки
+                Positioned(
+                  left: 8,
+                  right: 8,
+                  bottom: 16,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Название (сверху)
+                      Text(
+                        track.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          height: 1.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Описание (внизу)
+                      Text(
+                        track.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                          height: 14 / 10, // Line height 14
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }
