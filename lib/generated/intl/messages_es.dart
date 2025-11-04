@@ -110,6 +110,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "listen": MessageLookupByLibrary.simpleMessage("Escuchar"),
     "listenUpper": MessageLookupByLibrary.simpleMessage("ESCUCHAR"),
     "login": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
+    "loginSuccessBody": MessageLookupByLibrary.simpleMessage(
+      "Has iniciado sesión exitosamente en tu cuenta",
+    ),
+    "loginSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Inicio de sesión exitoso",
+    ),
     "logoutConfirmBody": MessageLookupByLibrary.simpleMessage(
       "¿Estás seguro de que quieres cerrar sesión? Puedes simplemente cerrar la aplicación",
     ),
@@ -166,6 +172,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "register": MessageLookupByLibrary.simpleMessage("Registrarse"),
     "registerSubmit": MessageLookupByLibrary.simpleMessage("Registrarse"),
+    "registerSuccessBody": MessageLookupByLibrary.simpleMessage(
+      "Te has registrado exitosamente",
+    ),
+    "registerSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Registro exitoso",
+    ),
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Repite la contraseña",
     ),

@@ -94,5 +94,9 @@
   "profileSupport": "Contact support",
   "profileAdmin": "Admin panel",
   "profileLogout": "Logout",
-  "logoutConfirmBody": "Are you sure you want to sign out of your account? You can simply close the app"
+  "logoutConfirmBody": "Are you sure you want to sign out of your account? You can simply close the app",
+  "loginSuccessTitle": "Login successful",
+  "loginSuccessBody": "You have successfully logged into your account",
+  "registerSuccessTitle": "Registration successful",
+  "registerSuccessBody": "You have successfully registered"
 }

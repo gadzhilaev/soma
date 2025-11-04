@@ -298,4 +298,17 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get logoutConfirmBody =>
       '¿Estás seguro de que quieres cerrar sesión? Puedes simplemente cerrar la aplicación';
+
+  @override
+  String get loginSuccessTitle => 'Inicio de sesión exitoso';
+
+  @override
+  String get loginSuccessBody =>
+      'Has iniciado sesión exitosamente en tu cuenta';
+
+  @override
+  String get registerSuccessTitle => 'Registro exitoso';
+
+  @override
+  String get registerSuccessBody => 'Te has registrado exitosamente';
 }

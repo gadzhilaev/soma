@@ -94,5 +94,9 @@
   "profileSupport": "Contactar soporte",
   "profileAdmin": "Panel de administración",
   "profileLogout": "Cerrar sesión",
-  "logoutConfirmBody": "¿Estás seguro de que quieres cerrar sesión? Puedes simplemente cerrar la aplicación"
+  "logoutConfirmBody": "¿Estás seguro de que quieres cerrar sesión? Puedes simplemente cerrar la aplicación",
+  "loginSuccessTitle": "Inicio de sesión exitoso",
+  "loginSuccessBody": "Has iniciado sesión exitosamente en tu cuenta",
+  "registerSuccessTitle": "Registro exitoso",
+  "registerSuccessBody": "Te has registrado exitosamente"
 }

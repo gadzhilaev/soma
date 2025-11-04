@@ -94,5 +94,9 @@
   "profileSupport": "Написать в поддержку",
   "profileAdmin": "Админ панель",
   "profileLogout": "Выйти",
-  "logoutConfirmBody": "Вы уверены, что хотите выйти из вашего аккаунта? Вы можете просто закрыть приложение"
+  "logoutConfirmBody": "Вы уверены, что хотите выйти из вашего аккаунта? Вы можете просто закрыть приложение",
+  "loginSuccessTitle": "Успешный вход",
+  "loginSuccessBody": "Вы успешно вошли в свой аккаунт",
+  "registerSuccessTitle": "Успешная регистрация",
+  "registerSuccessBody": "Вы успешно зарегистрировались"
 }

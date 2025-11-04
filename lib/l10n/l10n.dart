@@ -663,6 +663,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to sign out of your account? You can simply close the app'**
   String get logoutConfirmBody;
+
+  /// No description provided for @loginSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Login successful'**
+  String get loginSuccessTitle;
+
+  /// No description provided for @loginSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have successfully logged into your account'**
+  String get loginSuccessBody;
+
+  /// No description provided for @registerSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration successful'**
+  String get registerSuccessTitle;
+
+  /// No description provided for @registerSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have successfully registered'**
+  String get registerSuccessBody;
 }
 
 class _AppLocalizationsDelegate

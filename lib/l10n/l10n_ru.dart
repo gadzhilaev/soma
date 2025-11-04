@@ -299,4 +299,16 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get logoutConfirmBody =>
       'Вы уверены, что хотите выйти из вашего аккаунта? Вы можете просто закрыть приложение';
+
+  @override
+  String get loginSuccessTitle => 'Успешный вход';
+
+  @override
+  String get loginSuccessBody => 'Вы успешно вошли в свой аккаунт';
+
+  @override
+  String get registerSuccessTitle => 'Успешная регистрация';
+
+  @override
+  String get registerSuccessBody => 'Вы успешно зарегистрировались';
 }

@@ -813,6 +813,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Login successful`
+  String get loginSuccessTitle {
+    return Intl.message(
+      'Login successful',
+      name: 'loginSuccessTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have successfully logged into your account`
+  String get loginSuccessBody {
+    return Intl.message(
+      'You have successfully logged into your account',
+      name: 'loginSuccessBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration successful`
+  String get registerSuccessTitle {
+    return Intl.message(
+      'Registration successful',
+      name: 'registerSuccessTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have successfully registered`
+  String get registerSuccessBody {
+    return Intl.message(
+      'You have successfully registered',
+      name: 'registerSuccessBody',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

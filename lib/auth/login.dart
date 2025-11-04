@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:soma/generated/l10n.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase.dart';
+import '../core/notification_service.dart';
 import 'register.dart';
 import 'restore.dart';
 import '../onboarding/notifications_screen.dart';
@@ -66,6 +67,14 @@ class _LoginScreenState extends State<LoginScreen> {
       await supa.auth.signInWithPassword(email: email, password: pass);
       // внутри try после успешного signInWithPassword
       if (!mounted) return;
+      
+      // Показываем уведомление о успешном входе
+      final s = S.of(context);
+      await NotificationService().showNotification(
+        title: s.loginSuccessTitle,
+        body: s.loginSuccessBody,
+      );
+      
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const NotificationsScreen()),

@@ -297,4 +297,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get logoutConfirmBody =>
       'Are you sure you want to sign out of your account? You can simply close the app';
+
+  @override
+  String get loginSuccessTitle => 'Login successful';
+
+  @override
+  String get loginSuccessBody =>
+      'You have successfully logged into your account';
+
+  @override
+  String get registerSuccessTitle => 'Registration successful';
+
+  @override
+  String get registerSuccessBody => 'You have successfully registered';
 }

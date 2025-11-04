@@ -4,6 +4,7 @@ import 'package:soma/generated/l10n.dart';
 import 'login.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase.dart';
+import '../core/notification_service.dart';
 import '../onboarding/questions_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -436,6 +437,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }).select();
 
       if (!mounted) return; // ⬅️ ещё раз после await
+
+      // Показываем уведомление о успешной регистрации
+      await NotificationService().showNotification(
+        title: s.registerSuccessTitle,
+        body: s.registerSuccessBody,
+      );
 
       // Навигация
       Navigator.pushAndRemoveUntil(

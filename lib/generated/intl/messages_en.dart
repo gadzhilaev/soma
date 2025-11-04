@@ -104,6 +104,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "listen": MessageLookupByLibrary.simpleMessage("Listen"),
     "listenUpper": MessageLookupByLibrary.simpleMessage("LISTEN"),
     "login": MessageLookupByLibrary.simpleMessage("Login"),
+    "loginSuccessBody": MessageLookupByLibrary.simpleMessage(
+      "You have successfully logged into your account",
+    ),
+    "loginSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Login successful",
+    ),
     "logoutConfirmBody": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to sign out of your account? You can simply close the app",
     ),
@@ -154,6 +160,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileTerms": MessageLookupByLibrary.simpleMessage("Terms of service"),
     "register": MessageLookupByLibrary.simpleMessage("Register"),
     "registerSubmit": MessageLookupByLibrary.simpleMessage("Register"),
+    "registerSuccessBody": MessageLookupByLibrary.simpleMessage(
+      "You have successfully registered",
+    ),
+    "registerSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Registration successful",
+    ),
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Repeat password",
     ),

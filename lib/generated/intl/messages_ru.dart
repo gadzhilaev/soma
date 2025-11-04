@@ -114,6 +114,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "listen": MessageLookupByLibrary.simpleMessage("Слушать"),
     "listenUpper": MessageLookupByLibrary.simpleMessage("СЛУШАТЬ"),
     "login": MessageLookupByLibrary.simpleMessage("Войти"),
+    "loginSuccessBody": MessageLookupByLibrary.simpleMessage(
+      "Вы успешно вошли в свой аккаунт",
+    ),
+    "loginSuccessTitle": MessageLookupByLibrary.simpleMessage("Успешный вход"),
     "logoutConfirmBody": MessageLookupByLibrary.simpleMessage(
       "Вы уверены, что хотите выйти из вашего аккаунта? Вы можете просто закрыть приложение",
     ),
@@ -171,6 +175,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "register": MessageLookupByLibrary.simpleMessage("Регистрация"),
     "registerSubmit": MessageLookupByLibrary.simpleMessage(
       "Зарегистрироваться",
+    ),
+    "registerSuccessBody": MessageLookupByLibrary.simpleMessage(
+      "Вы успешно зарегистрировались",
+    ),
+    "registerSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Успешная регистрация",
     ),
     "repeatPasswordLabel": MessageLookupByLibrary.simpleMessage(
       "Повторите пароль",
