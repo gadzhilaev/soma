@@ -98,5 +98,12 @@
   "loginSuccessTitle": "Inicio de sesión exitoso",
   "loginSuccessBody": "Has iniciado sesión exitosamente en tu cuenta",
   "registerSuccessTitle": "Registro exitoso",
-  "registerSuccessBody": "Te has registrado exitosamente"
+  "registerSuccessBody": "Te has registrado exitosamente",
+  "change": "Cambiar",
+  "save": "Guardar",
+  "enterNewName": "Introduce tu nuevo nombre",
+  "enterNewEmail": "Introduce tu nuevo correo electrónico",
+  "oldPassword": "Contraseña antigua",
+  "newPassword": "Nueva contraseña",
+  "deleteAccount": "Eliminar cuenta"
 }

@@ -687,6 +687,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You have successfully registered'**
   String get registerSuccessBody;
+
+  /// No description provided for @change.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get change;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @enterNewName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your new name'**
+  String get enterNewName;
+
+  /// No description provided for @enterNewEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your new email'**
+  String get enterNewEmail;
+
+  /// No description provided for @oldPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Old password'**
+  String get oldPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPassword;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccount;
 }
 
 class _AppLocalizationsDelegate

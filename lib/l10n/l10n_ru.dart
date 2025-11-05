@@ -311,4 +311,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get registerSuccessBody => 'Вы успешно зарегистрировались';
+
+  @override
+  String get change => 'Изменить';
+
+  @override
+  String get save => 'Сохранить';
+
+  @override
+  String get enterNewName => 'Введите ваше новое имя';
+
+  @override
+  String get enterNewEmail => 'Введите вашу новую электронную почту';
+
+  @override
+  String get oldPassword => 'Старый пароль';
+
+  @override
+  String get newPassword => 'Новый пароль';
+
+  @override
+  String get deleteAccount => 'Удаление аккаунта';
 }

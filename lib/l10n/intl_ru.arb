@@ -98,5 +98,12 @@
   "loginSuccessTitle": "Успешный вход",
   "loginSuccessBody": "Вы успешно вошли в свой аккаунт",
   "registerSuccessTitle": "Успешная регистрация",
-  "registerSuccessBody": "Вы успешно зарегистрировались"
+  "registerSuccessBody": "Вы успешно зарегистрировались",
+  "change": "Изменить",
+  "save": "Сохранить",
+  "enterNewName": "Введите ваше новое имя",
+  "enterNewEmail": "Введите вашу новую электронную почту",
+  "oldPassword": "Старый пароль",
+  "newPassword": "Новый пароль",
+  "deleteAccount": "Удаление аккаунта"
 }

@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Стать премиум участником",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Отменить"),
+    "change": MessageLookupByLibrary.simpleMessage("Изменить"),
     "commentSent": MessageLookupByLibrary.simpleMessage(
       "Комментарий отправлен",
     ),
@@ -50,9 +51,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "Продолжить бесплатно",
     ),
     "dayShort": MessageLookupByLibrary.simpleMessage("дн"),
+    "deleteAccount": MessageLookupByLibrary.simpleMessage("Удаление аккаунта"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Введите почту"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Электронная почта"),
     "enterMessage": MessageLookupByLibrary.simpleMessage("Введите сообщение"),
+    "enterNewEmail": MessageLookupByLibrary.simpleMessage(
+      "Введите вашу новую электронную почту",
+    ),
+    "enterNewName": MessageLookupByLibrary.simpleMessage(
+      "Введите ваше новое имя",
+    ),
     "errAgreeRequired": MessageLookupByLibrary.simpleMessage(
       "Подтвердите согласие на обработку данных",
     ),
@@ -134,6 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "musicForSleep": MessageLookupByLibrary.simpleMessage("Для сна"),
     "nameHint": MessageLookupByLibrary.simpleMessage("Введите Имя"),
     "nameLabel": MessageLookupByLibrary.simpleMessage("Имя"),
+    "newPassword": MessageLookupByLibrary.simpleMessage("Новый пароль"),
     "newPriceYear": MessageLookupByLibrary.simpleMessage("1 999 ₽"),
     "next": MessageLookupByLibrary.simpleMessage("Далее"),
     "noActiveQuestions": MessageLookupByLibrary.simpleMessage(
@@ -145,6 +154,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "notifTitle": MessageLookupByLibrary.simpleMessage("Уведомления"),
     "ok": MessageLookupByLibrary.simpleMessage("Хорошо"),
+    "oldPassword": MessageLookupByLibrary.simpleMessage("Старый пароль"),
     "oldPriceYear": MessageLookupByLibrary.simpleMessage("3 400 ₽"),
     "passwordHint": MessageLookupByLibrary.simpleMessage("Введите пароль"),
     "passwordLabel": MessageLookupByLibrary.simpleMessage("Пароль"),
@@ -195,6 +205,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Введите вашу электронную почту, которую указывали при регистрации вашего аккаунта",
     ),
     "restorePass": MessageLookupByLibrary.simpleMessage("Восстановить пароль"),
+    "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
     "send": MessageLookupByLibrary.simpleMessage("Отправить"),
     "showMore": MessageLookupByLibrary.simpleMessage("Показать ещё"),
     "stepN": m0,

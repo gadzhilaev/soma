@@ -310,4 +310,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get registerSuccessBody => 'You have successfully registered';
+
+  @override
+  String get change => 'Change';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get enterNewName => 'Enter your new name';
+
+  @override
+  String get enterNewEmail => 'Enter your new email';
+
+  @override
+  String get oldPassword => 'Old password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get deleteAccount => 'Delete account';
 }

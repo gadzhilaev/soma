@@ -6,6 +6,7 @@ import '../../settings/repo.dart';
 import '../../widgets/bottom_nav.dart';
 import '../../onboarding/premium_screen.dart';
 import '../../auth/login.dart';
+import 'edit_profile_screen.dart';
 import 'dart:math' as math;
 
 class ProfileScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _loading = true;
   String _userName = '';
   String? _avatarUrl;
+  String? _userEmail;
   bool _isVip = false;
   bool _isAdmin = false;
   final int _notificationsCount = 0;
@@ -45,6 +47,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final user = supa.auth.currentUser;
       if (user != null) {
+        // Получаем email из auth
+        _userEmail = user.email;
+        
         // Получаем данные пользователя из таблицы users
         final userRes = await supa
             .from('users')
@@ -448,7 +453,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _ProfileButton(
                                 icon: Icons.account_circle_outlined,
                                 text: s.profileEdit,
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => EditProfileScreen(
+                                        currentName: _userName,
+                                        currentEmail: _userEmail,
+                                        currentAvatarUrl: _avatarUrl,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                               const SizedBox(height: 8),
                               // Кнопка Смена языка

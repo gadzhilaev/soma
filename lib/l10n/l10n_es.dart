@@ -311,4 +311,25 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get registerSuccessBody => 'Te has registrado exitosamente';
+
+  @override
+  String get change => 'Cambiar';
+
+  @override
+  String get save => 'Guardar';
+
+  @override
+  String get enterNewName => 'Introduce tu nuevo nombre';
+
+  @override
+  String get enterNewEmail => 'Introduce tu nuevo correo electrónico';
+
+  @override
+  String get oldPassword => 'Contraseña antigua';
+
+  @override
+  String get newPassword => 'Nueva contraseña';
+
+  @override
+  String get deleteAccount => 'Eliminar cuenta';
 }

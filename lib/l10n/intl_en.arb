@@ -98,5 +98,12 @@
   "loginSuccessTitle": "Login successful",
   "loginSuccessBody": "You have successfully logged into your account",
   "registerSuccessTitle": "Registration successful",
-  "registerSuccessBody": "You have successfully registered"
+  "registerSuccessBody": "You have successfully registered",
+  "change": "Change",
+  "save": "Save",
+  "enterNewName": "Enter your new name",
+  "enterNewEmail": "Enter your new email",
+  "oldPassword": "Old password",
+  "newPassword": "New password",
+  "deleteAccount": "Delete account"
 }

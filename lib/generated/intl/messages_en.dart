@@ -37,6 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Become premium member",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "change": MessageLookupByLibrary.simpleMessage("Change"),
     "commentSent": MessageLookupByLibrary.simpleMessage("Comment sent"),
     "commentsEmpty": MessageLookupByLibrary.simpleMessage("No comments yet"),
     "complaintThanks": MessageLookupByLibrary.simpleMessage(
@@ -44,9 +45,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "continueFree": MessageLookupByLibrary.simpleMessage("Continue for free"),
     "dayShort": MessageLookupByLibrary.simpleMessage("d"),
+    "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete account"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Enter your email"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
     "enterMessage": MessageLookupByLibrary.simpleMessage("Enter a message"),
+    "enterNewEmail": MessageLookupByLibrary.simpleMessage(
+      "Enter your new email",
+    ),
+    "enterNewName": MessageLookupByLibrary.simpleMessage("Enter your new name"),
     "errAgreeRequired": MessageLookupByLibrary.simpleMessage(
       "Please accept the data processing agreement",
     ),
@@ -126,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "musicForSleep": MessageLookupByLibrary.simpleMessage("For sleep"),
     "nameHint": MessageLookupByLibrary.simpleMessage("Enter your name"),
     "nameLabel": MessageLookupByLibrary.simpleMessage("Name"),
+    "newPassword": MessageLookupByLibrary.simpleMessage("New password"),
     "newPriceYear": MessageLookupByLibrary.simpleMessage("1,999 ₽"),
     "next": MessageLookupByLibrary.simpleMessage("Next"),
     "noActiveQuestions": MessageLookupByLibrary.simpleMessage(
@@ -137,6 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "notifTitle": MessageLookupByLibrary.simpleMessage("Notifications"),
     "ok": MessageLookupByLibrary.simpleMessage("OK"),
+    "oldPassword": MessageLookupByLibrary.simpleMessage("Old password"),
     "oldPriceYear": MessageLookupByLibrary.simpleMessage("3,400 ₽"),
     "passwordHint": MessageLookupByLibrary.simpleMessage("Enter your password"),
     "passwordLabel": MessageLookupByLibrary.simpleMessage("Password"),
@@ -179,6 +187,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enter your email address that was specified when registering your account",
     ),
     "restorePass": MessageLookupByLibrary.simpleMessage("Restore password"),
+    "save": MessageLookupByLibrary.simpleMessage("Save"),
     "send": MessageLookupByLibrary.simpleMessage("Send"),
     "showMore": MessageLookupByLibrary.simpleMessage("Show more"),
     "stepN": m0,
