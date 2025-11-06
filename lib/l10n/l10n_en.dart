@@ -346,4 +346,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get delete => 'Delete';
+
+  @override
+  String get notificationsEmpty => 'You have no new notifications';
+
+  @override
+  String get notificationsAction => 'Open';
+
+  @override
+  String get notificationsSampleTitle => 'New program!';
+
+  @override
+  String get notificationsSampleDescription =>
+      '🌿 Dive into the Mindfulness Path!\nMake time for yourself—start a meditation practice to gain clarity, maximum focus, and deep awareness.';
+
+  @override
+  String get notificationsSampleAction => 'Go to program';
 }

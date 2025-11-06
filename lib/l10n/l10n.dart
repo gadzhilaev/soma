@@ -753,6 +753,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no new notifications'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get notificationsAction;
+
+  /// No description provided for @notificationsSampleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New program!'**
+  String get notificationsSampleTitle;
+
+  /// No description provided for @notificationsSampleDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'🌿 Dive into the Mindfulness Path!\nMake time for yourself—start a meditation practice to gain clarity, maximum focus, and deep awareness.'**
+  String get notificationsSampleDescription;
+
+  /// No description provided for @notificationsSampleAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to program'**
+  String get notificationsSampleAction;
 }
 
 class _AppLocalizationsDelegate

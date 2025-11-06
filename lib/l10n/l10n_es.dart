@@ -347,4 +347,20 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get delete => 'Eliminar';
+
+  @override
+  String get notificationsEmpty => 'No tienes nuevas notificaciones';
+
+  @override
+  String get notificationsAction => 'Abrir';
+
+  @override
+  String get notificationsSampleTitle => '¡Nuevo programa!';
+
+  @override
+  String get notificationsSampleDescription =>
+      '🌿 Sumérgete en el Camino de la Atención Plena.\nEncuentra tiempo para ti: comienza a meditar para ganar claridad, concentración máxima y una conciencia profunda.';
+
+  @override
+  String get notificationsSampleAction => 'Ir al programa';
 }

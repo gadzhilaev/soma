@@ -347,4 +347,20 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get delete => 'Удалить';
+
+  @override
+  String get notificationsEmpty => 'У вас нет новых уведомлений';
+
+  @override
+  String get notificationsAction => 'Открыть';
+
+  @override
+  String get notificationsSampleTitle => 'Новая программа!';
+
+  @override
+  String get notificationsSampleDescription =>
+      '🌿 Погрузись в Путь Осознанности!\nНайди время для себя — начни практику медитации, чтобы обрести ясность, максимальную концентрацию и глубину осознания';
+
+  @override
+  String get notificationsSampleAction => 'Перейти к программе';
 }

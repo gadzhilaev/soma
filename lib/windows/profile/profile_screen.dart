@@ -1,13 +1,16 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import '../../core/supabase.dart';
+
+import '../../auth/login.dart';
 import '../../core/app_colors.dart';
+import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
+import '../../onboarding/premium_screen.dart';
 import '../../settings/repo.dart';
 import '../../widgets/bottom_nav.dart';
-import '../../onboarding/premium_screen.dart';
-import '../../auth/login.dart';
+import '../notifications/notifications_center_screen.dart';
 import 'edit_profile_screen.dart';
-import 'dart:math' as math;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -25,7 +28,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? _userEmail;
   bool _isVip = false;
   bool _isAdmin = false;
-  final int _notificationsCount = 0;
+  int _notificationsCount = 1;
+  bool _notificationsCleared = false;
 
   @override
   void initState() {
@@ -49,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (user != null) {
         // Получаем email из auth
         _userEmail = user.email;
-        
+
         // Получаем данные пользователя из таблицы users
         final userRes = await supa
             .from('users')
@@ -73,7 +77,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         } else {
           // Если пользователя нет в таблице, берем имя из auth
           setState(() {
-            _userName = (user.userMetadata?['name'] ?? user.email ?? 'User') as String;
+            _userName =
+                (user.userMetadata?['name'] ?? user.email ?? 'User') as String;
           });
         }
       }
@@ -252,7 +257,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Stack(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
                                     child: Column(
                                       children: [
                                         // Картинка профиля и элементы вокруг
@@ -267,20 +274,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 height: 120,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  image: _avatarUrl != null && _avatarUrl!.isNotEmpty
+                                                  image:
+                                                      _avatarUrl != null &&
+                                                          _avatarUrl!.isNotEmpty
                                                       ? DecorationImage(
-                                                          image: NetworkImage(_avatarUrl!),
+                                                          image: NetworkImage(
+                                                            _avatarUrl!,
+                                                          ),
                                                           fit: BoxFit.cover,
                                                         )
                                                       : null,
-                                                  color: _avatarUrl == null || _avatarUrl!.isEmpty
+                                                  color:
+                                                      _avatarUrl == null ||
+                                                          _avatarUrl!.isEmpty
                                                       ? AppColors.grey300
                                                       : null,
                                                 ),
-                                                child: _avatarUrl == null || _avatarUrl!.isEmpty
-                                                    ? const Icon(Icons.person, size: 60, color: AppColors.textSecondary)
+                                                child:
+                                                    _avatarUrl == null ||
+                                                        _avatarUrl!.isEmpty
+                                                    ? const Icon(
+                                                        Icons.person,
+                                                        size: 60,
+                                                        color: AppColors
+                                                            .textSecondary,
+                                                      )
                                                     : null,
                                               ),
+
                                               // VIP бейдж: правый нижний угол должен быть на границе аватарки
                                               // Аватарка: width 120px, height 120px, центр в Stack
                                               // VIP контейнер: width 39.55px, height 23.59px
@@ -292,7 +313,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               // Правый край VIP должен быть на границе аватарки: 240.34px
                                               // Значит left должен быть: 240.34 - 39.55 = 200.79px
                                               // Но в макете left: 196.34px, значит правый край на 235.89px, что не на границе
-                                              
+
                                               // Пересчитываем: если правый нижний угол должен быть на границе
                                               // Аватарка: радиус 60px от центра, значит правый край на +60px по X
                                               // VIP контейнер: его правый край должен быть на +60px от центра
@@ -303,7 +324,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               // Правый край VIP: 196.34 + 39.55 = 235.89px
                                               // Чтобы правый край был на границе: left должен быть 240.34 - 39.55 = 200.79px
                                               // От левого края аватарки: 200.79 - 120.34 = 80.45px
-                                              
+
                                               // В Stack аватарка центрирована, её правый край на +60px от центра
                                               // VIP правый край должен быть на +60px от центра
                                               // left VIP: 60 - 39.55 = 20.45px от центра
@@ -311,7 +332,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               // Чтобы нижний угол VIP был на границе: bottom должен быть на +60px
                                               // height VIP: 23.59px, значит top должен быть: 60 - 23.59 = 36.41px от центра (вниз)
                                               // Но в макете top: 75px от верха, а не от центра
-                                              
+
                                               // Упростим: используем макет как есть, но скорректируем для правого нижнего угла
                                               // В макете: top: 75px, left: 196.34px
                                               // Аватарка: left: 120.34px, width: 120px (правый край на 240.34px)
@@ -319,7 +340,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               // От левого края аватарки в Stack: 200.79 - 120.34 = 80.45px
                                               // В Stack аватарка центрирована, её левый край на -60px
                                               // От центра Stack: -60 + 80.45 = 20.45px
-                                              
+
                                               // Для bottom: аватарка height: 120px, нижний край на +60px от центра
                                               // VIP height: 23.59px, нижний край должен быть на +60px
                                               // top VIP: 60 - 23.59 = 36.41px от центра (вниз)
@@ -328,7 +349,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               // От верха аватарки: 75px, значит от центра Stack: -60 + 75 = 15px
                                               // Но нижний край VIP должен быть на +60px от центра
                                               // Значит top должен быть: 60 - 23.59 = 36.41px (но это не 75px от верха)
-                                              
+
                                               // Используем макет: top: 75px от верха аватарки
                                               // В Stack аватарка центрирована, её верх на -60px от центра
                                               // top VIP: -60 + 75 = 15px от центра Stack
@@ -337,31 +358,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               // left = right - width = 60 - 39.55 = 20.45px
                                               // bottom должен быть 60px (нижний край аватарки)
                                               // top = bottom - height = 60 - 23.59 = 36.41px
-                                              
                                               if (_isVip)
                                                 Positioned(
-                                                  bottom: 12, // Отступ 12px от низа картинки
-                                                  right: 1,   // Правый край прижат к правой границе картинки
+                                                  bottom:
+                                                      12, // Отступ 12px от низа картинки
+                                                  right:
+                                                      1, // Правый край прижат к правой границе картинки
                                                   child: Transform.rotate(
-                                                    angle: -15 * math.pi / 180, // angle: -15 deg
+                                                    angle:
+                                                        -15 *
+                                                        math.pi /
+                                                        180, // angle: -15 deg
                                                     child: Container(
-                                                      width: 39.552318039635665, // width согласно макету
-                                                      height: 23.59456984173971, // height согласно макету
+                                                      width:
+                                                          39.552318039635665, // width согласно макету
+                                                      height:
+                                                          23.59456984173971, // height согласно макету
                                                       decoration: BoxDecoration(
                                                         color: AppColors.accent,
-                                                        borderRadius: BorderRadius.circular(8),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              8,
+                                                            ),
                                                       ),
                                                       child: Center(
                                                         child: Text(
                                                           'VIP',
-                                                          style: const TextStyle(
-                                                            fontFamily: 'Inter',
-                                                            fontWeight: FontWeight.w700,
-                                                            fontSize: 12,
-                                                            height: 1.0,
-                                                            letterSpacing: 0.05,
-                                                            color: AppColors.primary,
-                                                          ),
+                                                          style:
+                                                              const TextStyle(
+                                                                fontFamily:
+                                                                    'Inter',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 12,
+                                                                height: 1.0,
+                                                                letterSpacing:
+                                                                    0.05,
+                                                                color: AppColors
+                                                                    .primary,
+                                                              ),
                                                         ),
                                                       ),
                                                     ),
@@ -370,132 +406,185 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ],
                                           ),
                                         ),
-                              const SizedBox(height: 16),
-                              // Имя пользователя
-                              Text(
-                                _userName.toUpperCase(),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                  height: 23 / 14,
-                                  letterSpacing: 0,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              // Кнопка подписки (если не VIP)
-                              if (!_isVip) ...[
-                                SizedBox(
-                                  width: 361,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (_) => const PremiumScreen(),
-                                        ),
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.accent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10000),
-                                      ),
-                                      padding: const EdgeInsets.only(left: 18),
-                                      minimumSize: const Size(double.infinity, 56),
-                                      alignment: Alignment.centerLeft, // Выравнивание по левому краю
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.start, // Выравнивание по левому краю
-                                      children: [
-                                        const Icon(
-                                          Icons.star,
-                                          color: AppColors.primary,
-                                          size: 24,
-                                        ),
-                                        const SizedBox(width: 14),
+                                        const SizedBox(height: 16),
+                                        // Имя пользователя
                                         Text(
-                                          s.profileSubscribe,
+                                          _userName.toUpperCase(),
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w400,
+                                            fontWeight: FontWeight.w700,
                                             fontSize: 14,
-                                            height: 1.0,
+                                            height: 23 / 14,
                                             letterSpacing: 0,
-                                            color: Colors.black,
+                                            color: AppColors.textPrimary,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                              ],
-                              // Кнопка Уведомления
-                              _ProfileButton(
-                                icon: Icons.notifications_outlined,
-                                text: s.profileNotifications,
-                                onTap: () {},
-                                showBadge: true,
-                                badgeCount: _notificationsCount,
-                              ),
-                              const SizedBox(height: 8),
-                              // Кнопка Избранное
-                              _ProfileButton(
-                                icon: Icons.favorite_border,
-                                text: s.profileFavorites,
-                                onTap: () {},
-                              ),
-                              const SizedBox(height: 8),
-                              // Кнопка Редактировать профиль
-                              _ProfileButton(
-                                icon: Icons.account_circle_outlined,
-                                text: s.profileEdit,
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => EditProfileScreen(
-                                        currentName: _userName,
-                                        currentEmail: _userEmail,
-                                        currentAvatarUrl: _avatarUrl,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 8),
-                              // Кнопка Смена языка
-                              _ProfileButton(
-                                icon: Icons.translate,
-                                text: s.profileLanguage,
-                                onTap: () {},
-                              ),
-                              const SizedBox(height: 8),
-                              // Кнопка Пользовательское соглашение
-                              _ProfileButton(
-                                icon: Icons.description_outlined,
-                                text: s.profileTerms,
-                                onTap: () {},
-                              ),
-                              const SizedBox(height: 8),
-                              // Кнопка Написать в поддержку
-                              _ProfileButton(
-                                icon: Icons.contact_support_outlined,
-                                text: s.profileSupport,
-                                onTap: () {},
-                              ),
-                              // Кнопка Админ панель (если админ, в конце списка)
-                              if (_isAdmin) ...[
-                                const SizedBox(height: 8),
-                                _ProfileButton(
-                                  icon: Icons.admin_panel_settings_outlined,
-                                  text: s.profileAdmin,
-                                  onTap: () {},
-                                ),
-                              ],
-                              const SizedBox(height: 20),
+                                        const SizedBox(height: 16),
+                                        // Кнопка подписки (если не VIP)
+                                        if (!_isVip) ...[
+                                          SizedBox(
+                                            width: 361,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        const PremiumScreen(),
+                                                  ),
+                                                );
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    AppColors.accent,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                        10000,
+                                                      ),
+                                                ),
+                                                padding: const EdgeInsets.only(
+                                                  left: 18,
+                                                ),
+                                                minimumSize: const Size(
+                                                  double.infinity,
+                                                  56,
+                                                ),
+                                                alignment: Alignment
+                                                    .centerLeft, // Выравнивание по левому краю
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment: MainAxisAlignment
+                                                    .start, // Выравнивание по левому краю
+                                                children: [
+                                                  const Icon(
+                                                    Icons.star,
+                                                    color: AppColors.primary,
+                                                    size: 24,
+                                                  ),
+                                                  const SizedBox(width: 14),
+                                                  Text(
+                                                    s.profileSubscribe,
+                                                    style: const TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 14,
+                                                      height: 1.0,
+                                                      letterSpacing: 0,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                        ],
+                                        // Кнопка Уведомления
+                                        Builder(
+                                          builder: (context) {
+                                            final notificationItems =
+                                                _buildNotifications(context);
+                                            final badgeCount =
+                                                _notificationsCleared
+                                                ? 0
+                                                : (_notificationsCount > 0
+                                                      ? _notificationsCount
+                                                      : notificationItems
+                                                            .length);
+                                            return _ProfileButton(
+                                              icon:
+                                                  Icons.notifications_outlined,
+                                              text: s.profileNotifications,
+                                              onTap: () {
+                                                Navigator.of(context)
+                                                    .push<bool>(
+                                                      MaterialPageRoute(
+                                                        builder: (_) => NotificationsCenterScreen(
+                                                          initialNotifications:
+                                                              notificationItems,
+                                                          showSampleFallback:
+                                                              !_notificationsCleared,
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .then((cleared) {
+                                                      if (!mounted) return;
+                                                      if (cleared == true) {
+                                                        setState(() {
+                                                          _notificationsCleared =
+                                                              true;
+                                                          _notificationsCount =
+                                                              0;
+                                                        });
+                                                      }
+                                                    });
+                                              },
+                                              showBadge: true,
+                                              badgeCount: badgeCount,
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(height: 8),
+                                        // Кнопка Избранное
+                                        _ProfileButton(
+                                          icon: Icons.favorite_border,
+                                          text: s.profileFavorites,
+                                          onTap: () {},
+                                        ),
+                                        const SizedBox(height: 8),
+                                        // Кнопка Редактировать профиль
+                                        _ProfileButton(
+                                          icon: Icons.account_circle_outlined,
+                                          text: s.profileEdit,
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    EditProfileScreen(
+                                                      currentName: _userName,
+                                                      currentEmail: _userEmail,
+                                                      currentAvatarUrl:
+                                                          _avatarUrl,
+                                                    ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(height: 8),
+                                        // Кнопка Смена языка
+                                        _ProfileButton(
+                                          icon: Icons.translate,
+                                          text: s.profileLanguage,
+                                          onTap: () {},
+                                        ),
+                                        const SizedBox(height: 8),
+                                        // Кнопка Пользовательское соглашение
+                                        _ProfileButton(
+                                          icon: Icons.description_outlined,
+                                          text: s.profileTerms,
+                                          onTap: () {},
+                                        ),
+                                        const SizedBox(height: 8),
+                                        // Кнопка Написать в поддержку
+                                        _ProfileButton(
+                                          icon: Icons.contact_support_outlined,
+                                          text: s.profileSupport,
+                                          onTap: () {},
+                                        ),
+                                        // Кнопка Админ панель (если админ, в конце списка)
+                                        if (_isAdmin) ...[
+                                          const SizedBox(height: 8),
+                                          _ProfileButton(
+                                            icon: Icons
+                                                .admin_panel_settings_outlined,
+                                            text: s.profileAdmin,
+                                            onTap: () {},
+                                          ),
+                                        ],
+                                        const SizedBox(height: 20),
                                       ],
                                     ),
                                   ),
@@ -506,7 +595,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
                                       iconSize: 24,
-                                      icon: const Icon(Icons.logout_outlined, color: AppColors.primary, size: 24),
+                                      icon: const Icon(
+                                        Icons.logout_outlined,
+                                        color: AppColors.primary,
+                                        size: 24,
+                                      ),
                                       onPressed: _logout,
                                     ),
                                   ),
@@ -532,6 +625,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
+  }
+
+  List<NotificationItem> _buildNotifications(BuildContext context) {
+    if (_notificationsCleared) return [];
+    final s = S.of(context);
+    return [
+      NotificationItem(
+        id: 'sample-profile',
+        title: s.notificationsSampleTitle,
+        description: s.notificationsSampleDescription,
+        actionLabel: s.notificationsSampleAction,
+      ),
+    ];
   }
 }
 
@@ -561,20 +667,13 @@ class _ProfileButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10000),
           ),
-          padding: EdgeInsets.only(
-            left: 18,
-            right: showBadge ? 8 : 18,
-          ),
+          padding: EdgeInsets.only(left: 18, right: showBadge ? 8 : 18),
           minimumSize: const Size(double.infinity, 56),
           elevation: 0,
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 24,
-              color: AppColors.primary,
-            ),
+            Icon(icon, size: 24, color: AppColors.primary),
             const SizedBox(width: 14),
             Expanded(
               child: Text(
@@ -617,4 +716,3 @@ class _ProfileButton extends StatelessWidget {
     );
   }
 }
-

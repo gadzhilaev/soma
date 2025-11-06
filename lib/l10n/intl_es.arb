@@ -109,5 +109,10 @@
   "confirmChangeNameBody": "¿Estás seguro de que quieres cambiar tu nombre en la aplicación?",
   "confirmChangeEmailBody": "¿Estás seguro de que quieres cambiar tu correo electrónico?",
   "confirmDeleteAccountBody": "¿Estás seguro de que quieres eliminar tu cuenta? Todos los datos de tu cuenta se perderán",
-  "delete": "Eliminar"
+  "delete": "Eliminar",
+  "notificationsEmpty": "No tienes nuevas notificaciones",
+  "notificationsAction": "Abrir",
+  "notificationsSampleTitle": "¡Nuevo programa!",
+  "notificationsSampleDescription": "🌿 Sumérgete en el Camino de la Atención Plena.\nEncuentra tiempo para ti: comienza a meditar para ganar claridad, concentración máxima y una conciencia profunda.",
+  "notificationsSampleAction": "Ir al programa"
 }

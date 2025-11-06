@@ -47,8 +47,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "confirmChangeNameBody": MessageLookupByLibrary.simpleMessage(
       "¿Estás seguro de que quieres cambiar tu nombre en la aplicación?",
     ),
+    "confirmDeleteAccountBody": MessageLookupByLibrary.simpleMessage(
+      "¿Estás seguro de que quieres eliminar tu cuenta? Todos los datos de tu cuenta se perderán",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage("Continuar gratis"),
     "dayShort": MessageLookupByLibrary.simpleMessage("d"),
+    "delete": MessageLookupByLibrary.simpleMessage("Eliminar"),
     "deleteAccount": MessageLookupByLibrary.simpleMessage("Eliminar cuenta"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Introduce tu correo"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Correo electrónico"),
@@ -157,6 +161,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "¿Quieres permitir que la app envíe notificaciones push?",
     ),
     "notifTitle": MessageLookupByLibrary.simpleMessage("Notificaciones"),
+    "notificationsAction": MessageLookupByLibrary.simpleMessage("Abrir"),
+    "notificationsEmpty": MessageLookupByLibrary.simpleMessage(
+      "No tienes nuevas notificaciones",
+    ),
+    "notificationsSampleAction": MessageLookupByLibrary.simpleMessage(
+      "Ir al programa",
+    ),
+    "notificationsSampleDescription": MessageLookupByLibrary.simpleMessage(
+      "🌿 Sumérgete en el Camino de la Atención Plena.\nEncuentra tiempo para ti: comienza a meditar para ganar claridad, concentración máxima y una conciencia profunda.",
+    ),
+    "notificationsSampleTitle": MessageLookupByLibrary.simpleMessage(
+      "¡Nuevo programa!",
+    ),
     "ok": MessageLookupByLibrary.simpleMessage("Bien"),
     "oldPassword": MessageLookupByLibrary.simpleMessage("Contraseña antigua"),
     "oldPriceYear": MessageLookupByLibrary.simpleMessage("3 400 ₽"),

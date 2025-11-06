@@ -53,10 +53,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "confirmChangeNameBody": MessageLookupByLibrary.simpleMessage(
       "Вы уверены, что хотите изменить ваше имя в приложении?",
     ),
+    "confirmDeleteAccountBody": MessageLookupByLibrary.simpleMessage(
+      "Вы уверены, что хотите удалить свой аккаунт? Все данные вашего аккаунта будут утеряны",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage(
       "Продолжить бесплатно",
     ),
     "dayShort": MessageLookupByLibrary.simpleMessage("дн"),
+    "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
     "deleteAccount": MessageLookupByLibrary.simpleMessage("Удаление аккаунта"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Введите почту"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Электронная почта"),
@@ -159,6 +163,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "Хотите ли вы разрешить приложению присылать всплывающие уведомления?",
     ),
     "notifTitle": MessageLookupByLibrary.simpleMessage("Уведомления"),
+    "notificationsAction": MessageLookupByLibrary.simpleMessage("Открыть"),
+    "notificationsEmpty": MessageLookupByLibrary.simpleMessage(
+      "У вас нет новых уведомлений",
+    ),
+    "notificationsSampleAction": MessageLookupByLibrary.simpleMessage(
+      "Перейти к программе",
+    ),
+    "notificationsSampleDescription": MessageLookupByLibrary.simpleMessage(
+      "🌿 Погрузись в Путь Осознанности!\nНайди время для себя — начни практику медитации, чтобы обрести ясность, максимальную концентрацию и глубину осознания",
+    ),
+    "notificationsSampleTitle": MessageLookupByLibrary.simpleMessage(
+      "Новая программа!",
+    ),
     "ok": MessageLookupByLibrary.simpleMessage("Хорошо"),
     "oldPassword": MessageLookupByLibrary.simpleMessage("Старый пароль"),
     "oldPriceYear": MessageLookupByLibrary.simpleMessage("3 400 ₽"),

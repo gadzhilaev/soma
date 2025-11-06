@@ -946,9 +946,54 @@ class S {
 
   /// `Delete`
   String get delete {
+    return Intl.message('Delete', name: 'delete', desc: '', args: []);
+  }
+
+  /// `You have no new notifications`
+  String get notificationsEmpty {
     return Intl.message(
-      'Delete',
-      name: 'delete',
+      'You have no new notifications',
+      name: 'notificationsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open`
+  String get notificationsAction {
+    return Intl.message(
+      'Open',
+      name: 'notificationsAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New program!`
+  String get notificationsSampleTitle {
+    return Intl.message(
+      'New program!',
+      name: 'notificationsSampleTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `🌿 Dive into the Mindfulness Path!\nMake time for yourself—start a meditation practice to gain clarity, maximum focus, and deep awareness.`
+  String get notificationsSampleDescription {
+    return Intl.message(
+      '🌿 Dive into the Mindfulness Path!\nMake time for yourself—start a meditation practice to gain clarity, maximum focus, and deep awareness.',
+      name: 'notificationsSampleDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to program`
+  String get notificationsSampleAction {
+    return Intl.message(
+      'Go to program',
+      name: 'notificationsSampleAction',
       desc: '',
       args: [],
     );

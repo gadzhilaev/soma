@@ -49,8 +49,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "confirmChangeNameBody": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to change your name in the app?",
     ),
+    "confirmDeleteAccountBody": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to delete your account? All your account data will be lost",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage("Continue for free"),
     "dayShort": MessageLookupByLibrary.simpleMessage("d"),
+    "delete": MessageLookupByLibrary.simpleMessage("Delete"),
     "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete account"),
     "emailHint": MessageLookupByLibrary.simpleMessage("Enter your email"),
     "emailLabel": MessageLookupByLibrary.simpleMessage("Email"),
@@ -149,6 +153,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "Would you like to allow the app to send push notifications?",
     ),
     "notifTitle": MessageLookupByLibrary.simpleMessage("Notifications"),
+    "notificationsAction": MessageLookupByLibrary.simpleMessage("Open"),
+    "notificationsEmpty": MessageLookupByLibrary.simpleMessage(
+      "You have no new notifications",
+    ),
+    "notificationsSampleAction": MessageLookupByLibrary.simpleMessage(
+      "Go to program",
+    ),
+    "notificationsSampleDescription": MessageLookupByLibrary.simpleMessage(
+      "🌿 Dive into the Mindfulness Path!\nMake time for yourself—start a meditation practice to gain clarity, maximum focus, and deep awareness.",
+    ),
+    "notificationsSampleTitle": MessageLookupByLibrary.simpleMessage(
+      "New program!",
+    ),
     "ok": MessageLookupByLibrary.simpleMessage("OK"),
     "oldPassword": MessageLookupByLibrary.simpleMessage("Old password"),
     "oldPriceYear": MessageLookupByLibrary.simpleMessage("3,400 ₽"),
