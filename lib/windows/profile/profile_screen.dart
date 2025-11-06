@@ -11,6 +11,7 @@ import '../../settings/repo.dart';
 import '../../widgets/bottom_nav.dart';
 import '../notifications/notifications_center_screen.dart';
 import 'edit_profile_screen.dart';
+import 'privacy_policy_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -565,7 +566,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         _ProfileButton(
                                           icon: Icons.description_outlined,
                                           text: s.profileTerms,
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const PrivacyPolicyScreen(),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         const SizedBox(height: 8),
                                         // Кнопка Написать в поддержку
