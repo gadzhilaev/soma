@@ -6,11 +6,13 @@ import '../../auth/login.dart';
 import '../../core/app_colors.dart';
 import '../../core/supabase.dart';
 import '../../generated/l10n.dart';
+import '../../main.dart';
 import '../../onboarding/premium_screen.dart';
 import '../../settings/repo.dart';
 import '../../widgets/bottom_nav.dart';
 import '../notifications/notifications_center_screen.dart';
 import 'edit_profile_screen.dart';
+import 'language_picker_screen.dart';
 import 'privacy_policy_screen.dart';
 import 'support_form_screen.dart';
 
@@ -224,6 +226,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       (route) => false,
     );
+  }
+
+  void _setLocale(Locale locale) {
+    setState(() {
+      _lang = locale.languageCode;
+    });
   }
 
   @override
@@ -560,7 +568,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         _ProfileButton(
                                           icon: Icons.translate,
                                           text: s.profileLanguage,
-                                          onTap: () {},
+                                          onTap: () async {
+                                            await Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    LanguagePickerScreen(
+                                                      onConfirmLocale:
+                                                          (locale) {
+                                                            MainApp.maybeOf(
+                                                              context,
+                                                            )?.changeLocale(
+                                                              locale,
+                                                            );
+                                                            _setLocale(locale);
+                                                          },
+                                                    ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         const SizedBox(height: 8),
                                         // Кнопка Пользовательское соглашение

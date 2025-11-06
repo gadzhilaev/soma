@@ -11,7 +11,8 @@ Future<void> main() async {
 
   await Supabase.initialize(
     url: 'https://yyxgdlbamxfedwyfbbxe.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGdkbGJhbXhmZWR3eWZiYnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4MzU5OTUsImV4cCI6MjA3NjQxMTk5NX0.TYEEAXrafUBd4SIb6D8IN5yN2hJxV1YzgrbsCSzEoaA',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl5eGdkbGJhbXhmZWR3eWZiYnhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4MzU5OTUsImV4cCI6MjA3NjQxMTk5NX0.TYEEAXrafUBd4SIb6D8IN5yN2hJxV1YzgrbsCSzEoaA',
   );
 
   // Инициализируем сервис уведомлений
@@ -22,6 +23,15 @@ Future<void> main() async {
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  static _MainAppState? maybeOf(BuildContext context) =>
+      context.findAncestorStateOfType<_MainAppState>();
+
+  static _MainAppState of(BuildContext context) {
+    final state = maybeOf(context);
+    assert(state != null, 'MainApp state not found in context');
+    return state!;
+  }
 
   @override
   State<MainApp> createState() => _MainAppState();
@@ -54,15 +64,13 @@ class _MainAppState extends State<MainApp> {
     }
   }
 
-  void _setLocale(Locale locale) => setState(() => _locale = locale);
+  void changeLocale(Locale locale) => setState(() => _locale = locale);
 
   @override
   Widget build(BuildContext context) {
     if (!_ready) {
       return const MaterialApp(
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
       );
     }
 
@@ -76,13 +84,10 @@ class _MainAppState extends State<MainApp> {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'Inter',
-      ),
+      theme: ThemeData(useMaterial3: true, fontFamily: 'Inter'),
       home: _loggedIn
           ? const HomeScreen() // если сессия есть → сразу на главный
-          : LanguageScreen(onConfirmLocale: _setLocale),
+          : LanguageScreen(onConfirmLocale: changeLocale),
     );
   }
 }
@@ -109,7 +114,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
     super.initState();
 
     final systemCode =
-      WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
     final idx = _items.indexWhere((it) => it.locale.languageCode == systemCode);
     selected = idx != -1 ? idx : 0;
 
@@ -137,7 +142,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 child: SizedBox(
                   width: 112,
                   height: 118,
-                  child: Image.asset('assets/logo/logo.png', fit: BoxFit.contain),
+                  child: Image.asset(
+                    'assets/logo/logo.png',
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               const SizedBox(height: 87),
@@ -181,7 +189,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD580),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
                     elevation: 0,
                   ),
                   child: Text(
@@ -222,13 +232,21 @@ class _LanguageTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 56,
-        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Row(
           children: [
             const SizedBox(width: 16),
             ClipRRect(
               borderRadius: BorderRadius.circular(500),
-              child: Image.asset(item.flagPath, width: 24, height: 24, fit: BoxFit.cover),
+              child: Image.asset(
+                item.flagPath,
+                width: 24,
+                height: 24,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(width: 6),
             Text(
