@@ -913,6 +913,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Are you sure you want to change your name in the app?`
+  String get confirmChangeNameBody {
+    return Intl.message(
+      'Are you sure you want to change your name in the app?',
+      name: 'confirmChangeNameBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to change your email?`
+  String get confirmChangeEmailBody {
+    return Intl.message(
+      'Are you sure you want to change your email?',
+      name: 'confirmChangeEmailBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete your account? All your account data will be lost`
+  String get confirmDeleteAccountBody {
+    return Intl.message(
+      'Are you sure you want to delete your account? All your account data will be lost',
+      name: 'confirmDeleteAccountBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -47,6 +47,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "complaintThanks": MessageLookupByLibrary.simpleMessage(
       "Спасибо! Мы рассмотрим жалобу.",
     ),
+    "confirmChangeEmailBody": MessageLookupByLibrary.simpleMessage(
+      "Вы уверены, что хотите изменить вашу электронную почту?",
+    ),
+    "confirmChangeNameBody": MessageLookupByLibrary.simpleMessage(
+      "Вы уверены, что хотите изменить ваше имя в приложении?",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage(
       "Продолжить бесплатно",
     ),

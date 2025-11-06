@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../core/screen_utils.dart';
 import '../../generated/l10n.dart';
+import '../../widgets/confirm_change_dialog.dart';
 import 'edit_name_screen.dart';
 import 'edit_email_screen.dart';
 import 'edit_password_screen.dart';
@@ -358,26 +359,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildDeleteAccountButton() {
-    return Row(
-      children: [
-        Icon(
-          Icons.delete_outline,
-          size: ScreenUtils.adaptiveIconSize(context, 20),
-          color: const Color(0xFFFE8E8E),
-        ),
-        SizedBox(width: ScreenUtils.adaptiveWidth(context, 8)),
-        Text(
-          S.of(context).deleteAccount,
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w500,
-            fontSize: ScreenUtils.adaptiveFontSize(context, 13),
-            height: 1.0,
-            letterSpacing: 0,
-            color: const Color(0xFFC5C5C5),
+    final s = S.of(context);
+    return GestureDetector(
+      onTap: () {
+        ConfirmChangeDialog.show(
+          context,
+          bodyText: s.confirmDeleteAccountBody,
+          confirmButtonText: s.delete,
+          dialogHeight: 172,
+          onConfirm: () {
+            // TODO: Удалить аккаунт
+            Navigator.of(context).pop();
+          },
+        );
+      },
+      child: Row(
+        children: [
+          Icon(
+            Icons.delete_outline,
+            size: ScreenUtils.adaptiveIconSize(context, 20),
+            color: const Color(0xFFFE8E8E),
           ),
-        ),
-      ],
+          SizedBox(width: ScreenUtils.adaptiveWidth(context, 8)),
+          Text(
+            s.deleteAccount,
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+              fontSize: ScreenUtils.adaptiveFontSize(context, 13),
+              height: 1.0,
+              letterSpacing: 0,
+              color: const Color(0xFFC5C5C5),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

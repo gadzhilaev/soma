@@ -332,4 +332,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get deleteAccount => 'Удаление аккаунта';
+
+  @override
+  String get confirmChangeNameBody =>
+      'Вы уверены, что хотите изменить ваше имя в приложении?';
+
+  @override
+  String get confirmChangeEmailBody =>
+      'Вы уверены, что хотите изменить вашу электронную почту?';
+
+  @override
+  String get confirmDeleteAccountBody =>
+      'Вы уверены, что хотите удалить свой аккаунт? Все данные вашего аккаунта будут утеряны';
+
+  @override
+  String get delete => 'Удалить';
 }

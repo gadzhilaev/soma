@@ -729,6 +729,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete account'**
   String get deleteAccount;
+
+  /// No description provided for @confirmChangeNameBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to change your name in the app?'**
+  String get confirmChangeNameBody;
+
+  /// No description provided for @confirmChangeEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to change your email?'**
+  String get confirmChangeEmailBody;
+
+  /// No description provided for @confirmDeleteAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your account? All your account data will be lost'**
+  String get confirmDeleteAccountBody;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
 }
 
 class _AppLocalizationsDelegate

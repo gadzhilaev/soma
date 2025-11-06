@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/screen_utils.dart';
 import '../../generated/l10n.dart';
+import '../../widgets/confirm_change_dialog.dart';
 
 class EditEmailScreen extends StatefulWidget {
   final String currentEmail;
@@ -114,8 +115,14 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Сохранить email
-                    Navigator.of(context).pop(_emailController.text);
+                    ConfirmChangeDialog.show(
+                      context,
+                      bodyText: s.confirmChangeEmailBody,
+                      onConfirm: () {
+                        // TODO: Сохранить email
+                        Navigator.of(context).pop(_emailController.text);
+                      },
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD580),

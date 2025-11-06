@@ -331,4 +331,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccount => 'Delete account';
+
+  @override
+  String get confirmChangeNameBody =>
+      'Are you sure you want to change your name in the app?';
+
+  @override
+  String get confirmChangeEmailBody =>
+      'Are you sure you want to change your email?';
+
+  @override
+  String get confirmDeleteAccountBody =>
+      'Are you sure you want to delete your account? All your account data will be lost';
+
+  @override
+  String get delete => 'Delete';
 }

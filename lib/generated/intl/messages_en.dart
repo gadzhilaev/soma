@@ -43,6 +43,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "complaintThanks": MessageLookupByLibrary.simpleMessage(
       "Thanks! We\'ll review your report.",
     ),
+    "confirmChangeEmailBody": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to change your email?",
+    ),
+    "confirmChangeNameBody": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to change your name in the app?",
+    ),
     "continueFree": MessageLookupByLibrary.simpleMessage("Continue for free"),
     "dayShort": MessageLookupByLibrary.simpleMessage("d"),
     "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete account"),

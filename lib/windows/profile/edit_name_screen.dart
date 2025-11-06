@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/screen_utils.dart';
 import '../../generated/l10n.dart';
+import '../../widgets/confirm_change_dialog.dart';
 
 class EditNameScreen extends StatefulWidget {
   final String currentName;
@@ -114,8 +115,14 @@ class _EditNameScreenState extends State<EditNameScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Сохранить имя
-                    Navigator.of(context).pop(_nameController.text);
+                    ConfirmChangeDialog.show(
+                      context,
+                      bodyText: s.confirmChangeNameBody,
+                      onConfirm: () {
+                        // TODO: Сохранить имя
+                        Navigator.of(context).pop(_nameController.text);
+                      },
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFD580),
