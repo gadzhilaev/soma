@@ -1018,6 +1018,131 @@ class S {
       args: [],
     );
   }
+
+  /// `Support Contact Form`
+  String get supportFormTitle {
+    return Intl.message(
+      'Support Contact Form',
+      name: 'supportFormTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use the feedback form to leave any message for our support team with a suggestion or an issue.`
+  String get supportFormDescription {
+    return Intl.message(
+      'Use the feedback form to leave any message for our support team with a suggestion or an issue.',
+      name: 'supportFormDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The reply will be sent to this email`
+  String get supportFormEmailLabel {
+    return Intl.message(
+      'The reply will be sent to this email',
+      name: 'supportFormEmailLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email`
+  String get supportFormEmailHint {
+    return Intl.message(
+      'Enter your email',
+      name: 'supportFormEmailHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter message`
+  String get supportFormMessageLabel {
+    return Intl.message(
+      'Enter message',
+      name: 'supportFormMessageLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type your request`
+  String get supportFormMessageHint {
+    return Intl.message(
+      'Type your request',
+      name: 'supportFormMessageHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your other contacts (optional)`
+  String get supportFormContactsLabel {
+    return Intl.message(
+      'Your other contacts (optional)',
+      name: 'supportFormContactsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Telegram: @nullscode`
+  String get supportFormContactsHint {
+    return Intl.message(
+      'Telegram: @nullscode',
+      name: 'supportFormContactsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send`
+  String get supportFormSubmit {
+    return Intl.message('Send', name: 'supportFormSubmit', desc: '', args: []);
+  }
+
+  /// `Attention!`
+  String get supportFormErrorTitle {
+    return Intl.message(
+      'Attention!',
+      name: 'supportFormErrorTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The message cannot be empty or contain fewer than 12 characters.`
+  String get supportFormErrorBody {
+    return Intl.message(
+      'The message cannot be empty or contain fewer than 12 characters.',
+      name: 'supportFormErrorBody',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `OK`
+  String get supportFormErrorOk {
+    return Intl.message('OK', name: 'supportFormErrorOk', desc: '', args: []);
+  }
+
+  /// `Your request has been recorded. A reply will be sent to your email or other contact details.`
+  String get supportFormSuccessTitle {
+    return Intl.message(
+      'Your request has been recorded. A reply will be sent to your email or other contact details.',
+      name: 'supportFormSuccessTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `OK`
+  String get supportFormSuccessOk {
+    return Intl.message('OK', name: 'supportFormSuccessOk', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

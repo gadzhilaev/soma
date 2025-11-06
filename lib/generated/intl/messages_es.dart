@@ -234,6 +234,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "send": MessageLookupByLibrary.simpleMessage("Enviar"),
     "showMore": MessageLookupByLibrary.simpleMessage("Mostrar más"),
     "stepN": m0,
+    "supportFormContactsHint": MessageLookupByLibrary.simpleMessage(
+      "Telegram: @nullscode",
+    ),
+    "supportFormContactsLabel": MessageLookupByLibrary.simpleMessage(
+      "Otros datos de contacto (opcional)",
+    ),
+    "supportFormDescription": MessageLookupByLibrary.simpleMessage(
+      "En el formulario de contacto puede dejar cualquier mensaje para el soporte con su sugerencia o problema.",
+    ),
+    "supportFormEmailHint": MessageLookupByLibrary.simpleMessage(
+      "Ingrese su correo electrónico",
+    ),
+    "supportFormEmailLabel": MessageLookupByLibrary.simpleMessage(
+      "La respuesta se enviará a este correo",
+    ),
+    "supportFormErrorBody": MessageLookupByLibrary.simpleMessage(
+      "El mensaje no puede estar vacío ni contener menos de 12 caracteres.",
+    ),
+    "supportFormErrorOk": MessageLookupByLibrary.simpleMessage("OK"),
+    "supportFormErrorTitle": MessageLookupByLibrary.simpleMessage("¡Atención!"),
+    "supportFormMessageHint": MessageLookupByLibrary.simpleMessage(
+      "Escriba su solicitud",
+    ),
+    "supportFormMessageLabel": MessageLookupByLibrary.simpleMessage(
+      "Ingrese el mensaje",
+    ),
+    "supportFormSubmit": MessageLookupByLibrary.simpleMessage("Enviar"),
+    "supportFormSuccessOk": MessageLookupByLibrary.simpleMessage("OK"),
+    "supportFormSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Tu solicitud ha sido registrada. La respuesta se enviará a tu correo o a otros datos de contacto.",
+    ),
+    "supportFormTitle": MessageLookupByLibrary.simpleMessage(
+      "Formulario de contacto con soporte",
+    ),
     "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
       "El mensaje no puede estar vacío ni contener menos de 12 caracteres.",
     ),

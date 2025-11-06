@@ -220,6 +220,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "send": MessageLookupByLibrary.simpleMessage("Send"),
     "showMore": MessageLookupByLibrary.simpleMessage("Show more"),
     "stepN": m0,
+    "supportFormContactsHint": MessageLookupByLibrary.simpleMessage(
+      "Telegram: @nullscode",
+    ),
+    "supportFormContactsLabel": MessageLookupByLibrary.simpleMessage(
+      "Your other contacts (optional)",
+    ),
+    "supportFormDescription": MessageLookupByLibrary.simpleMessage(
+      "Use the feedback form to leave any message for our support team with a suggestion or an issue.",
+    ),
+    "supportFormEmailHint": MessageLookupByLibrary.simpleMessage(
+      "Enter your email",
+    ),
+    "supportFormEmailLabel": MessageLookupByLibrary.simpleMessage(
+      "The reply will be sent to this email",
+    ),
+    "supportFormErrorBody": MessageLookupByLibrary.simpleMessage(
+      "The message cannot be empty or contain fewer than 12 characters.",
+    ),
+    "supportFormErrorOk": MessageLookupByLibrary.simpleMessage("OK"),
+    "supportFormErrorTitle": MessageLookupByLibrary.simpleMessage("Attention!"),
+    "supportFormMessageHint": MessageLookupByLibrary.simpleMessage(
+      "Type your request",
+    ),
+    "supportFormMessageLabel": MessageLookupByLibrary.simpleMessage(
+      "Enter message",
+    ),
+    "supportFormSubmit": MessageLookupByLibrary.simpleMessage("Send"),
+    "supportFormSuccessOk": MessageLookupByLibrary.simpleMessage("OK"),
+    "supportFormSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Your request has been recorded. A reply will be sent to your email or other contact details.",
+    ),
+    "supportFormTitle": MessageLookupByLibrary.simpleMessage(
+      "Support Contact Form",
+    ),
     "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
       "The message cannot be empty or contain fewer than 12 characters.",
     ),

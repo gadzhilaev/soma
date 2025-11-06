@@ -12,6 +12,7 @@ import '../../widgets/bottom_nav.dart';
 import '../notifications/notifications_center_screen.dart';
 import 'edit_profile_screen.dart';
 import 'privacy_policy_screen.dart';
+import 'support_form_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -580,7 +581,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         _ProfileButton(
                                           icon: Icons.contact_support_outlined,
                                           text: s.profileSupport,
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    SupportFormScreen(
+                                                      initialEmail: _userEmail,
+                                                    ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                         // Кнопка Админ панель (если админ, в конце списка)
                                         if (_isAdmin) ...[

@@ -238,6 +238,40 @@ class MessageLookup extends MessageLookupByLibrary {
     "send": MessageLookupByLibrary.simpleMessage("Отправить"),
     "showMore": MessageLookupByLibrary.simpleMessage("Показать ещё"),
     "stepN": m0,
+    "supportFormContactsHint": MessageLookupByLibrary.simpleMessage(
+      "Telegram: @nullscode",
+    ),
+    "supportFormContactsLabel": MessageLookupByLibrary.simpleMessage(
+      "Ваши другие контакты (при необходимости)",
+    ),
+    "supportFormDescription": MessageLookupByLibrary.simpleMessage(
+      "В форме обратной связи вы можете оставить любое сообщение для службы поддержки с предложением или проблемой",
+    ),
+    "supportFormEmailHint": MessageLookupByLibrary.simpleMessage(
+      "Введите ваш email",
+    ),
+    "supportFormEmailLabel": MessageLookupByLibrary.simpleMessage(
+      "Ответ будет отправлен на этот email",
+    ),
+    "supportFormErrorBody": MessageLookupByLibrary.simpleMessage(
+      "Сообщение не может быть пустым или содержать менее 12 символов в своем теле",
+    ),
+    "supportFormErrorOk": MessageLookupByLibrary.simpleMessage("ОК"),
+    "supportFormErrorTitle": MessageLookupByLibrary.simpleMessage("Внимание!"),
+    "supportFormMessageHint": MessageLookupByLibrary.simpleMessage(
+      "Введите текст обращения",
+    ),
+    "supportFormMessageLabel": MessageLookupByLibrary.simpleMessage(
+      "Введите сообщение",
+    ),
+    "supportFormSubmit": MessageLookupByLibrary.simpleMessage("Отправить"),
+    "supportFormSuccessOk": MessageLookupByLibrary.simpleMessage("ОК"),
+    "supportFormSuccessTitle": MessageLookupByLibrary.simpleMessage(
+      "Ваше обращение зафиксировано, ответ будет отправлен на email или иные контактные данные",
+    ),
+    "supportFormTitle": MessageLookupByLibrary.simpleMessage(
+      "Форма для связи с поддержкой",
+    ),
     "validationBodyTooShort": MessageLookupByLibrary.simpleMessage(
       "Сообщение не может быть пустым или содержать менее 12 символов в своем теле",
     ),
