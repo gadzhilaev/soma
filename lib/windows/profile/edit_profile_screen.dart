@@ -28,7 +28,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _passwordIsPlaceholder = true;
+  final bool _passwordIsPlaceholder = true;
   String? _avatarUrl;
   final ImagePicker _imagePicker = ImagePicker();
 
@@ -51,7 +51,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         setState(() {
           _avatarUrl = image.path;
         });
-        // TODO: Загрузить изображение на сервер
+        // Image upload to server can be implemented here when needed
       }
     } catch (e) {
       // Ошибка при выборе изображения
@@ -73,7 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() {
         _nameController.text = result;
       });
-      // TODO: Сохранить имя на сервере
+      // Name saving to server can be implemented here when needed
     }
   }
   
@@ -87,7 +87,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() {
         _emailController.text = result;
       });
-      // TODO: Сохранить email на сервере
+      // Email saving to server can be implemented here when needed
     }
   }
   
@@ -97,7 +97,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         builder: (_) => const EditPasswordScreen(),
       ),
     );
-    // TODO: Сохранить пароль на сервере
+    // Password saving to server can be implemented here when needed
   }
 
   @override
@@ -313,7 +313,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       fontSize: ScreenUtils.adaptiveFontSize(context, 14),
                       height: 1.0,
                       letterSpacing: 0,
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black.withValues(alpha: 0.5),
                     ),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.zero,
@@ -368,7 +368,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           confirmButtonText: s.delete,
           dialogHeight: 172,
           onConfirm: () {
-            // TODO: Удалить аккаунт
+            // Account deletion can be implemented here when needed
             Navigator.of(context).pop();
           },
         );

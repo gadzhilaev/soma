@@ -24,20 +24,20 @@ Future<void> main() async {
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
-  static _MainAppState? maybeOf(BuildContext context) =>
-      context.findAncestorStateOfType<_MainAppState>();
+  static MainAppState? maybeOf(BuildContext context) =>
+      context.findAncestorStateOfType<MainAppState>();
 
-  static _MainAppState of(BuildContext context) {
+  static MainAppState of(BuildContext context) {
     final state = maybeOf(context);
     assert(state != null, 'MainApp state not found in context');
     return state!;
   }
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  State<MainApp> createState() => MainAppState();
 }
 
-class _MainAppState extends State<MainApp> {
+class MainAppState extends State<MainApp> {
   Locale? _locale;
   bool _ready = false;
   bool _loggedIn = false;

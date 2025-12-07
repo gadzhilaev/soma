@@ -1,6 +1,7 @@
-// lib/auth/register.dart
+// lib/auth/restore.dart
 import 'package:flutter/material.dart';
 import 'package:soma/generated/l10n.dart';
+import '../core/supabase.dart';
 import 'login.dart';
 
 class RestoreScreen extends StatefulWidget {
@@ -18,14 +19,11 @@ class RestoreScreen extends StatefulWidget {
 }
 
 class _RestoreScreenState extends State<RestoreScreen> {
-  final nameController = TextEditingController();
   final emailController = TextEditingController();
-  final passController = TextEditingController();
-  final repeatPassController = TextEditingController();
+  bool _loading = false;
 
   late Locale _currentLocale;
   bool showLanguageList = false;
-  bool agreed = false;
 
   final _languages = const [
     _LangItem('assets/icons/ru.png', Locale('ru')),
@@ -37,6 +35,57 @@ class _RestoreScreenState extends State<RestoreScreen> {
   void initState() {
     super.initState();
     _currentLocale = widget.currentLocale;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _restorePassword() async {
+    final email = emailController.text.trim();
+
+    if (email.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).emailHint)),
+      );
+      return;
+    }
+
+    setState(() => _loading = true);
+    try {
+      await supa.auth.resetPasswordForEmail(
+        email,
+        redirectTo: null, // Можно указать URL для сброса пароля
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${S.of(context).restorePass} - Проверьте вашу почту'),
+        ),
+      );
+      // Возвращаемся на экран входа
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => LoginScreen(
+            onChangeLocale: widget.onChangeLocale,
+            currentLocale: _currentLocale,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${S.of(context).errorPrefix} $e')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
   }
 
   @override
@@ -114,19 +163,28 @@ class _RestoreScreenState extends State<RestoreScreen> {
                                     elevation: 0,
                                     minimumSize: const Size(353, 56),
                                   ),
-                                  onPressed: () {},
-                                  child: Center(
-                                    child: Text(
-                                      s.restorePass.toUpperCase(),
-                                      style: const TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        letterSpacing: 0.48, // 4% от 12
-                                        color: Color(0xFF59523A),
-                                      ),
-                                    ),
-                                  ),
+                                  onPressed: _loading ? null : _restorePassword,
+                                  child: _loading
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Color(0xFF59523A),
+                                          ),
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            s.restorePass.toUpperCase(),
+                                            style: const TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              letterSpacing: 0.48,
+                                              color: Color(0xFF59523A),
+                                            ),
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),

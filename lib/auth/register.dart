@@ -439,12 +439,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (!mounted) return; // ⬅️ ещё раз после await
 
       // Показываем уведомление о успешной регистрации
+      if (!mounted) return;
       await NotificationService().showNotification(
         title: s.registerSuccessTitle,
         body: s.registerSuccessBody,
       );
 
       // Навигация
+      if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const QuestionsScreen()),

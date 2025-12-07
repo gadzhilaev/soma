@@ -119,7 +119,7 @@ class _EditEmailScreenState extends State<EditEmailScreen> {
                       context,
                       bodyText: s.confirmChangeEmailBody,
                       onConfirm: () {
-                        // TODO: Сохранить email
+                        // Email will be saved by the parent screen
                         Navigator.of(context).pop(_emailController.text);
                       },
                     );

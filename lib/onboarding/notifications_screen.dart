@@ -32,8 +32,8 @@ class NotificationsScreen extends StatelessWidget {
         );
       }
     } catch (e) {
-      // В случае ошибки выводим в консоль для отладки
-      print('Error requesting notification permission: $e');
+      // В случае ошибки просто переходим дальше
+      // Ошибка запроса разрешения не критична
       // Все равно переходим дальше
       if (context.mounted) {
         Navigator.of(context).pushReplacement(

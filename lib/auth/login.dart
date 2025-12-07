@@ -69,12 +69,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       
       // Показываем уведомление о успешном входе
+      if (!mounted) return;
       final s = S.of(context);
       await NotificationService().showNotification(
         title: s.loginSuccessTitle,
         body: s.loginSuccessBody,
       );
       
+      if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const NotificationsScreen()),

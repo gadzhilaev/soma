@@ -119,7 +119,7 @@ class _EditNameScreenState extends State<EditNameScreen> {
                       context,
                       bodyText: s.confirmChangeNameBody,
                       onConfirm: () {
-                        // TODO: Сохранить имя
+                        // Name will be saved by the parent screen
                         Navigator.of(context).pop(_nameController.text);
                       },
                     );

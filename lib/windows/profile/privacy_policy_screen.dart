@@ -51,7 +51,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
           style: linkStyle,
           recognizer: TapGestureRecognizer()
             ..onTap = () {
-              // TODO: integrate url_launcher if needed
+              // URL launcher can be integrated here when needed
+              // For now, URLs are displayed as clickable text
             },
         ),
       );

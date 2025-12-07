@@ -1,7 +1,7 @@
 name: soma
-description: "A new Flutter project."
+description: "Wellness & Meditation App - Flutter mobile application for iOS and Android with meditation programs, music, articles, and personalized content."
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0
 
 environment:
   sdk: ^3.9.2

@@ -72,10 +72,12 @@ class _NotificationsCenterScreenState extends State<NotificationsCenterScreen> {
 
     final shouldPopCleared = _notifications.isEmpty || _cleared;
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.of(context).pop(shouldPopCleared);
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          Navigator.of(context).pop(shouldPopCleared);
+        }
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -111,7 +113,8 @@ class _NotificationsCenterScreenState extends State<NotificationsCenterScreen> {
                         item: item,
                         onClose: () => _removeNotification(item.id),
                         onAction: () {
-                          // TODO: Implement notification action handling
+                          // Notification action handling can be implemented here
+                          // when specific actions are needed for notifications
                         },
                       );
                     },

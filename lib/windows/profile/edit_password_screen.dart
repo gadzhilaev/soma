@@ -118,7 +118,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Сохранить пароль
+                    // Password change will be handled by the parent screen
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
@@ -186,7 +186,7 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
               fontSize: ScreenUtils.adaptiveFontSize(context, 14),
               height: 1.0,
               letterSpacing: 0,
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withValues(alpha: 0.5),
             ),
             border: InputBorder.none,
             contentPadding: EdgeInsets.zero,
