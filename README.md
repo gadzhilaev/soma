@@ -1,18 +1,15 @@
-# Soma - Wellness & Meditation App
+![SOMA - приложение для медитаций](assets/SOMA%20-%20приложение%20%20для%20медитаций.png)
+# Soma — приложение для медитаций
 
-<div align="center">
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-3.9.2+-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter"/>
+  <img src="https://img.shields.io/badge/Platform-iOS%20%7C%20Android-59666C?style=for-the-badge&logo=android&logoColor=white" alt="Platforms"/>
+  <img src="https://img.shields.io/badge/License-Open%20Source-4CAF50?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License"/>
+  <img src="https://img.shields.io/badge/State%20Mgmt-Provider-FF9800?style=for-the-badge&logo=flutter&logoColor=white" alt="State Management"/>
+  <img src="https://img.shields.io/badge/Backend-Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase"/>
+</p>
 
-![Soma Logo](assets/logo/logo.png)
-
-**Мобильное приложение для медитации, релаксации и личностного роста**
-
-[![Flutter](https://img.shields.io/badge/Flutter-3.9.2+-02569B?logo=flutter)](https://flutter.dev)
-[![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-lightgrey)](https://flutter.dev)
-[![License](https://img.shields.io/badge/License-Open%20Source-green)](LICENSE)
-
-</div>
-
----
+Мобильное приложение для медитации, релаксации и личностного роста с персонализированными аудио-программами, статьями и музыкой.
 
 ## 📱 О проекте
 
